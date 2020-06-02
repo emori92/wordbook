@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="container" action="{% url 'notepad:dashboard' %}">
+        
+        {% if form.errors %}
+            <p style="color: tomato;"></p>
+        {% endif %}
+            
+        <form class="d-flex flex-column" method="POST">
+        {% csrf_token %}
+            <div class="container my-3">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="container my-3">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                <input type="submit" class="btn btn-warning btn-sm ml-4" value="submit!">
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+    
