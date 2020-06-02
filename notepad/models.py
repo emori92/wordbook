@@ -1,50 +1,95 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from datetime import datetime
 
 
-class User(models.Model):
-    user_id = models.AutoField(primary_key=True)
-    mail_address = models.EmailField()
-    password = models.CharField(max_length=32)
-    created_at = models.DateTimeField(default=datetime.now())
+class User(AbstractUser):
+    '''ユーザー作成日を追加したユーザーモデル'''
+    class Meta:
+        db_table = 'ユーザー'
+        
+    created_at = models.DateTimeField(verbose_name='作成日' ,default=datetime.now())
+    
+    def __str__(self):
+        return self.username
 
-class Note(models.Model):
-    note_id = models.AutoField(primary_key=True)
-    user_id = models.IntegerField()
-    title = models.CharField(max_length=16)
-    describe = models.CharField(max_length=128, null=True)
-    public = models.BooleanField()
-    created_at = models.DateTimeField(default=datetime.now())
-    updated_at = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-class Question(models.Model):
-    question_id = models.AutoField(primary_key=True)
-    note_id = models.IntegerField()
-    query = models.CharField(max_length=256)
-    hint = models.CharField(max_length=64, null=True)
-    answer = models.CharField(max_length=256)
-    review = models.BooleanField()
-    created_at = models.DateTimeField(default=datetime.now())
-    updated_at = models.DateTimeField()
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
 
 class Tag(models.Model):
-    tag_id = models.AutoField(primary_key=True)
-    tag_name = models.CharField(max_length=8)
-    note_id = models.IntegerField()
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    '''ノートをカテゴリするタグのモデル'''
+    class Meta:
+        db_table = 'カテゴリタグ'
+        
+    tag_name = models.CharField(verbose_name='カテゴリタグ', max_length=32)
+
+    def __str__(self):
+        return self.tag_name
+
+
+class Note(models.Model):
+    '''メモ基本情報のモデル'''
+    class Meta:
+        db_table = 'ノート'
+        
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
+    tag = models.ForeignKey(Tag, verbose_name='カテゴリ', on_delete=models.PROTECT, null=True)
+    title = models.CharField(verbose_name='タイトル', max_length=16)
+    describe = models.CharField(verbose_name='説明', max_length=128, null=True)
+    public = models.BooleanField(verbose_name='公開範囲')
+    created_at = models.DateTimeField(verbose_name='作成日', default=datetime.now())
+    updated_at = models.DateTimeField(verbose_name='更新日', null=True)
+    
+    def update_note(self):
+        '''日付の更新をする'''
+        self.updated_at = datetime.now()
+        self.save()
+
+    def __str__(self):
+        return self.title
+
+
+class Question(models.Model):
+    '''問題、ヒント、答えのモデル'''
+    class Meta:
+        db_table = '問題'
+        
+    query = models.CharField(verbose_name='問題', max_length=256)
+    hint = models.CharField(verbose_name='ヒント', max_length=64, null=True)
+    answer = models.CharField(verbose_name='答え', max_length=256)
+    review = models.BooleanField(verbose_name='復習', )
+    created_at = models.DateTimeField(verbose_name='作成日', default=datetime.now())
+    updated_at = models.DateTimeField(verbose_name='更新日', )
+    note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.PROTECT)
+    
+    def update_note(self):
+        '''日付の更新をする'''
+        self.updated_at = datetime.now()
+        self.save()
+        
+    def __str__(self):
+        return self.query
+
+
+
 
 class Star(models.Model):
-    star_id = models.AutoField(primary_key=True)
-    note_id = models.IntegerField()
-    star_user = models.IntegerField()
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    '''ノートをブックマークするモデル'''
+    class Meta:
+        db_table = 'ブックマーク'
 
-class Follower(models.Model):
-    follower_id = models.AutoField(primary_key=True)
-    following = models.IntegerField()
-    followed = models.IntegerField()
-    user_1 = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_2 = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.note
+    
+
+# class Follower(models.Model):
+#     '''フォロワーのモデル'''
+#     class Meta:
+#         db_table = 'フォロワー'
+
+#     following = models.ForeignKey(User, verbose_name='フォロー', on_delete=models.PROTECT)
+#     followed = models.ForeignKey(User, verbose_name='フォロワー', on_delete=models.PROTECT)
+
+#     def __str__(self):
+#         return self.following
