@@ -2,13 +2,13 @@
 
 
 {% block content %}
-    <div class="container" action="{% url 'notepad:dashboard' %}">
+    <div class="container">
         
         {% if form.errors %}
             <p style="color: tomato;"></p>
         {% endif %}
             
-        <form class="d-flex flex-column" method="POST">
+        <form class="d-flex flex-column" method="POST" action="{% url 'login' %}">
         {% csrf_token %}
             <div class="container my-3">
                 {{ form.username.label_tag }}
@@ -17,7 +17,7 @@
             <div class="container my-3">
                 {{ form.password.label_tag }}
                 {{ form.password }}
-                <input type="submit" class="btn btn-warning btn-sm ml-4" value="submit!">
+                <input type="submit" class="btn btn-warning btn-sm ml-4" value="Login!">
             </div>
         </form>
     </div>

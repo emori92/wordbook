@@ -1,7 +1,41 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
-    dashboard
-{% endblock content %}
+{% block title %}dashboard{% endblock title %}
+
+
+
+{% block style %}
+    <style>
+        .note {
+            height: 520px;
+            background-color: #f5f5f5;
+        }
+    </style>
+{% endblock style %}
     
+
+
+{% block content %}
+    <div class="container">
+        
+        <div class="greet mt-4">
+            <h1 class="text-info">Hello {{ user.username }}!<br>Here is your dashboard!</h1>
+        </div>
+        <div class="content">
+            
+            <div class="row container py-4 note">
+                {% for note in object_list %}
+                    <div class="col-4">
+                        <a href="">{{ note.title }}</a>
+                    </div>
+                {% empty %}
+                    <div class="col">
+                        <p class="text-center h1 font-weight-normal text-secondary">Note isn't found.</p>
+                    </div>
+                {% endfor %}
+            </div>
+                
+        </div>
+    </div>
+{% endblock content %}
