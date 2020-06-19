@@ -5,10 +5,10 @@
     <div class="container">
         
         {% if form.errors %}
-            <p style="color: tomato;"></p>
+            <p style="color: red;" class="m-3">名前かパスワードが間違っています。</p>
         {% endif %}
             
-        <form class="d-flex flex-column" method="POST" action="{% url 'login' %}">
+        <form method="POST" action="{% url 'login' %}" class="d-flex flex-column">
         {% csrf_token %}
             <div class="container my-3">
                 {{ form.username.label_tag }}
