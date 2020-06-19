@@ -1,52 +1,59 @@
 {% extends 'base.html' %}
 
-
 {% block title %}dashboard{% endblock title %}
 
 
-
 {% block style %}
-    <style>
-        .note {
-            height: 520px;
-            background-color: #f5f5f5;
-        }
+  <style>
+    .content {
+      height: 520px;
+    }
 
-        .create a {
-            width: 120px;
-            height: 120px;
-        }
-    </style>
+    .note {
+      height: 120px;
+      width: 120px;
+    }
+
+    .create a {
+      width: 120px;
+      height: 120px;
+    }
+  </style>
 {% endblock style %}
-    
 
 
 {% block content %}
-    <div class="container">
-        
-        <!-- greet -->
-        <div class="greet my-5">
-            <h1 class="text-info">Hello {{ user.username }}!<br>Here is your dashboard!</h1>
-        </div>
+  <div class="container">
 
-        <!-- note -->
-        <div class="content">
-            <div class="row container py-4 note">
-                {% for note in object_list %}
-                    <div class="col-4">
-                        <a href="">{{ note.title }}</a>
-                    </div>
-                {% empty %}
-                    <div class="col">
-                        <p class="text-center h1 font-weight-normal text-secondary">Note isn't found.</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- create note -->
-        <div class="create w-25 mx-auto my-5">
-            <a href="{% url 'notepad:new_note' %}" class="display-1 text-white bg-warning rounded-circle d-block text-center"><i class="fas fa-plus"></i></a>
-        </div>
+    <!-- greet -->
+    <div class="row greet">
+      <div class="col my-5">
+        <h1 class="text-info">Hello {{ user.username }}!<br>Here is your dashboard!</h1>
+      </div>
     </div>
+
+    <!-- note -->
+    <div class="row content">  
+      <div class="col-12 shadow-lg p-3 d-flex">
+        {% for note in object_list %}
+          <div class="note rounded mx-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'notepad:note_detail' pk=note.pk %}">
+              <p class="h4">{{ note.title }}</p>
+            </a>
+          </div>
+        {% empty %}
+          <div>
+            <p class="text-center h1 font-weight-normal text-secondary">Note isn't found.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- create note -->
+    <div class="row create">
+      <div class="mx-auto my-5">
+        <a href="{% url 'notepad:new_note' %}" class="display-1 text-white bg-warning rounded-circle d-block text-center"><i class="fas fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

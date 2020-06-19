@@ -1,23 +1,14 @@
 {% extends 'base.html' %}
 
-
 {% block title %}create Note{% endblock title %}
 
 
-
 {% block content %}
-    <form action="{% url 'notepad:dashboard' %}" method="POST" class="inline-flex flex-column container m-5">
-    {% csrf_token %}
-        <div class="form-row">
-            {{ form.title.label }}
-            {{ form.title }}
-        </div>
-        <div class="form-row">
-            {{ form.describe.label }}
-            {{ form.describe }}
-        </div>
-        <input type="submit" value="Create!" class="btn btn-success my-5">
-    </form>
+  <form method="POST" class="inline-flex flex-column container m-5">
+  {% csrf_token %}
+    <div>
+      {{ form.as_p }}
+    </div>
+    <input type="submit" value="Create!" class="btn btn-success my-5">
+  </form>
 {% endblock content %}
-    
-    

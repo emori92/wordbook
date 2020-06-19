@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('new_note/', views.new_note, name='new_note'),
+    path('note/<int:pk>/', views.note_detail, name='note_detail'),
 ]

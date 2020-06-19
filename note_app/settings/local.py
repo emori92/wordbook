@@ -19,3 +19,56 @@ DATABASES = {
         'ATOMIC_REQUESTS': True,
     }
 }
+
+# logging
+LOGGING = {
+
+    # 初期化
+    'version': 1,
+    'disable_existing_loggers': False,
+    
+    # logger
+    'loggers': {
+        
+        # Django
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        
+        # apps
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagete': False,
+        },
+        
+        # db
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+    
+    # handler
+    'handlers': {
+        
+        # condole
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'develop',
+        },
+    },
+    
+    # formatter
+    'formatters': {
+        
+        # develop
+        'develop': {
+            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
+        },
+    },
+}
