@@ -2,24 +2,21 @@
 
 
 {% block content %}
-    <div class="container">
-        
-        {% if form.errors %}
-            <p style="color: red;" class="m-3">名前かパスワードが間違っています。</p>
-        {% endif %}
-            
-        <form method="POST" action="{% url 'login' %}" class="d-flex flex-column">
-        {% csrf_token %}
-            <div class="container my-3">
-                {{ form.username.label_tag }}
-                {{ form.username }}
-            </div>
-            <div class="container my-3">
-                {{ form.password.label_tag }}
-                {{ form.password }}
-                <input type="submit" class="btn btn-warning btn-sm ml-4" value="Login!">
-            </div>
-        </form>
-    </div>
+  <div class="container">
+
+    <!-- error -->
+    {% if form.errors %}
+      <p style="color: red;" class="m-3">名前かパスワードが間違っています。</p>
+    {% endif %}
+
+    <!-- form -->
+    <form method="POST" action="{% url 'login' %}" class="d-flex flex-column">
+      {% csrf_token %}
+      <div class="mt-4">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn btn-warning w-25">Login!</button>
+    </form>
+  </div>
 {% endblock content %}
     

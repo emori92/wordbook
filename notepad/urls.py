@@ -9,4 +9,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('new_note/', views.new_note, name='new_note'),
     path('note/<int:pk>/', views.note_detail, name='note_detail'),
+    path('note/<int:pk>/new_query/', views.new_query, name='new_query'),
 ]
