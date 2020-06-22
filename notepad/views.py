@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 import logging
 
-from .models import Note
-from .forms import NoteForm, NoteFormSet
+from .models import Note, Question
+from .forms import NoteForm, NoteFormSet, QuestionForm
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import View, TemplateView, RedirectView, FormView, ListView, DetailView, CreateView
@@ -48,7 +48,33 @@ class NewNoteCreateView(LoginRequiredMixin, CreateView):
 class NoteDetailView(LoginRequiredMixin, DetailView):
     model = Note
     template_name = "notepad/note_detail.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        # noteに紐づくqueryを全て取得
+        queryset = Question.objects.filter(note=self.kwargs['pk']).order_by('created_at')
+        # queryset = Question.objects.filter(note=self.kwargs.get('pk')).order_by('created_at')
+        context['queryset'] = queryset
+        return context
+
+
+class QuestionCreateView(LoginRequiredMixin, CreateView):
+    model = Question
+    fields = ['query', 'hint', 'answer']
+    template_name = "notepad/new_query.html"
+    formclass = QuestionForm
+
+    def get_success_url(self):
+        # return reverse('notepad:note_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse('notepad:note_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        
+        # kwargsの取得
+        note = get_object_or_404(Note, pk=self.kwargs.get('pk'))
+        form.instance.note = note
+        return super().form_valid(form)
 
 
 index = Index.as_view()
@@ -56,3 +82,4 @@ login = Login.as_view()
 dashboard = DashBoard.as_view()
 new_note = NewNoteCreateView.as_view()
 note_detail = NoteDetailView.as_view()
+new_query = QuestionCreateView.as_view()

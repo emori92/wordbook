@@ -4,11 +4,13 @@
 
 
 {% block content %}
-  <form method="POST" class="inline-flex flex-column container m-5">
-  {% csrf_token %}
-    <div>
-      {{ form.as_p }}
-    </div>
-    <input type="submit" value="Create!" class="btn btn-success my-5">
-  </form>
+  <div class="container m-5">
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mt-4">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn btn-success my-5">Create!</button>
+    </form>
+  </div>
 {% endblock content %}

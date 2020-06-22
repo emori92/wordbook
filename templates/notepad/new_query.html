@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}new query{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mt-4">
+      {{ form.as_p }}
+    </div>
+    <button type="submit" class="btn btn-success">create!</button>
+  </form>
+</div>
+{% endblock content %}
