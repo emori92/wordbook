@@ -5,8 +5,8 @@ import logging
 from .models import Note, Question
 from .forms import NoteForm, NoteFormSet, QuestionForm
 
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import View, TemplateView, RedirectView, FormView, ListView, DetailView, CreateView
+from django.contrib.auth.views import LoginView
+from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -14,28 +14,31 @@ from django.contrib.messages.views import SuccessMessageMixin
 # logging
 logger = logging.getLogger(__name__)
 
-class Index(TemplateView):
+
+# index
+class Index(generic.TemplateView):
     template_name = 'notepad/index.html'
 
 
+# login
 class Login(SuccessMessageMixin, LoginView):
     template_name = 'registration/login.html'
     success_url = 'notepad:dashboard'
     success_message = 'Login success!'
 
 
-class DashBoard(LoginRequiredMixin, ListView):
-    login_url = '/accounts/login/'
-    
+# dashboard
+class DashBoard(LoginRequiredMixin, generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
 
 
-class NewNoteCreateView(LoginRequiredMixin, CreateView):
+# note
+class NewNoteCreateView(LoginRequiredMixin, generic.CreateView):
     model = Note
-    fields = ['title', 'describe']
-    template_name = "notepad/new_note.html"
     formclass = NoteForm
+    fields = ['title', 'describe']
+    template_name = "notepad/note_new.html"
     success_url = '/dashboard/'
     
     # form_validでユーザーを追加
@@ -45,7 +48,7 @@ class NewNoteCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NoteDetailView(LoginRequiredMixin, DetailView):
+class NoteDetailView(LoginRequiredMixin, generic.DetailView):
     model = Note
     template_name = "notepad/note_detail.html"
     
@@ -59,11 +62,20 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class QuestionCreateView(LoginRequiredMixin, CreateView):
+class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Note
+    formclass = NoteForm
+    fields = ['title', 'describe']
+    template_name = "notepad/note_new.html"
+    success_url = '/dashboard/'
+
+
+# question
+class QuestionCreateView(LoginRequiredMixin, generic.CreateView):
     model = Question
-    fields = ['query', 'hint', 'answer']
-    template_name = "notepad/new_query.html"
     formclass = QuestionForm
+    fields = ['query', 'hint', 'answer']
+    template_name = "notepad/query_new.html"
 
     def get_success_url(self):
         # return reverse('notepad:note_detail', kwargs={'pk': self.kwargs['pk']})
@@ -77,9 +89,25 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Question
+    formclass = QuestionForm
+    fields = ['query', 'hint', 'answer']
+    template_name = "notepad/query_new.html"
+
+    def get_success_url(self):
+    # def get_success_url(self, note_pk):
+        return reverse('notepad:note_detail', kwargs={'pk': self.object.pk})
+
+
+
+
+# View.as_view()
 index = Index.as_view()
 login = Login.as_view()
 dashboard = DashBoard.as_view()
-new_note = NewNoteCreateView.as_view()
+note_new = NewNoteCreateView.as_view()
 note_detail = NoteDetailView.as_view()
-new_query = QuestionCreateView.as_view()
+note_edit = NoteUpdateView.as_view()
+query_new = QuestionCreateView.as_view()
+query_edit = QuestionUpdateView.as_view()

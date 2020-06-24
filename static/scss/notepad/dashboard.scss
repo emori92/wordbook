@@ -1,0 +1,18 @@
+
+.container {
+
+  // note
+  .content {
+      height: 520px;
+      .note {
+        height: 120px;
+        width: 120px;
+      }
+    }
+
+    // create note
+    .create a {
+      width: 120px;
+      height: 120px;
+  }
+}

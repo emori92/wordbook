@@ -1,0 +1,30 @@
+.top-img {
+  background-size: cover;
+  height: 720px;
+}
+
+.top-img .message {
+  padding-top: 240px;
+}
+
+.top-img .message p {
+  font-family: 'Caveat', cursive;
+}
+
+.container .content {
+  height: 520px;
+}
+
+.container .content .note {
+  height: 120px;
+  width: 120px;
+}
+
+.container .create a {
+  width: 120px;
+  height: 120px;
+}
+
+body header a {
+  font-family: 'Skranji', cursive;
+}
