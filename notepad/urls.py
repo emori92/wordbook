@@ -7,7 +7,10 @@ app_name = 'notepad'
 urlpatterns = [
     path('', views.index, name='index'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('new_note/', views.new_note, name='new_note'),
+    path('note_new/', views.note_new, name='note_new'),
     path('note/<int:pk>/', views.note_detail, name='note_detail'),
-    path('note/<int:pk>/new_query/', views.new_query, name='new_query'),
+    path('note/<int:pk>/edit/', views.note_edit, name='note_edit'),
+    path('note/<int:pk>/query_new/', views.query_new, name='query_new'),
+    # path('note/<int:note_pk>/query/<int:query_pk>/edit/', views.query_edit, name='query_edit')
+    path('note/<int:pk>/query/edit/', views.query_edit, name='query_edit')
 ]

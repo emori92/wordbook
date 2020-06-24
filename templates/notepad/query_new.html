@@ -10,7 +10,11 @@
     <div class="mt-4">
       {{ form.as_p }}
     </div>
-    <button type="submit" class="btn btn-success">create!</button>
+    <div class="d-flex flex-column w-25">
+      <button type="submit" class="btn btn-success mb-4">作成!</button>
+      <a href="{% url 'notepad:dashboard' %}" class="btn btn-outline-secondary">戻る</a>
+    </div>
+
   </form>
 </div>
 {% endblock content %}

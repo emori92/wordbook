@@ -3,32 +3,17 @@
 {% block title %}dashboard{% endblock title %}
 
 
-{% block style %}
-  <style>
-    .content {
-      height: 520px;
-    }
-
-    .note {
-      height: 120px;
-      width: 120px;
-    }
-
-    .create a {
-      width: 120px;
-      height: 120px;
-    }
-  </style>
-{% endblock style %}
-
-
 {% block content %}
   <div class="container">
 
     <!-- greet -->
     <div class="row greet">
       <div class="col my-5">
-        <h1 class="text-info">Hello {{ user.username }}!<br>Here is your dashboard!</h1>
+        <h1 class="text-info">
+          Hello {{ user.username }}!
+          <br>
+          Here is your dashboard!
+        </h1>
       </div>
     </div>
 
@@ -37,7 +22,7 @@
       <div class="col-12 shadow-lg p-3 d-flex">
         {% for note in object_list %}
           <div class="note rounded m-4">
-            <a class="btn btn-outline-primary btn-lg" href="{% url 'notepad:note_detail' pk=note.pk %}">
+            <a class="btn btn-primary btn-lg" href="{% url 'notepad:note_detail' pk=note.pk %}">
               <p class="h4">{{ note.title }}</p>
             </a>
           </div>
@@ -52,7 +37,7 @@
     <!-- create note -->
     <div class="row create">
       <div class="mx-auto my-5">
-        <a href="{% url 'notepad:new_note' %}" class="display-1 text-white bg-warning rounded-circle d-block text-center"><i class="fas fa-plus"></i></a>
+        <a href="{% url 'notepad:note_new' %}" class="display-1 text-white bg-warning rounded-circle d-block text-center"><i class="fas fa-plus"></i></a>
       </div>
     </div>
   </div>
