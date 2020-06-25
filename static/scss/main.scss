@@ -1,12 +1,11 @@
 
 @import 'notepad/index.scss';
 @import 'notepad/dashboard.scss';
+@import 'registration/login.scss';
 
 
 body {
   header {
-    a {
-      font-family: 'Skranji', cursive;    
-    }
+    font-family: 'Skranji', cursive;
   }
 }

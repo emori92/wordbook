@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.title }} delete{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-8 mx-auto">
+        <form  method="post">
+          {% csrf_token %}
+          <div class="alert alert-danger my-5 text-center">
+            <p>「{{ object.title }}」のノートを削除します。本当によろしいですか？</p>
+          </div>
+          <div class="d-flex flex-column w-50 mx-auto">
+            <input type="submit" value="削除する" class="btn btn-danger btn-lg mb-3">
+            <a href="{% url 'notepad:note_detail' pk=note.pk %}" class="btn btn-outline-secondary">戻る</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

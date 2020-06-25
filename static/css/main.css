@@ -8,7 +8,7 @@
 }
 
 .top-img .message p {
-  font-family: 'Caveat', cursive;
+  font-family: 'Skranji', cursive;
 }
 
 .container .content {
@@ -25,6 +25,6 @@
   height: 120px;
 }
 
-body header a {
+body header {
   font-family: 'Skranji', cursive;
 }
