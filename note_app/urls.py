@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('notepad.urls')),
     path('accounts/login/', login, name='login'),
-    path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout')
+    path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
