@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Note, Question
+from .models import Note, Question
 
 
 class NoteForm(forms.ModelForm):

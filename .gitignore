@@ -2,6 +2,7 @@
 *.pyc
 *.pot
 __pycache__
+.DS_store
 /.vscode
 .vscode/*
 local_settings.py

@@ -1,17 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from datetime import datetime
-
-
-class User(AbstractUser):
-    '''ユーザー作成日を追加したユーザーモデル'''
-    class Meta:
-        db_table = 'user'
-        
-    created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
-    
-    def __str__(self):
-        return self.username
+# user
+from accounts.models import User
 
 
 # class Tag(models.Model):
