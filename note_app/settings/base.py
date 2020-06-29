@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_sass',
     # app
     'notepad.apps.NotepadConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,11 @@ DATABASES = {}
 
 
 # User モデルの拡張
-AUTH_USER_MODEL = 'notepad.User'
+AUTH_USER_MODEL = 'accounts.User'
 
-# ログアウトのリダイレクト先
-LOGIN_REDIRECT_URL = '/dashboard'
+# リダイレクト先
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
 
 # FLASH MESSAGEのストレージ
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

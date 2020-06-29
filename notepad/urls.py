@@ -5,8 +5,10 @@ from . import views
 app_name = 'notepad'
 
 urlpatterns = [
+    # base
     path('', views.index, name='index'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/<int:pk>/', views.dashboard, name='dashboard'),
     # note
     path('note_new/', views.note_new, name='note_new'),
     path('note/<int:pk>/', views.note_detail, name='note_detail'),

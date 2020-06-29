@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
 
+{% block title %}login{% endblock title %}
+  
+
 {% block content %}
   <div class="container">
 
-    <!-- error -->
-    {% if form.errors %}
-      <p style="color: red;" class="m-3">名前かパスワードが間違っています。</p>
-    {% endif %}
-
     <!-- form -->
-    <form method="POST" action="{% url 'login' %}" class="d-flex flex-column">
+    <h1 class="mt-4">ログイン</h1>
+    <form method="POST">
       {% csrf_token %}
       <div class="mt-4">
         {{ form.as_p }}

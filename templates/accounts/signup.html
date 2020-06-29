@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}サインアップ{% endblock  %}
+  
+
+{% block content %}
+  <div class="container">
+    
+    <!-- form -->
+    <h1 class="mt-4">サインアップ</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mt-4">
+        <p>
+          {{ form.username.label }}{{ form.username }}
+        </p>
+        <p>
+          {{ form.password.label}}
+          <input type="password" name="password" maxlength="128" required="" id="id_password">
+        </p>
+      </div>
+      <button type="submit" class="btn btn-success w-25">Signup!</button>
+    </form>
+  </div>
+{% endblock content %}

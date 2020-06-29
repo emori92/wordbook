@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 import logging
 
 from .models import Note, Question
 from .forms import NoteForm, QuestionForm
 
-from django.contrib.auth.views import LoginView
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -18,13 +17,6 @@ logger = logging.getLogger(__name__)
 # index
 class Index(generic.TemplateView):
     template_name = 'notepad/index.html'
-
-
-# login
-class Login(SuccessMessageMixin, LoginView):
-    template_name = 'registration/login.html'
-    success_url = 'notepad:dashboard'
-    success_message = 'Login success!'
 
 
 # dashboard
@@ -118,7 +110,6 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 # base
 index = Index.as_view()
-login = Login.as_view()
 dashboard = DashBoard.as_view()
 # note
 note_new = NewNoteCreateView.as_view()
