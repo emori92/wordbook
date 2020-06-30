@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
@@ -25,15 +25,15 @@ class SignupView(CreateView):
     template_name = "accounts/signup.html"
     success_url = reverse_lazy('notepad:dashboard')
 
-    def form_valid(self, form, request):
-        # ユーザー登録
+    def form_valid(self, form):
+        # ユーザー取得
         self.object = form.save(commit=False)
-        username = self.object.username
-        self.object.set_password(self.object.password)
+        username = form.cleaned_data.get('username')
+        # パスワードハッシュ化
+        self.object.set_password(form.cleaned_data.get('password'))
         self.object = form.save()
         # ログイン
-        # password = self.object.password
-        # user = authenticate(username=username, password=password)
-        # login(request, user)
-        
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
         return super().form_valid(form)
