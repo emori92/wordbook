@@ -24,6 +24,10 @@ class DashBoard(LoginRequiredMixin, generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
 
+    # ユーザーのオブジェクトを取得
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user.pk).order_by('-updated_at')
+
 
 # note
 class NewNoteCreateView(LoginRequiredMixin, generic.CreateView):
