@@ -35,10 +35,7 @@ class NewNoteCreateView(LoginRequiredMixin, generic.CreateView):
     formclass = NoteForm
     fields = ['title', 'describe']
     template_name = "notepad/note_new.html"
-    
-    def get_success_url(self):
-        pk = self.object.pk
-        return reverse('notepad:note_detail', kwargs={'pk': pk})
+    success_url = '/dashboard/'
     
     # form_validでユーザーを追加
     def form_valid(self, form):
@@ -52,7 +49,7 @@ class NoteDetailView(LoginRequiredMixin, generic.DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        
         # noteに紐づくqueryを全て取得
         queryset = Question.objects.filter(note=self.kwargs['pk']).order_by('-updated_at')
         context['queryset'] = queryset
