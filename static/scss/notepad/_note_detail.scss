@@ -1,0 +1,11 @@
+
+.container {
+
+  // question list
+  .question-not-active {
+    display: none;
+  }
+  .question-active {
+    display: block;
+  }
+}
