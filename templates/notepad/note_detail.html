@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ object.title }} | Wordbook{% endblock title %}
 
@@ -7,8 +8,8 @@
   <div class="container">
     <div class="row my-5">
 
-      <!-- abstract -->
-      <div class="col-lg-3">
+      <!-- note abstract -->
+      <div class="col-lg-3 col-md-6 mb-5">
         <div class="card border-secondary">
 
           <!-- note -->
@@ -32,17 +33,24 @@
 
             <!-- question -->
             <div class="card-header border-secondary">{{ item.query }}</div>
-            <p class="card-body">
-              {{ item.hint }}
-                <br>
-              {{ item.answer }}
-            </p>
+
+              <!-- btn -->
+              <div>
+                <button id="answer-btn-{{ item.id }}" class="answer-btn btn btn-danger ml-3 my-3" onclick="showText(this.id)">答え</button>
+                {% if item.hint %}
+                  <button id="hint-btn-{{ item.id }}" class="hint-btn btn btn-primary ml-3 my-3" onclick="showText(this.id)">ヒント</button>
+                {% endif %}
+              </div>
+
+              <!-- text -->
+              <div id="hint-{{ item.id }}" class="question-not-active mx-4 mb-3">ヒント:<br> {{ item.hint }}</div>
+              <div id="answer-{{ item.id }}" class="question-not-active mx-4 mb-3">答え:<br> {{ item.answer }}</div>
 
             <!-- btn -->
-            <div class="d-flex flex-column w-25 mb-4 mx-auto">
+            <!-- <div class="d-flex flex-column w-25 mb-4 mx-auto">
               <a href="{% url 'notepad:query_edit' pk=item.pk %}" class="btn btn-outline-secondary btn-block">編集する</a>
               <a href="{% url 'notepad:query_delete' pk=item.pk %}" class="btn btn-outline-danger btn-block">削除する</a>
-            </div>
+            </div> -->
 
           </div>
         {% empty %}
@@ -54,3 +62,8 @@
     </div>
   </div>
 {% endblock content %}
+
+
+{% block js %}
+  <script src="{% static 'js/notepad/note-detail.js' %}"></script>
+{% endblock js %}

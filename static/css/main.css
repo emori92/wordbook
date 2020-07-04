@@ -1,3 +1,7 @@
+button {
+  font-family: 'Skranji', cursive;
+}
+
 .top-img {
   background-size: cover;
   height: 720px;
@@ -25,8 +29,12 @@
   height: 120px;
 }
 
-button {
-  font-family: 'Skranji', cursive;
+.container .question-not-active {
+  display: none;
+}
+
+.container .question-active {
+  display: block;
 }
 
 body header {
