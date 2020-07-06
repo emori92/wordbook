@@ -16,10 +16,10 @@ button {
 }
 
 .container .content {
-  height: 640px;
+  height: 760px;
 }
 
-.container .content .card {
+.container .content .wordbook {
   width: 240px;
   height: 200px;
 }
@@ -35,6 +35,11 @@ button {
 
 .container .question-active {
   display: block;
+}
+
+.container .wordbook {
+  width: 240px;
+  height: 200px;
 }
 
 body header {

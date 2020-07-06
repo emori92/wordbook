@@ -1,29 +1,25 @@
+
 'user strict';
 
 
 // hintとanswerを表示する関数
-function showText(type) {
-
-  // idの最後の一文字を取得
-  let num = type.slice(-1);
+let showText = (elemId) => {
 
   // 表示の処理
-  function changeDisplay(text) {
-    if (text.classList.contains('question-active')) {
-      text.classList.remove('question-active');
-      text.classList.add('question-not-active');
+  let changeDisplay = (text) => {
+    if (text.classList.contains('d-none')) {
+      text.classList.remove('d-none');
     } else {
-      text.classList.remove('question-not-active');
-      text.classList.add('question-active');
+      text.classList.add('d-none');
     }
   }
 
   // hintとanswerの判別
-  if (type.slice(0, 4) === 'hint') {
-    let text = document.getElementById(`hint-${num}`);
+  if (elemId.slice(0, 4) === 'hint') {
+    let text = document.getElementById(`hint-${elemId.slice(-1)}`);
     changeDisplay(text);
   } else {
-    let text = document.getElementById(`answer-${num}`);
+    let text = document.getElementById(`answer-${elemId.slice(-1)}`);
     changeDisplay(text);
   }
 }

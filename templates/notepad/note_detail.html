@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block title %}{{ object.title }} | Wordbook{% endblock title %}
-
 
 {% block content %}
   <div class="container">
@@ -43,8 +43,8 @@
               </div>
 
               <!-- text -->
-              <div id="hint-{{ item.id }}" class="question-not-active mx-4 mb-3">ヒント:<br> {{ item.hint }}</div>
-              <div id="answer-{{ item.id }}" class="question-not-active mx-4 mb-3">答え:<br> {{ item.answer }}</div>
+              <div id="hint-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint }}</div>
+              <div id="answer-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer }}</div>
 
             <!-- btn -->
             <!-- <div class="d-flex flex-column w-25 mb-4 mx-auto">
@@ -62,7 +62,6 @@
     </div>
   </div>
 {% endblock content %}
-
 
 {% block js %}
   <script src="{% static 'js/notepad/note-detail.js' %}"></script>

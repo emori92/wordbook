@@ -1,18 +1,19 @@
 
-.container {
+@import '../mixin';
 
+
+// content
+.container {
   // note
   .content {
-      height: 640px;
-      .card {
-        width: 240px;
-        height: 200px;
-      }
+    height: 760px;
+    .wordbook {
+      @include wordbook();
     }
-
-    // create note
-    .create a {
-      width: 120px;
-      height: 120px;
+  }
+  // create note
+  .create a {
+    width: 120px;
+    height: 120px;
   }
 }

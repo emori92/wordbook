@@ -1,0 +1,10 @@
+
+@import '../mixin';
+
+
+// content
+.container {
+  .wordbook {
+    @include wordbook();
+  }
+}

@@ -20,7 +20,7 @@ class Index(generic.TemplateView):
 
 
 # dashboard
-class DashBoard(LoginRequiredMixin, generic.ListView):
+class Dashboard(generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
 
@@ -30,10 +30,10 @@ class DashBoard(LoginRequiredMixin, generic.ListView):
 
 
 # note
-class NewNoteCreateView(LoginRequiredMixin, generic.CreateView):
+class NoteCreateView(LoginRequiredMixin, generic.CreateView):
     model = Note
     formclass = NoteForm
-    fields = ['title', 'describe']
+    fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
     success_url = '/dashboard/'
     
@@ -43,7 +43,7 @@ class NewNoteCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class NoteDetailView(LoginRequiredMixin, generic.DetailView):
+class NoteDetailView(generic.DetailView):
     model = Note
     template_name = "notepad/note_detail.html"
     
@@ -59,7 +59,7 @@ class NoteDetailView(LoginRequiredMixin, generic.DetailView):
 class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Note
     formclass = NoteForm
-    fields = ['title', 'describe']
+    fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
     success_url = '/dashboard/'
 
@@ -108,16 +108,18 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse('notepad:note_detail', kwargs={'pk': pk})
 
 
+class HotListView(generic.ListView):
+    model = Note
+    template_name = "notepad/hot.html"
 
-# base
-index = Index.as_view()
-dashboard = DashBoard.as_view()
-# note
-note_new = NewNoteCreateView.as_view()
-note_detail = NoteDetailView.as_view()
-note_edit = NoteUpdateView.as_view()
-note_delete = NoteDeleteView.as_view()
-# query
-query_new = QuestionCreateView.as_view()
-query_edit = QuestionUpdateView.as_view()
-query_delete = QuestionDeleteView.as_view()
+    def get_queryset(self):
+        # return Note.objects.filter(public=1).order_by('-created_at')[:60]  # 本番用
+        return Note.objects.filter().order_by('-created_at')[:60]  # 60件まで取得
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # ユーザーに推薦するノートを追加
+        demo_query = Note.objects.filter()
+        context['recommender'] = demo_query
+        return context
+    

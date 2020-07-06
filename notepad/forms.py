@@ -5,7 +5,7 @@ from .models import Note, Question
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['title', 'describe']
+        fields = ['title', 'describe', 'public']
         
         
 class QuestionForm(forms.ModelForm):
