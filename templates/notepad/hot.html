@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Hot | Wordbook{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="row my-5">
+
+      <!-- wordbook -->
+      <div class="col-lg border border-secondary rounded py-4">
+        <div>
+
+          <!-- tab btn -->
+          <div class="mx-auto pb-4 w-25">
+            <button id="wordbook-btn" class="btn btn-dark mr-3">New!</button>
+            <button id="recommender-btn" class="btn btn-dark">おすすめ</button>
+          </div>
+
+          <!-- new wordbook -->
+          <div id="wordbook" class="d-flex flex-wrap">
+            {% for item in object_list %}
+              <div class="card wordbook m-3 border-secondary">
+                <div class="card-header border-secondary">
+                  {{ item.title }}
+                </div>
+                <div class="card-body">
+                  <p>{{ item.describe|truncatechars:50 }}</p>
+                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                </div>
+              </div>
+            {% empty %}
+              <div class="card m-4 p-4 shadow-sm w-100 h-50">
+                <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- recommender -->
+          <div id="recommender" class="d-none flex-wrap">
+            {% for item in recommender %}
+              <div class="card wordbook m-3 border-secondary">
+                <div class="card-header border-secondary">
+                  {{ item.title }}
+                </div>
+                <div class="card-body">
+                  <p>{{ item.describe|truncatechars:50 }}</p>
+                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                </div>
+              </div>
+            {% empty %}
+              <div class="card m-4 p-4 shadow-sm w-100 h-50">
+                <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
+              </div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/notepad/hot.js' %}"></script>
+{% endblock js %}

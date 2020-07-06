@@ -18,27 +18,27 @@
       </div>
     </div>
 
-    <!-- note -->
+    <!-- wordbook -->
     <div class="row content">
-      <div class="col shadow-lg p-3 d-flex flex-wrap">
-        {% for note in object_list %}
-          <div class="card mt-3 ml-4 text-center border-secondary">
-            <div class="card-header border-secondary h5">{{ note.title|truncatechars:10 }}</div>
+      <div class="col border border-secondary rounded d-flex flex-wrap">
+        {% for item in object_list %}
+          <div class="card wordbook mt-4 ml-4 text-center border-secondary">
+            <div class="card-header border-secondary h5">{{ item.title|truncatechars:10 }}</div>
             <div class="card-body">
-              <p class="card-text">{{ note.describe|truncatechars:40 }}</p>
-              <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=note.pk %}">ノートを見る</a>
-              <p class="text-secondary text-right font-italic">{{ note.updated_at }}</p>
+              <p class="card-text">{{ item.describe|truncatechars:40 }}</p>
+              <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=item.pk %}">ノートを見る</a>
+              <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
             </div>
           </div>
         {% empty %}
-          <div class="card m-4 shadow-sm w-100 h-50>
-            <p class="text-center h1 font-weight-normal text-secondary">Note isn't found.</p>
+          <div class="card m-4 p-4 shadow-sm w-100 h-50">
+            <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
           </div>
         {% endfor %}
       </div>
     </div>
 
-    <!-- create note -->
+    <!-- create wordbook -->
     <div class="row create">
       <div class="mx-auto my-5">
         <a href="{% url 'notepad:note_new' %}" class="display-1 text-white bg-warning rounded-circle d-block text-center"><i class="fas fa-plus"></i></a>

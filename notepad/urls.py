@@ -6,16 +6,18 @@ app_name = 'notepad'
 
 urlpatterns = [
     # base
-    path('', views.index, name='index'),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    # path('dashboard/<int:pk>/', views.dashboard, name='dashboard'),
+    path('', views.Index.as_view(), name='index'),
+    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
+    # path('dashboard/<int:pk>/', views.Dashboard.as_view(), name='dashboard'),
     # note
-    path('note_new/', views.note_new, name='note_new'),
-    path('note/<int:pk>/', views.note_detail, name='note_detail'),
-    path('note/<int:pk>/edit/', views.note_edit, name='note_edit'),
-    path('note/<int:pk>/delete/', views.note_delete, name='note_delete'),
+    path('note_new/', views.NoteCreateView.as_view(), name='note_new'),
+    path('note/<int:pk>/', views.NoteDetailView.as_view(), name='note_detail'),
+    path('note/<int:pk>/edit/', views.NoteUpdateView.as_view(), name='note_edit'),
+    path('note/<int:pk>/delete/', views.NoteDeleteView.as_view(), name='note_delete'),
     # query
-    path('note/<int:pk>/query_new/', views.query_new, name='query_new'),
-    path('query/<int:pk>/edit/', views.query_edit, name='query_edit'),
-    path('query/<int:pk>/delete/', views.query_delete, name='query_delete'),
+    path('note/<int:pk>/query_new/', views.QuestionCreateView.as_view(), name='query_new'),
+    path('query/<int:pk>/edit/', views.QuestionUpdateView.as_view(), name='query_edit'),
+    path('query/<int:pk>/delete/', views.QuestionDeleteView.as_view(), name='query_delete'),
+    # hot ranking
+    path('hot/', views.HotListView.as_view(), name='hot'),
 ]
