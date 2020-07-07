@@ -19,29 +19,22 @@ button {
   height: 760px;
 }
 
-.container .content .wordbook {
-  width: 240px;
-  height: 200px;
-}
-
 .container .create a {
   width: 120px;
   height: 120px;
 }
 
-.container .question-not-active {
-  display: none;
-}
-
-.container .question-active {
-  display: block;
-}
-
-.container .wordbook {
-  width: 240px;
-  height: 200px;
+.container .edit-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 body header {
   font-family: 'Skranji', cursive;
+}
+
+body .wordbook {
+  width: 240px;
+  height: 200px;
 }

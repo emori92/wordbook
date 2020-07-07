@@ -1,15 +1,20 @@
 
+// minxin
+@import 'mixin';
+
 // components
 @import 'registration/login';
 @import 'notepad/index';
 @import 'notepad/dashboard';
 @import 'notepad/note_detail';
-@import 'notepad/hot';
 
 
 // content
 body {
   header {
     font-family: 'Skranji', cursive;
+  }
+  .wordbook {
+    @include wordbook();
   }
 }

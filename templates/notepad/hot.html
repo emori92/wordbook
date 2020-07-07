@@ -4,6 +4,8 @@
 
 {% block title %}Hot | Wordbook{% endblock title %}
 
+{% block hot_active %}active{% endblock %}
+
 {% block content %}
   <div class="container">
     <div class="row my-5">
@@ -23,11 +25,12 @@
             {% for item in object_list %}
               <div class="card wordbook m-3 border-secondary">
                 <div class="card-header border-secondary">
-                  {{ item.title }}
+                  {{ item.title|truncatechars:10 }}
                 </div>
                 <div class="card-body">
                   <p>{{ item.describe|truncatechars:50 }}</p>
                   <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
                 </div>
               </div>
             {% empty %}
@@ -47,6 +50,7 @@
                 <div class="card-body">
                   <p>{{ item.describe|truncatechars:50 }}</p>
                   <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
                 </div>
               </div>
             {% empty %}
