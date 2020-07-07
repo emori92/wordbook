@@ -1,11 +1,10 @@
 
 // content
 .container {
-  // question list
-  .question-not-active {
-    display: none;
-  }
-  .question-active {
-    display: block;
+  // edit btn
+  .edit-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 }

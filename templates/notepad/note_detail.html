@@ -8,49 +8,61 @@
   <div class="container">
     <div class="row my-5">
 
-      <!-- note abstract -->
+      <!-- wordbook abstract -->
       <div class="col-lg-3 col-md-6 mb-5">
         <div class="card border-secondary">
 
-          <!-- note -->
+          <!-- describe -->
           <div class="card-header border-secondary h2">{{ object.title }}</div>
           <p class="card-body">{{ object.describe }}</p>
   
           <!-- btn -->
-          <div class="d-inline-flex flex-column px-4 mb-4">
-            <a href="{% url 'notepad:query_new' pk=note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
-            <a href="{% url 'notepad:note_edit' pk=note.pk %}" class="btn btn-outline-secondary btn-block">ノートを編集する</a>
-            <a href="{% url 'notepad:note_delete' pk=note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
-          </div>
-          <p class="text-secondary font-italic text-right mr-3">更新: {{object.updated_at }}</p>
+          {% if user.pk == object.user.pk %}
+            <div class="d-inline-flex flex-column px-4 mb-4">
+              <a href="{% url 'notepad:query_new' pk=note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
+              <a href="{% url 'notepad:note_edit' pk=note.pk %}" class="btn btn-outline-secondary btn-block">ノートを編集する</a>
+              <a href="{% url 'notepad:note_delete' pk=note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
+            </div>
+          {% endif %}
+          
+          <!-- date -->
+          <p class="text-secondary font-italic text-right mr-3">更新: {{ object.updated_at }}</p>
+          
         </div>
       </div>
 
       <!-- question list -->
       <div class="col-lg-9">
         {% for item in queryset %}
-          <div class="card border-secondary mb-5">
+        <div class="card border-secondary mb-5">
 
-            <!-- question -->
-            <div class="card-header border-secondary">{{ item.query }}</div>
+          <!-- question -->
+          <div class="card-header border-secondary">{{ item.query }}</div>
+          
+          <!-- answer hint btn -->
+          <div class="d-flex position-relative">
+            <div class="w-75">
+              <button id="answer-btn-{{ item.id }}" class="answer-btn btn btn-danger ml-3 my-3" onclick="showText(this.id)">答え</button>
+              {% if item.hint %}
+                <button id="hint-btn-{{ item.id }}" class="hint-btn btn btn-primary ml-3 my-3" onclick="showText(this.id)">ヒント</button>
+              {% endif %}
+            </div>
 
-              <!-- btn -->
-              <div>
-                <button id="answer-btn-{{ item.id }}" class="answer-btn btn btn-danger ml-3 my-3" onclick="showText(this.id)">答え</button>
-                {% if item.hint %}
-                  <button id="hint-btn-{{ item.id }}" class="hint-btn btn btn-primary ml-3 my-3" onclick="showText(this.id)">ヒント</button>
-                {% endif %}
+            <!-- edit btn -->
+            {% if user.pk == object.user.pk %}
+              <div class="edit-btn dropleft mr-1 mb-2">
+                <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="far fa-edit"></i></button>
+                <div class="dropdown-menu">
+                  <a href="{% url 'notepad:query_edit' pk=item.pk %}" class="dropdown-item">編集する</a>
+                  <a href="{% url 'notepad:query_delete' pk=item.pk %}" class="dropdown-item">削除する</a>
+                </div>
               </div>
+            {% endif %}
+          </div>
 
-              <!-- text -->
-              <div id="hint-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint }}</div>
-              <div id="answer-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer }}</div>
-
-            <!-- btn -->
-            <!-- <div class="d-flex flex-column w-25 mb-4 mx-auto">
-              <a href="{% url 'notepad:query_edit' pk=item.pk %}" class="btn btn-outline-secondary btn-block">編集する</a>
-              <a href="{% url 'notepad:query_delete' pk=item.pk %}" class="btn btn-outline-danger btn-block">削除する</a>
-            </div> -->
+          <!-- text -->
+          <div id="hint-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint }}</div>
+          <div id="answer-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer }}</div>
 
           </div>
         {% empty %}

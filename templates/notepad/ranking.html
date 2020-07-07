@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Ranking | Wordbook{% endblock %}
+
+{% block ranking_active %}active{% endblock  %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg border border-secondary rounded my-5">
+        <div class="d-flex flex-wrap">
+          {% for item in object_list %}
+            <div class="wordbook card border-secondary m-3">
+              <div class="card-header border-secondary">
+                {{ forloop.counter }}. {{ item.title|truncatechars:10 }}
+              </div>
+              <div class="card-body">
+                <p>{{ item.describe|truncatechars:50 }}</p>
+                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

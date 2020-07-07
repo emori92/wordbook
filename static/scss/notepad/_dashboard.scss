@@ -1,15 +1,9 @@
 
-@import '../mixin';
-
-
 // content
 .container {
   // note
   .content {
     height: 760px;
-    .wordbook {
-      @include wordbook();
-    }
   }
   // create note
   .create a {

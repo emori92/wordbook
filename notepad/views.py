@@ -108,6 +108,19 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
         return reverse('notepad:note_detail', kwargs={'pk': pk})
 
 
+class RankingListView(generic.ListView):
+    model = Note
+    template_name = "notepad/ranking.html"
+    
+def get_queryset(self):
+    queryset = super().get_queryset()
+    return Note.objects.filter(public=1)
+
+def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    return context
+
+
 class HotListView(generic.ListView):
     model = Note
     template_name = "notepad/hot.html"
@@ -118,8 +131,8 @@ class HotListView(generic.ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # ユーザーに推薦するノートを追加
-        demo_query = Note.objects.filter()
+        # 推薦されたノートをcontextに追加
+        # demo_query = Note.objects.filter()
+        demo_query = Note.objects.filter(public=1)  # 本番用
         context['recommender'] = demo_query
         return context
-    

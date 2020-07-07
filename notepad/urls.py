@@ -18,6 +18,7 @@ urlpatterns = [
     path('note/<int:pk>/query_new/', views.QuestionCreateView.as_view(), name='query_new'),
     path('query/<int:pk>/edit/', views.QuestionUpdateView.as_view(), name='query_edit'),
     path('query/<int:pk>/delete/', views.QuestionDeleteView.as_view(), name='query_delete'),
-    # hot ranking
+    # ranking hot
+    path('ranking/', views.RankingListView.as_view(), name='ranking'),
     path('hot/', views.HotListView.as_view(), name='hot'),
 ]
