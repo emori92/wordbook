@@ -4,11 +4,11 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 # view
-from django.views.generic import CreateView
+from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import User
-from .forms import MyUserCreationForm, SignupForm
+from .forms import MyUserCreationForm, SignupForm, ProfileForm
 
 
 # login
@@ -18,11 +18,11 @@ class Login(SuccessMessageMixin, LoginView):
 
 
 # signup
-class SignupView(CreateView):
+class SignupView(generic.CreateView):
     model = User
     formclass = SignupForm
-    fields = ['username', 'password']
     template_name = "accounts/signup.html"
+    fields = ['username', 'password']
     success_url = reverse_lazy('notepad:dashboard')
 
     def form_valid(self, form):
@@ -37,3 +37,10 @@ class SignupView(CreateView):
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super().form_valid(form)
+
+
+# profile
+class ProfileUpdateView(generic.UpdateView):
+    model = User
+    formclass = ProfileForm
+    template_name = "accounts/profile.html"

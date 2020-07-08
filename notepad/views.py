@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 import logging
 
+from accounts.models import User
 from .models import Note, Question
 from .forms import NoteForm, QuestionForm
 
@@ -24,10 +25,17 @@ class Dashboard(generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
 
-    # ユーザーのオブジェクトを取得
+    # ユーザー取得
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = User.objects.get(username=self.request.user)
+        return context
+
+    # ユーザーの単語帳を取得
     def get_queryset(self):
         return Note.objects.filter(user=self.request.user.pk).order_by('-updated_at')
-
+    
+    
 
 # note
 class NoteCreateView(LoginRequiredMixin, generic.CreateView):

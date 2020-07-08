@@ -36,3 +36,9 @@ class SignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+        
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'describe', 'image']
