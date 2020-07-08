@@ -2,24 +2,28 @@
 'user strict';
 
 
-// hintとanswerを表示する関数
-let showText = (elemId) => {
+// 実行
+let answers = document.querySelectorAll('.answer-btn');
+let hints = document.querySelectorAll('.hint-btn');
 
-  // 表示の処理
-  let changeDisplay = (text) => {
-    if (text.classList.contains('d-none')) {
-      text.classList.remove('d-none');
-    } else {
-      text.classList.add('d-none');
-    }
-  }
 
-  // hintとanswerの判別
-  if (elemId.slice(0, 4) === 'hint') {
-    let text = document.getElementById(`hint-${elemId.slice(-1)}`);
-    changeDisplay(text);
-  } else {
-    let text = document.getElementById(`answer-${elemId.slice(-1)}`);
-    changeDisplay(text);
+// 表示処理
+const showText = (elemList, elemClass) => {
+
+  for (let i = 0; i < elemList.length; i++) {
+    // click event
+    elemList[i].addEventListener('click', () => {
+      // get elem
+      let elem = elemList[i].parentElement.parentElement.parentElement.querySelector(elemClass);
+      // display: none の削除、追加
+      if (elem.classList.contains('d-none')) {
+        elem.classList.remove('d-none');
+      } else {
+        elem.classList.add('d-none');
+      }
+    });
   }
 }
+
+showText(answers, '.answer');
+showText(hints, '.hint');

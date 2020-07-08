@@ -42,9 +42,11 @@
           <!-- answer hint btn -->
           <div class="d-flex position-relative">
             <div class="w-75">
-              <button id="answer-btn-{{ item.id }}" class="answer-btn btn btn-danger ml-3 my-3" onclick="showText(this.id)">答え</button>
+              <!-- <button id="answer-btn-{{ item.id }}" class="answer-btn btn btn-danger ml-3 my-3" onclick="showText(this.id)">答え</button> -->
+              <button class="answer-btn btn btn-danger ml-3 my-3">答え</button>
               {% if item.hint %}
-                <button id="hint-btn-{{ item.id }}" class="hint-btn btn btn-primary ml-3 my-3" onclick="showText(this.id)">ヒント</button>
+                <!-- <button id="hint-btn-{{ item.id }}" class="hint-btn btn btn-primary ml-3 my-3" onclick="showText(this.id)">ヒント</button> -->
+                <button  class="hint-btn btn btn-primary ml-3 my-3">ヒント</button>
               {% endif %}
             </div>
 
@@ -61,8 +63,8 @@
           </div>
 
           <!-- text -->
-          <div id="hint-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint }}</div>
-          <div id="answer-{{ item.id }}" class="d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer }}</div>
+          <div id="hint-{{ item.id }}" class="hint d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint|linebreaksbr }}</div>
+          <div id="answer-{{ item.id }}" class="answer d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer|linebreaksbr }}</div>
 
           </div>
         {% empty %}
