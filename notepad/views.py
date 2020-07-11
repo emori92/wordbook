@@ -3,7 +3,7 @@ from django.urls import reverse
 import logging
 
 from accounts.models import User
-from .models import Note, Question
+from .models import Note, Question, Follow
 from .forms import NoteForm, QuestionForm
 
 from django.views import generic
@@ -20,6 +20,36 @@ class Index(generic.TemplateView):
     template_name = 'notepad/index.html'
 
 
+class RankingListView(generic.ListView):
+    model = Note
+    template_name = "notepad/ranking.html"
+    
+def get_queryset(self):
+    queryset = super().get_queryset()
+    return Note.objects.filter(public=1)
+
+def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    return context
+
+
+class HotListView(generic.ListView):
+    model = Note
+    template_name = "notepad/hot.html"
+
+    def get_queryset(self):
+        # return Note.objects.filter(public=1).order_by('-created_at')[:60]  # 本番用
+        return Note.objects.filter().order_by('-created_at')[:60]  # 60件まで取得
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 推薦されたノートをcontextに追加
+        # demo_query = Note.objects.filter()
+        demo_query = Note.objects.filter(public=1)  # 本番用
+        context['recommender'] = demo_query
+        return context
+
+
 # dashboard
 class Dashboard(generic.ListView):
     model = Note
@@ -28,14 +58,45 @@ class Dashboard(generic.ListView):
     # ユーザー取得
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = User.objects.get(username=self.request.user)
+        # dashboardに表示するUser取得
+        context['account'] = User.objects.get(pk=self.kwargs['pk'])
+        # フォローするユーザーとされるユーザーを取得
+        following = User.objects.get(pk=self.request.user.pk)
+        followed = User.objects.get(pk=self.kwargs['pk'])
+        # フォローの有無
+        follow_state = Follow.objects.filter(following=following, followed=followed).exists()
+        print(f'\n\n{follow_state}\n\n')
+        context['follow_state'] = follow_state
         return context
 
     # ユーザーの単語帳を取得
     def get_queryset(self):
-        return Note.objects.filter(user=self.request.user.pk).order_by('-updated_at')
+        return Note.objects.filter(user=self.kwargs['pk']).order_by('-updated_at')
+
+
+class FollowView(LoginRequiredMixin, generic.RedirectView):
+    # url = '/dashboard/'
+    pattern_name = 'notepad:dashboard'
+    # query_string = True
+
+    # フォロー、フォロー削除
+    def get(self, request, *args, **kwargs):
+        # フォローするユーザーとされるユーザーを取得
+        following = User.objects.get(pk=self.kwargs['following'])
+        followed = User.objects.get(pk=self.kwargs['followed'])
+        # pkをDBに格納 or 削除
+        if Follow.objects.filter(following=following, followed=followed).exists():
+            follow = Follow.objects.get(following=following, followed=followed)
+            follow.delete()
+        else:
+            follow = Follow.objects.create(following=following, followed=followed)
+            follow.save()
+        return super().get(request, *args, **kwargs)
     
-    
+    def get_redirect_url(self, *args, **kwargs):
+        url = '/dashboard/%s/' % self.kwargs['following']
+        return url
+
 
 # note
 class NoteCreateView(LoginRequiredMixin, generic.CreateView):
@@ -43,12 +104,16 @@ class NoteCreateView(LoginRequiredMixin, generic.CreateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    success_url = '/dashboard/'
+    # success_url = '/dashboard/'
     
     # form_validでユーザーを追加
     def form_valid(self, form):
         form.instance.user_id = self.request.user.id
         return super().form_valid(form)
+
+    def get_success_url(self):
+        note_pk = self.object.pk
+        return reverse('notepad:note_detail', kwargs={'pk': note_pk})
 
 
 class NoteDetailView(generic.DetailView):
@@ -69,7 +134,10 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    success_url = '/dashboard/'
+    
+    def get_success_url(self):
+        note_pk = self.object.pk
+        return reverse('notepad:note_detail', kwargs={'pk': note_pk})
 
 
 class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -114,33 +182,3 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_success_url(self):
         pk = self.object.note_id
         return reverse('notepad:note_detail', kwargs={'pk': pk})
-
-
-class RankingListView(generic.ListView):
-    model = Note
-    template_name = "notepad/ranking.html"
-    
-def get_queryset(self):
-    queryset = super().get_queryset()
-    return Note.objects.filter(public=1)
-
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    return context
-
-
-class HotListView(generic.ListView):
-    model = Note
-    template_name = "notepad/hot.html"
-
-    def get_queryset(self):
-        # return Note.objects.filter(public=1).order_by('-created_at')[:60]  # 本番用
-        return Note.objects.filter().order_by('-created_at')[:60]  # 60件まで取得
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # 推薦されたノートをcontextに追加
-        # demo_query = Note.objects.filter()
-        demo_query = Note.objects.filter(public=1)  # 本番用
-        context['recommender'] = demo_query
-        return context

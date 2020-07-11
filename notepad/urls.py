@@ -7,8 +7,10 @@ app_name = 'notepad'
 urlpatterns = [
     # base
     path('', views.Index.as_view(), name='index'),
-    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
-    # path('dashboard/<int:pk>/', views.Dashboard.as_view(), name='dashboard'),
+    # path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
+    path('dashboard/<int:pk>/', views.Dashboard.as_view(), name='dashboard'),
+    # path('test/', views.FollowView.as_view(), name='follow'),
+    path('<int:following>/<int:followed>/', views.FollowView.as_view(), name='follow'),
     # note
     path('note_new/', views.NoteCreateView.as_view(), name='note_new'),
     path('note/<int:pk>/', views.NoteDetailView.as_view(), name='note_detail'),

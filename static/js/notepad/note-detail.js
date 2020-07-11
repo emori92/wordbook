@@ -2,20 +2,20 @@
 'user strict';
 
 
-// 実行
+// get answer and hint class
 let answers = document.querySelectorAll('.answer-btn');
 let hints = document.querySelectorAll('.hint-btn');
 
 
-// 表示処理
+// show answer, hint
 const showText = (elemList, elemClass) => {
 
   for (let i = 0; i < elemList.length; i++) {
     // click event
     elemList[i].addEventListener('click', () => {
-      // get elem
+      // get element
       let elem = elemList[i].parentElement.parentElement.parentElement.querySelector(elemClass);
-      // display: none の削除、追加
+      // add or remove 'display: none'
       if (elem.classList.contains('d-none')) {
         elem.classList.remove('d-none');
       } else {
