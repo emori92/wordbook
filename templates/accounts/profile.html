@@ -3,5 +3,19 @@
 {% block title %}プロフィール編集{% endblock title %}
 
 {% block content %}
-  
+  <div class="container my-5">
+    <div class="row">
+      <div class="col">
+
+        <!-- form -->
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">更新！</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
