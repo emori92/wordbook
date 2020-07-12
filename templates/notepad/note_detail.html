@@ -24,6 +24,20 @@
               <a href="{% url 'notepad:note_delete' pk=note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
             </div>
           {% endif %}
+
+          <!-- star -->
+          {% if user.is_authenticated %}
+            {% if user.pk != object.user.pk %}
+              <div class="ml-4">
+                {% if star_state == True %}
+                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}"><i class="fas fa-star h3 text-warning"></i></a>
+                {% else %}
+                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}"><i class="far fa-star h3 text-secondary"></i></a>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+            
           
           <!-- date -->
           <p class="text-secondary font-italic text-right mr-3">更新: {{ object.updated_at }}</p>

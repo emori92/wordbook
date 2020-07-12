@@ -3,7 +3,7 @@
 {% block title %}new query{% endblock title %}
 
 {% block content %}
-<div class="container">
+<div class="container my-5">
   <form method="POST">
     {% csrf_token %}
     <div class="mt-4">
@@ -11,9 +11,8 @@
     </div>
     <div class="d-flex flex-column w-25">
       <button type="submit" class="btn btn-success mb-4">作成!</button>
-      <a href="{% url 'notepad:dashboard' %}" class="btn btn-outline-secondary">戻る</a>
+      <a href="{% url 'notepad:dashboard' pk=user.pk %}" class="btn btn-outline-secondary">戻る</a>
     </div>
-
   </form>
 </div>
 {% endblock content %}

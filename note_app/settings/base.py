@@ -85,7 +85,6 @@ DATABASES = {}
 AUTH_USER_MODEL = 'accounts.User'
 
 # リダイレクト先
-LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
 # FLASH MESSAGEのストレージ
