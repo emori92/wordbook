@@ -11,7 +11,7 @@
       </div>
       <div class="d-flex flex-column w-25 ml-5">
         <button type="submit" class="btn btn-success mt-5">作成!</button>
-        <a href="{% url 'notepad:dashboard' %}" class="btn btn-outline-secondary mt-4">戻る</a>
+        <a href="{% url 'notepad:dashboard' pk=user.pk %}" class="btn btn-outline-secondary mt-4">戻る</a>
       </div>
     </form>
   </div>

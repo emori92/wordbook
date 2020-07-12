@@ -51,17 +51,18 @@ class Question(models.Model):
         return self.query
 
 
-# class Star(models.Model):
-#     '''ノートをブックマークするモデル'''
+class Star(models.Model):
+    '''ノートをブックマークするモデル'''
 
-#     note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
+    liked_at = models.DateTimeField(verbose_name='いいねした日', auto_now=True)
 
-#     class Meta:
-#         db_table = 'star'
+    class Meta:
+        db_table = 'star'
 
-#     def __str__(self):
-#         return self.note
+    def __str__(self):
+        return self.note
 
 
 class Follow(models.Model):

@@ -15,6 +15,9 @@ from .forms import MyUserCreationForm, SignupForm, ProfileForm
 class Login(SuccessMessageMixin, LoginView):
     template_name = 'accounts/login.html'
     success_message = 'Login success!'
+    
+    def get_success_url(self):
+        return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
 
 
 # signup
@@ -23,7 +26,9 @@ class SignupView(generic.CreateView):
     formclass = SignupForm
     template_name = "accounts/signup.html"
     fields = ['username', 'password']
-    success_url = reverse_lazy('notepad:dashboard')
+    
+    def get_success_url(self):
+        return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
 
     def form_valid(self, form):
         # ユーザー取得
@@ -45,4 +50,6 @@ class ProfileUpdateView(generic.UpdateView):
     formclass = ProfileForm
     fields = ['username', 'describe', 'image']
     template_name = "accounts/profile.html"
-    success_url = '/dashboard/'
+
+    def get_success_url(self):
+        return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
