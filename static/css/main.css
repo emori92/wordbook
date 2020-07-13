@@ -15,8 +15,12 @@ button {
   font-family: 'Skranji', cursive;
 }
 
-.container .content {
-  height: 760px;
+.container .title h1 {
+  font-family: 'Bangers', cursive;
+}
+
+.container .wordbook span {
+  font-family: 'Bangers', cursive;
 }
 
 .container .create a {

@@ -2,10 +2,6 @@
 'user strict';
 
 
-// btn
-let wordbook = document.getElementById('wordbook-btn');
-let recommender = document.getElementById('recommender-btn');
-
 // add or remove class
 const changeDisplay = (id1, id2) => {
   // get element
@@ -16,7 +12,19 @@ const changeDisplay = (id1, id2) => {
   element1.classList.add('d-flex');
   element2.classList.remove('d-flex');
   element2.classList.add('d-none');
+  // change btn active
+  // if (wordbook.classList.contains('active')) {
+  //   wordbook.classList.remove('active');
+  //   recommender.classList.add('active');
+  // } else {
+  //   recommender.classList.remove('active');
+  //   wordbook.classList.add('active');
+  // }
 }
+
+// btn
+let wordbook = document.getElementById('wordbook-btn');
+let recommender = document.getElementById('recommender-btn');
 
 // push btn
 wordbook.addEventListener('click', () => { changeDisplay('wordbook', 'recommender') });
