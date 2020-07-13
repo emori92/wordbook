@@ -33,3 +33,21 @@ LEFT JOIN
 ON
     t1.note_id == t3.id
 ;
+
+
+-- star ranking
+SELECT
+    t2.id AS note_id
+    , t3.title AS note
+    , COUNT(t1.user_id) AS star_num
+FROM
+    star AS t1
+INNER JOIN
+    note AS t2
+ON
+    t1.note_id == t2.id
+GROUP BY
+    note
+ORDER BY
+    star_num DESC
+;

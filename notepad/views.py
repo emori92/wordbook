@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
+from django.db.models import Count
 import logging
 
 from accounts.models import User
@@ -27,7 +28,8 @@ class RankingListView(generic.ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        return Note.objects.filter(public=1)
+        return Note.objects.values('id', 'user_id', 'user__username', 'title', 'describe').filter(public=1, star__gt=0).annotate(star_num=Count('star__id')).order_by('-star_num')
+        # return Star.objects.values('note_id', 'note__title')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,9 +66,8 @@ class Dashboard(generic.ListView):
         context = super().get_context_data(**kwargs)
         # dashboardに表示するUser取得
         context['account'] = User.objects.get(pk=self.kwargs['pk'])
-        # ログインしている場合
-        if self.request.user.is_authenticated:
         # フォローするユーザーとされるユーザーを取得
+        if self.request.user.is_authenticated:
             following = User.objects.get(pk=self.request.user.pk)
             followed = User.objects.get(pk=self.kwargs['pk'])
             # ユーザーがフォローしているか真偽値を取得
@@ -75,6 +76,10 @@ class Dashboard(generic.ListView):
         # 公開されている単語帳のみ取得
         public_list = Note.objects.filter(user=self.kwargs['pk'], public=1).order_by('-updated_at')
         context['public_list'] = public_list
+        # いいねした単語帳を取得
+        if self.request.user.pk == self.kwargs['pk']:
+            liked_note = Note.objects.filter(star__user=self.request.user.pk)
+            context['liked_note'] = liked_note
         return context
 
 

@@ -8,19 +8,38 @@
 
 {% block content %}
   <div class="container">
+
+    <!-- title -->
+    <div class="title row mt-5">
+      <div class="col-lg-4">
+        <h1 class="text-info display-2">Ranking</h1>
+      </div>
+
+      <!-- category btn -->
+      <div class="col-lg-8 mt-5">
+        <div class="btn-group btn-group-lg">
+          <button class="btn btn-secondary">いいね</button>
+          <button class="btn btn-secondary">ユーザー</button>
+          <button class="btn btn-secondary">カテゴリ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ranking -->
     <div class="row">
-      <div class="col-lg border border-secondary rounded my-5">
+      <div class="col-lg border border-secondary rounded my-4">
         <div class="d-flex flex-wrap">
           {% for item in object_list %}
             <div class="wordbook card border-secondary m-3">
               <div class="card-header border-secondary">
-                {{ forloop.counter }}. {{ item.title|truncatechars:15 }}
+                <span class="h4 text-danger">{{ forloop.counter }} </span>{{ item.title|truncatechars:15 }}
+                <span class="text-right text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
               </div>
               <div class="card-body">
                 <p>{{ item.describe|truncatechars:50 }}</p>
-                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
-                  <a href="{% url 'notepad:dashboard' pk=item.user.pk %}" class="btn btn-danger">{{ item.user }}</a>
-                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
+                <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user__username }}</a>
+                <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
               </div>
             </div>
           {% endfor %}
