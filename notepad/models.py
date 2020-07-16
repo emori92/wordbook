@@ -1,5 +1,5 @@
 from django.db import models
-# user
+
 from accounts.models import User
 
 
@@ -17,7 +17,7 @@ from accounts.models import User
 
 class Note(models.Model):
     '''メモ基本情報のモデル'''
-        
+
     user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
     # tag = models.ForeignKey(Tag, verbose_name='カテゴリ', on_delete=models.SET_NULL, null=True)
     title = models.CharField(verbose_name='タイトル', max_length=32)

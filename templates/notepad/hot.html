@@ -17,12 +17,36 @@
           <!-- tab btn -->
           <div class="btn-group mx-auto pb-4 w-25">
             <button id="wordbook-btn" class="btn btn-secondary">New!</button>
+            {% if user.is_authenticated %}
+              <button id="follow-btn" class="btn btn-secondary">フォロー</button>
+            {% endif %}
             <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
           </div>
 
           <!-- new wordbook -->
-          <div id="wordbook" class="d-flex flex-wrap">
+          <div id="wordbook" class="flex-wrap d-none">
             {% for item in object_list %}
+              <div class="card wordbook m-3 border-secondary">
+                <div class="card-header border-secondary">
+                  {{ item.title|truncatechars:15 }}
+                </div>
+                <div class="card-body">
+                  <p>{{ item.describe|truncatechars:50 }}</p>
+                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                  <a href="{% url 'notepad:dashboard' pk=item.user.pk %}" class="btn btn-danger">{{ item.user }}</a>
+                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
+                </div>
+              </div>
+            {% empty %}
+              <div class="card m-4 p-4 shadow-sm w-100 h-50">
+                <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- follow -->
+          <div id="follow" class="flex-wrap d-flex">
+            {% for item in follow_note %}
               <div class="card wordbook m-3 border-secondary">
                 <div class="card-header border-secondary">
                   {{ item.title|truncatechars:15 }}

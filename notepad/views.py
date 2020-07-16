@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Count
+from django.db.models import Count, Subquery, OuterRef
 import logging
 
 from accounts.models import User
@@ -28,11 +28,17 @@ class RankingListView(generic.ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        return Note.objects.values('id', 'user_id', 'user__username', 'title', 'describe').filter(public=1, star__gt=0).annotate(star_num=Count('star__id')).order_by('-star_num')
-        # return Star.objects.values('note_id', 'note__title')
+        # いいねされたノートをランキング形式で取得
+        note = Note.objects.filter(public=1, star__gt=0).values('id', 'title', 'describe', 'user_id', 'user__username') \
+            .annotate(star_num=Count('star__id')).order_by('-star_num')
+        return note
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # フォロー数の多い人を抽出
+        users = User.objects.filter(followed__followed__gt=0).values('id', 'username', 'describe') \
+            .annotate(user_num=Count('followed__followed')).order_by('-user_num')
+        context['users'] = users
         return context
 
 
@@ -41,13 +47,20 @@ class HotListView(generic.ListView):
     template_name = "notepad/hot.html"
 
     def get_queryset(self):
-        return Note.objects.filter(public=1).order_by('-created_at')[:60]  # 本番用
-        # return Note.objects.filter().order_by('-created_at')[:60]  # 60件まで取得
+        # 新規投稿を取得
+        return Note.objects.filter(public=1).order_by('-created_at')[:60]
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 推薦されたノートをcontextに追加
-        demo_query = Note.objects.filter(public=1)  # デモデータ
+        if self.request.user.is_authenticated:
+            # サブクエリでフォローしているユーザーを取得
+            follow_user = User.objects.filter(following=OuterRef('pk'))
+            subq = Subquery(follow_user.values('following__followed'))
+            # 上記で取得したクエリからノートを取得
+            note = Note.objects.filter(public=1).annotate(note=subq)
+            context['follow_note'] = note
+        # 推薦されたノートを取得
+        demo_query = Note.objects.filter()  # デモデータ
         context['recommender'] = demo_query
         return context
 
@@ -89,7 +102,6 @@ class NoteCreateView(LoginRequiredMixin, generic.CreateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    # success_url = '/dashboard/'
     
     # form_validでユーザーを追加
     def form_valid(self, form):
@@ -115,9 +127,16 @@ class NoteDetailView(generic.DetailView):
             # 単語帳とユーザーを特定
             note = Note.objects.get(pk=self.kwargs['pk'])
             user = User.objects.get(pk=self.request.user.pk)
-            # いいねの判定を真偽値で格納
+            # いいねの有無を真偽値で格納
             star_state = Star.objects.filter(note=note, user=user).exists()
             context['star_state'] = star_state
+        # いいね数
+        star_num = Star.objects.filter(note_id=self.kwargs['pk'])
+        # starテーブルにレコードの有無を確認（レコードがないとエラーになるので、定数0を格納）
+        if star_num.exists():
+            context['star_num'] = star_num.values('note_id').annotate(num=Count('id')).get(note_id=self.kwargs['pk'])
+        else:
+            context['star_num'] = {'num': 0}
         return context
 
 

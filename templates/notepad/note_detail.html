@@ -14,7 +14,7 @@
 
           <!-- describe -->
           <div class="card-header border-secondary h2">{{ object.title }}</div>
-          <p class="card-body">{{ object.describe }}</p>
+          <p class="card-body">{{ object.describe|linebreaksbr }}</p>
   
           <!-- btn -->
           {% if user.pk == object.user.pk %}
@@ -30,15 +30,25 @@
             {% if user.pk != object.user.pk %}
               <div class="ml-4">
                 {% if star_state == True %}
-                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}"><i class="fas fa-star h3 text-warning"></i></a>
+                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}">
+                    <i class="fas fa-star h3 text-warning"></i>
+                  </a>
+                  <span class="h4"> {{ star_num.num }}</span>
                 {% else %}
-                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}"><i class="far fa-star h3 text-secondary"></i></a>
+                  <a href="{% url 'notepad:star' user_pk=user.pk note_pk=object.pk %}">
+                    <i class="far fa-star h3 text-secondary"></i>
+                  </a>
+                  <span class="h4"> {{ star_num.num }}</span>
                 {% endif %}
               </div>
             {% endif %}
+          {% else %}
+            <div class="ml-4">
+              <i class="far fa-star h3 text-secondary"></i>
+              <span class="h4"> {{ star_num.num }}</span>
+            </div>
           {% endif %}
-            
-          
+
           <!-- date -->
           <p class="text-secondary font-italic text-right mr-3">更新: {{ object.updated_at }}</p>
           
