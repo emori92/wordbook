@@ -18,9 +18,9 @@
       <!-- category btn -->
       <div class="col-lg-8 mt-5">
         <div class="btn-group btn-group-lg">
-          <button class="btn btn-secondary">いいね</button>
-          <button class="btn btn-secondary">ユーザー</button>
-          <button class="btn btn-secondary">カテゴリ</button>
+          <button id="star-btn" class="btn btn-secondary">いいね</button>
+          <button id="user-btn" class="btn btn-secondary">ユーザー</button>
+          <button id="category-btn" class="btn btn-secondary">カテゴリ</button>
         </div>
       </div>
     </div>
@@ -28,7 +28,9 @@
     <!-- ranking -->
     <div class="row">
       <div class="col-lg border border-secondary rounded my-4">
-        <div class="d-flex flex-wrap">
+
+        <!-- star -->
+        <div id="star" class="flex-wrap d-flex">
           {% for item in object_list %}
             <div class="wordbook card border-secondary m-3">
               <div class="card-header border-secondary">
@@ -44,7 +46,33 @@
             </div>
           {% endfor %}
         </div>
+
+        <!-- user -->
+        <div id="user" class="flex-wrap d-none">
+          {% for item in users %}
+            <div class="wordbook card border-secondary m-3">
+              <div class="card-header border-secondary">
+                <span class="h4 text-danger">{{ forloop.counter }} </span>
+                <a href="{% url 'notepad:dashboard' pk=item.id %}" class="text-info">{{ item.username|truncatechars:10 }}</a>
+                <i class="fas fa-user-friends"></i>: {{ item.user_num }}
+              </div>
+              <div class="card-body">
+                {% if item.describe %}
+                  <p>{{ item.describe|linebreaksbr }}</p>
+                {% endif %}
+                <a href="" class="btn btn-primary">フォロー</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- tag -->
       </div>
     </div>
   </div>
 {% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/notepad/ranking.js' %}"></script>
+{% endblock  %}
+  
