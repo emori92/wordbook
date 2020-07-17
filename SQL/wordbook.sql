@@ -58,6 +58,34 @@ GROUP BY
 
 -- ユーザーid:15の人がフォローしているノートを取得
 SELECT
+    u.id
+    , u.username
+    , f.followed_id
+    , n.title
+-- フォロー
+FROM
+    follow AS f
+-- ノート
+INNER JOIN
+    note AS n
+ON
+    n.user_id == f.followed_id
+-- ユーザー
+INNER JOIN
+    user AS u
+ON
+    u.id == f.following_id
+WHERE
+    u.username == 'test'
+AND
+    n.public == 1
+ORDER BY
+    n.created_at
+;
+
+
+-- ユーザーid:15の人がフォローしているノートを取得
+SELECT
     t2.id
     , t2.username
     , t2.followed_id
@@ -76,7 +104,7 @@ INNER JOIN
     ON
         t1.id == t2.following_id
     WHERE
-        t2.following_id == 18
+        t2.following_id == 15
     ) AS t2
 -- フォローされたユーザーでノートテーブルと結合
 ON

@@ -24,7 +24,7 @@
           </div>
 
           <!-- new wordbook -->
-          <div id="wordbook" class="flex-wrap d-none">
+          <div id="wordbook" class="flex-wrap d-flex">
             {% for item in object_list %}
               <div class="card wordbook m-3 border-secondary">
                 <div class="card-header border-secondary">
@@ -45,7 +45,7 @@
           </div>
 
           <!-- follow -->
-          <div id="follow" class="flex-wrap d-flex">
+          <div id="follow" class="flex-wrap d-none">
             {% for item in follow_note %}
               <div class="card wordbook m-3 border-secondary">
                 <div class="card-header border-secondary">
@@ -53,8 +53,8 @@
                 </div>
                 <div class="card-body">
                   <p>{{ item.describe|truncatechars:50 }}</p>
-                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
-                  <a href="{% url 'notepad:dashboard' pk=item.user.pk %}" class="btn btn-danger">{{ item.user }}</a>
+                  <a href="{% url 'notepad:note_detail' pk=item.note_id %}" class="btn btn-primary">ノートを見る</a>
+                  <a href="{% url 'notepad:dashboard' pk=item.followed_id %}" class="btn btn-danger">{{ item.username }}</a>
                   <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
                 </div>
               </div>
