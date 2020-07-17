@@ -32,5 +32,5 @@ let recommender = document.getElementById('recommender-btn');
 
 // push btn
 wordbook.addEventListener('click', () => { changeDisplay('wordbook', 'follow', 'recommender') });
-follow.addEventListener('click', () => { changeDisplay('follow', 'wordbook', 'recommender') });
 recommender.addEventListener('click', () => { changeDisplay('recommender', 'wordbook', 'follow') });
+follow.addEventListener('click', () => { changeDisplay('follow', 'wordbook', 'recommender') });

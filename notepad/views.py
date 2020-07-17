@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Count, Subquery, OuterRef
+from django.db.models import Count
 import logging
 
 from accounts.models import User
 from .models import Note, Question, Follow, Star
 from .forms import NoteForm, QuestionForm
+from SQL.notepad import hot_query  # SQL query
 
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -49,15 +50,12 @@ class HotListView(generic.ListView):
     def get_queryset(self):
         # 新規投稿を取得
         return Note.objects.filter(public=1).order_by('-created_at')[:60]
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # フォローしているユーザーのノートを取得
         if self.request.user.is_authenticated:
-            # サブクエリでフォローしているユーザーを取得
-            follow_user = User.objects.filter(following=OuterRef('pk'))
-            subq = Subquery(follow_user.values('following__followed'))
-            # 上記で取得したクエリからノートを取得
-            note = Note.objects.filter(public=1).annotate(note=subq)
+            note = Note.objects.raw(hot_query, [self.request.user.pk])
             context['follow_note'] = note
         # 推薦されたノートを取得
         demo_query = Note.objects.filter()  # デモデータ
@@ -154,7 +152,10 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
 class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Note
     template_name = 'notepad/note_delete.html'
-    success_url = '/dashboard/'
+
+    def get_success_url(self):
+        note_pk = self.object.user_id
+        return reverse('notepad:dashboard', kwargs={'pk': note_pk})
 
 
 # question
