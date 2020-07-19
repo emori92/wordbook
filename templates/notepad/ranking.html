@@ -40,7 +40,7 @@
               <div class="card-body">
                 <p>{{ item.describe|truncatechars:50 }}</p>
                 <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
-                <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user__username }}</a>
+                <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user }}</a>
                 <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
               </div>
             </div>
@@ -67,6 +67,10 @@
         </div>
 
         <!-- tag -->
+
+        <!-- pagination -->
+        {% include 'components/pagination.html' with page_obj=page_obj %}
+
       </div>
     </div>
   </div>
@@ -75,4 +79,3 @@
 {% block js %}
   <script src="{% static 'js/notepad/ranking.js' %}"></script>
 {% endblock  %}
-  

@@ -4,11 +4,11 @@ hot_query = '''
 
     -- ユーザーがフォローしているノートを取得
     SELECT
-        n.id AS note_id
+        n.id AS pk
         , n.title AS title
         , n.describe AS describe
         , u1.id                                        -- pkのため名前変更不可
-        , u1.followed_id AS followed_id
+        , u1.followed_id AS user_pk
         , u2.username
     FROM
         note AS n
