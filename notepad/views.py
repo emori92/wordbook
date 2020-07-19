@@ -26,11 +26,12 @@ class Index(generic.TemplateView):
 class RankingListView(generic.ListView):
     model = Note
     template_name = "notepad/ranking.html"
+    paginate_by = 2
     
     def get_queryset(self):
         queryset = super().get_queryset()
         # いいねされたノートをランキング形式で取得
-        note = Note.objects.filter(public=1, star__gt=0).values('id', 'title', 'describe', 'user_id', 'user__username') \
+        note = Note.objects.filter(public=1, star__gt=0).select_related('user') \
             .annotate(star_num=Count('star__id')).order_by('-star_num')
         return note
 

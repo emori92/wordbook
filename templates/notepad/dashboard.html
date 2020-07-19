@@ -42,7 +42,7 @@
               <!-- follow btn -->
               <div class="mx-auto w-50">
                 {% if follow_state == True %}
-                  <a href="{% url 'notepad:follow' following=user.pk followed=account.pk %}" class="btn btn-primary mb-3">フォロー解除</a>
+                  <a href="{% url 'notepad:follow' following=user.pk followed=account.pk %}" class="btn btn-outline-danger mb-3">フォロー解除</a>
                 {% else %}
                   <a href="{% url 'notepad:follow' following=user.pk followed=account.pk %}" class="btn btn-primary mb-3">フォロー</a>
                 {% endif %}
@@ -54,86 +54,27 @@
       </div>
 
       <!-- wordbook -->
-      {% if user.id == account.id %}
+      <div class="col-lg-9 my-5">
         <!-- ユーザーの場合 非公開といいねした投稿を表示 -->
-        <div class="col-lg-9 my-5">
-
+        {% if user.id == account.id %}
           <!-- 表示切り替え -->
           <div class="mx-auto mb-4 w-50 d-flex">
             <button id="wordbook-btn" class="btn btn-dark mr-3">自分のノート</button>
             <button id="liked-btn" class="btn btn-dark">いいね</button>
           </div>
-
           <!-- 非公開 -->
-          <div id="wordbook" class="border border-secondary rounded flex-wrap d-flex">
-            {% for item in object_list %}
-              <div class="wordbook card my-4 ml-4 text-center border-secondary position-relative">
-                <div class="card-header border-secondary h5">{{ item.title|truncatechars:15 }}</div>
-                <div class="card-body">
-                  <p class="card-text">{{ item.describe|truncatechars:40 }}</p>
-                  <div class="position-absolute" style="bottom: 0">
-                    <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=item.pk %}">ノートを見る</a>
-                    <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
-                  </div>
-                </div>
-              </div>
-            {% empty %}
-              <div class="m-4 p-4 w-100 h-50">
-                <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
-              </div>
-            {% endfor %}
-          </div>
-
+          {% include 'components/wordbook.html' with object_list=object_list %}
           <!-- いいね -->
-          <div id="liked" class="border border-secondary rounded flex-wrap d-none">
-            <!-- いいね -->
-            {% for item in liked_note %}
-              <div class="wordbook card my-4 ml-4 text-center border-secondary position-relative">
-                <div class="card-header border-secondary h5">{{ item.title|truncatechars:15 }}</div>
-                <div class="card-body">
-                  <p class="card-text">{{ item.describe|truncatechars:40 }}</p>
-                  <div class="position-absolute" style="bottom: 0">
-                    <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=item.pk %}">ノートを見る</a>
-                    <a href="{% url 'notepad:dashboard' pk=item.user.pk %}" class="btn btn-danger">{{ item.user }}</a>
-                    <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
-                  </div>
-                </div>
-              </div>
-            {% empty %}
-              <div class="m-4 p-4 w-100 h-50">
-                <p class="text-center h1 font-weight-normal text-secondary">いいねはありません。</p>
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-
-      {% else %}
-        <!-- ユーザー以外は公開のみ表示 -->
-        <div class="col-lg-9 my-5 border border-secondary rounded d-flex flex-wrap">
-          {% for item in public_list %}
-            <div class="wordbook card mt-4 ml-4 text-center border-secondary position-relative">
-              <div class="card-header border-secondary h5">{{ item.title|truncatechars:15 }}</div>
-              <div class="card-body">
-                <p class="card-text">{{ item.describe|truncatechars:40 }}</p>
-                <div class="position-absolute" style="bottom: 0">
-                  <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=item.pk %}">ノートを見る</a>
-                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
-                </div>
-              </div>
-            </div>
-          {% empty %}
-            <div class="m-4 p-4 w-100 h-50">
-              <p class="text-center h1 font-weight-normal text-secondary">ノートがありません。</p>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
+          {% include 'components/wordbook.html' with object_list=liked_note id='liked' display='d-none' name='いいね' %}
+        {% else %}
+          <!-- ユーザー以外は公開のみ表示 -->
+          {% include 'components/wordbook.html' with object_list=public_list %}
+        {% endif %}
+      </div>
     </div>
-
   </div>
 {% endblock content %}
 
 {% block js %}
   <script src="{% static 'js/notepad/dashboard.js' %}"></script>
 {% endblock js %}
-  
