@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # package
     'django_sass',
+    'guardian',
     # app
     'notepad.apps.NotepadConfig',
     'accounts.apps.AccountsConfig',
@@ -90,6 +91,11 @@ LOGOUT_REDIRECT_URL = '/'
 # FLASH MESSAGEのストレージ
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+# user permisiion (django-guardian)
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # default
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

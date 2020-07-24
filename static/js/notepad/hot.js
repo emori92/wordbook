@@ -2,27 +2,27 @@
 'user strict';
 
 
+// 表示のオンオフをsessionStorageで保存する
+if (sessionStorage.getItem('hot') === null) {
+  sessionStorage.setItem('hot', 'wordbook');
+}
+// display wordbook
+let active_id = sessionStorage.getItem('hot');
+let wordbooks = document.getElementById(active_id);
+wordbooks.classList.remove('d-none');
+
 // add or remove class
 const changeDisplay = (id1, id2, id3) => {
   // get element
   let element1 = document.getElementById(id1);
   let element2 = document.getElementById(id2);
   let element3 = document.getElementById(id3);
+  // save session
+  sessionStorage.setItem('hot', id1);
   // change display
   element1.classList.remove('d-none');
-  element1.classList.add('d-flex');
-  element2.classList.remove('d-flex');
   element2.classList.add('d-none');
-  element3.classList.remove('d-flex');
   element3.classList.add('d-none');
-  // change btn active
-  // if (wordbook.classList.contains('active')) {
-  //   wordbook.classList.remove('active');
-  //   recommender.classList.add('active');
-  // } else {
-  //   recommender.classList.remove('active');
-  //   wordbook.classList.add('active');
-  // }
 }
 
 // btn

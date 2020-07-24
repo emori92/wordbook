@@ -30,7 +30,6 @@
 
           <!-- user only -->
           {% if user.is_authenticated %}
-
             {% if user.pk == account.pk %}
               <div class="mx-auto w-50">
                 <a href="{% url 'accounts:profile' pk=account.pk %}" class="btn btn-secondary">編集する</a>
@@ -48,7 +47,6 @@
                 {% endif %}
               </div>
             {% endif %}
-            
           {% endif %}
         </div>
       </div>
@@ -63,12 +61,12 @@
             <button id="liked-btn" class="btn btn-dark">いいね</button>
           </div>
           <!-- 非公開 -->
-          {% include 'components/wordbook.html' with object_list=object_list %}
+          {% include 'includes/wordbook.html' %}
           <!-- いいね -->
-          {% include 'components/wordbook.html' with object_list=liked_note id='liked' display='d-none' name='いいね' %}
+          {% include 'includes/wordbook.html' with object_list=liked page_obj=liked page='liked' id='liked' name='いいね' %}
         {% else %}
           <!-- ユーザー以外は公開のみ表示 -->
-          {% include 'components/wordbook.html' with object_list=public_list %}
+          {% include 'includes/wordbook.html' with object_list=public page_obj=public page='public' id='public' %}
         {% endif %}
       </div>
     </div>
