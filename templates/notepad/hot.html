@@ -11,28 +11,26 @@
     <div class="row my-5">
 
       <!-- wordbook -->
-      <div class="col-lg border border-secondary rounded py-4">
-        <div>
+      <div class="col-lg py-4">
 
-          <!-- tab btn -->
-          <div class="btn-group mx-auto pb-4 w-25">
-            <button id="wordbook-btn" class="btn btn-secondary">New!</button>
-            {% if user.is_authenticated %}
-              <button id="follow-btn" class="btn btn-secondary">フォロー</button>
-            {% endif %}
-            <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
-          </div>
-
-          <!-- new wordbook -->
-          {% include 'components/wordbook.html' with object_list=object_list %}
-
-          <!-- follow -->
-          {% include 'components/wordbook.html' with object_list=follow_note id='follow' display='d-none' %}
-
-          <!-- recommender -->
-          {% include 'components/wordbook.html' with object_list=recommender id='recommender' display='d-none' %}
-
+        <!-- tab btn -->
+        <div class="btn-group mx-auto pb-4">
+          <button id="wordbook-btn" class="btn btn-secondary">New!</button>
+          {% if user.is_authenticated %}
+            <button id="follow-btn" class="btn btn-secondary">フォロー</button>
+          {% endif %}
+          <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
         </div>
+
+        <!-- new wordbook -->
+        {% include 'includes/wordbook.html' %}
+
+        <!-- follow -->
+        {% include 'includes/wordbook.html' with object_list=follow page_obj=follow page='follow' id='follow' %}
+
+        <!-- recommender -->
+        {% include 'includes/wordbook.html' with object_list=recommender page_obj=recommender page='recommender' id='recommender' %}
+
       </div>
     </div>
   </div>

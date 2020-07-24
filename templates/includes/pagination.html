@@ -1,0 +1,39 @@
+
+<div class="my-4">
+  <div class="w-25 mx-auto">
+    <ul class="pagination">
+
+      <!-- 前へ -->
+      {% if page_obj.has_previous %}
+        <!-- <li class="page-itme">
+          <a href="?{{ page|default:'page' }}={{ page_obj.previous_page_number }}" class="page-link">
+            <span>&laquo;</span>
+          </a>
+        </li> -->
+      {% endif %}
+
+      <!-- 数値 -->
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+          <li class="page-itme active">
+            <a href="#" class="page-link">{{ num }}</a>
+          </li>
+        {% else %}
+          <li class="page-itme">
+            <a href="?{{ page|default:'page' }}={{ num }}" class="page-link">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      <!-- 次へ -->
+      {% if page_obj.has_next %}
+        <!-- <li class="page-itme">
+          <a href="?{{ page|default:'page' }}={{ page_obj.next_page_number }}" class="page-link">
+            <span>&raquo;</span>
+          </a>
+        </li> -->
+      {% endif %}
+
+    </ul>
+  </div>
+</div>
