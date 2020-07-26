@@ -27,51 +27,59 @@
 
     <!-- ranking -->
     <div class="row">
-      <div class="col-lg border border-secondary rounded my-4">
+      <div class="col-lg my-4">
 
         <!-- star -->
-        <div id="star" class="flex-wrap d-flex">
-          {% for item in object_list %}
-            <div class="wordbook card border-secondary m-3">
-              <div class="card-header border-secondary">
-                <span class="h4 text-danger">{{ forloop.counter }} </span>{{ item.title|truncatechars:15 }}
-                <span class="text-right text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
+        <div id="star" class="border border-secondary rounded d-none">
+          <div class="d-flex flex-wrap">
+            {% for num, item in nums_stars.items %}
+              <div class="wordbook card border-secondary m-3">
+                <div class="card-header border-secondary">
+                  <span class="h4 text-danger">{{ num }} </span>
+                  {{ item.title|truncatechars:15 }}
+                  <span class="text-right text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
+                </div>
+                <div class="card-body">
+                  <p>{{ item.describe|truncatechars:50 }}</p>
+                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
+                  <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user }}</a>
+                  <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
+                </div>
               </div>
-              <div class="card-body">
-                <p>{{ item.describe|truncatechars:50 }}</p>
-                <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
-                <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user }}</a>
-                <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
+
+          <!-- pagination -->
+          {% include 'includes/pagination.html' %}
         </div>
 
         <!-- user -->
-        <div id="user" class="flex-wrap d-none">
-          {% for item in users %}
-            <div class="wordbook card border-secondary m-3">
-              <div class="card-header border-secondary">
-                <span class="h4 text-danger">{{ forloop.counter }} </span>
-                <a href="{% url 'notepad:dashboard' pk=item.id %}" class="text-info">{{ item.username|truncatechars:10 }}</a>
-                <i class="fas fa-user-friends"></i>: {{ item.user_num }}
+        <div id="user" class="border border-secondary rounded d-none">
+          <div class="d-flex flex-wrap">
+            <!-- 辞書で格納したnums_usersをdict.items()で展開 -->
+            {% for num, item in nums_users.items %}
+              <div class="wordbook card border-secondary m-3">
+                <div class="card-header border-secondary">
+                  <span class="h4 text-danger">{{ num }} </span>
+                  <a href="{% url 'notepad:dashboard' pk=item.id %}" class="text-info">{{ item.username|truncatechars:10 }}</a>
+                  <i class="fas fa-user-friends"></i>: {{ item.user_num }}
+                </div>
+                <div class="card-body">
+                  {% if item.describe %}
+                    <p>{{ item.describe|linebreaksbr }}</p>
+                  {% endif %}
+                  <a href="" class="btn btn-primary">フォロー</a>
+                </div>
               </div>
-              <div class="card-body">
-                {% if item.describe %}
-                  <p>{{ item.describe|linebreaksbr }}</p>
-                {% endif %}
-                <a href="" class="btn btn-primary">フォロー</a>
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
+
+          <!-- pagination -->
+          {% include 'includes/pagination.html' with object_list=users page_obj=users page='user' %}
         </div>
 
         <!-- tag -->
 
-        <!-- pagination -->
-        {% include 'includes/pagination.html' %}
-
-      </div>
     </div>
   </div>
 {% endblock content %}

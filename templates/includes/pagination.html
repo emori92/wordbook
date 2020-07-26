@@ -1,6 +1,6 @@
 
 <div class="my-4">
-  <div class="w-25 mx-auto">
+  <nav class="w-25 mx-auto">
     <ul class="pagination">
 
       <!-- 前へ -->
@@ -16,7 +16,7 @@
       {% for num in page_obj.paginator.page_range %}
         {% if num == page_obj.number %}
           <li class="page-itme active">
-            <a href="#" class="page-link">{{ num }}</a>
+            <span class="page-link">{{ num }}</span>
           </li>
         {% else %}
           <li class="page-itme">
@@ -35,5 +35,5 @@
       {% endif %}
 
     </ul>
-  </div>
+  </nav>
 </div>

@@ -2,6 +2,15 @@
 'user strict';
 
 
+// タブの表示をsessionStorageで保存する
+if (sessionStorage.getItem('ranking') === null) {
+  sessionStorage.setItem('ranking', 'star');
+}
+// display wordbook
+let active_id = sessionStorage.getItem('ranking');
+let wordbooks = document.getElementById(active_id);
+wordbooks.classList.remove('d-none');
+
 // add or remove class
 const changeDisplay = (id1, id2) => {
   // get element
@@ -9,9 +18,9 @@ const changeDisplay = (id1, id2) => {
   let element2 = document.getElementById(id2);
   // change display
   element1.classList.remove('d-none');
-  element1.classList.add('d-flex');
-  element2.classList.remove('d-flex');
   element2.classList.add('d-none');
+  // save session
+  sessionStorage.setItem('ranking', id1);
 }
 
 // btn
@@ -21,3 +30,11 @@ let user = document.getElementById('user-btn');
 // push btn
 star.addEventListener('click', () => { changeDisplay('star', 'user') });
 user.addEventListener('click', () => { changeDisplay('user', 'star') });
+
+// ranking num
+const print = c => console.log(c);
+
+let rankNum = [];
+for (let i = 1; i <= 40; i++) {
+  rankNum.push(i);
+}

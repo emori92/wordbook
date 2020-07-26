@@ -2,16 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db.models import Count
 import logging
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from accounts.models import User
 from .models import Note, Question, Follow, Star
 from .forms import NoteForm, QuestionForm
 from SQL.notepad import hot_query  # SQL query
-from my_python.my_paginator import set_paginator
+from my_python.paginator import set_paginator, set_ranking_num  # paginator
 
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
 
@@ -27,28 +26,37 @@ class Index(generic.TemplateView):
 class RankingListView(generic.ListView):
     model = Note
     template_name = "notepad/ranking.html"
-    paginate_by = 2
+    paginate_by = 4
     
     def get_queryset(self):
         queryset = super().get_queryset()
         # いいねされたノートをランキング形式で取得
         note = Note.objects.filter(public=1, star__gt=0).select_related('user') \
-            .annotate(star_num=Count('star__id')).order_by('-star_num')
+            .annotate(star_num=Count('star__id')).order_by('-star_num')[:40]
         return note
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # フォロー数の多い人を抽出
         users = User.objects.filter(followed__followed__gt=0).values('id', 'username', 'describe') \
-            .annotate(user_num=Count('followed__followed')).order_by('-user_num')
+            .annotate(user_num=Count('followed__followed')).order_by('-user_num')[:40]
+        # pagination機能を付ける
+        users = set_paginator(self, queryset=users, query_parameter='user')  # paginatorを作成する関数
         context['users'] = users
+        # ランキングの数字を合わせてcontextに格納
+        context['nums_users'] = set_ranking_num(users)
+        # いいねの投稿も同上の処理を行う
+        stars = self.get_queryset()
+        context['stars'] = stars
+        paginator = set_paginator(self, stars, 'page')
+        context['nums_stars'] = set_ranking_num(paginator)
         return context
 
 
 class HotListView(generic.ListView):
     model = Note
     template_name = "notepad/hot.html"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         # 新規投稿を取得
@@ -60,11 +68,9 @@ class HotListView(generic.ListView):
         if self.request.user.is_authenticated:
             # SQLディレクトリにあるクエリ文を引数にする
             note = Note.objects.raw(hot_query, [self.request.user.pk])[:40]
-            # paginator
             context['follow'] = set_paginator(self, note, 'follow')
         # 推薦されたノートを取得
         demo_query = Note.objects.all()[:20]  # デモデータ
-        # paginator
         context['recommender'] = set_paginator(self, demo_query, 'recommender')
         return context
 
@@ -73,7 +79,7 @@ class HotListView(generic.ListView):
 class Dashboard(generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
-    paginate_by = 2
+    paginate_by = 4
 
     # ユーザーの単語帳を取得
     def get_queryset(self):
@@ -93,12 +99,10 @@ class Dashboard(generic.ListView):
             context['follow_state'] = follow_state
         # 公開されている単語帳のみ取得
         public = Note.objects.filter(user=self.kwargs['pk'], public=1).order_by('-updated_at')
-        # paginator
         context['public'] = set_paginator(self, public, 'public')
         # いいねした単語帳を取得
         if self.request.user.pk == self.kwargs['pk']:
             liked = Note.objects.filter(star__user=self.request.user.pk)
-            # paginator
             context['liked'] = set_paginator(self, liked, 'liked')
         return context
 
@@ -147,13 +151,11 @@ class NoteDetailView(generic.DetailView):
         return context
 
 
-class NoteUpdateView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Note
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    # permission
-    permission_required = ('notepad.change_note')
     
     def get_success_url(self):
         note_pk = self.object.pk

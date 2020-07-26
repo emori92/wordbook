@@ -9,10 +9,9 @@
 {% block content %}
   <div class="container">
     <div class="row my-5">
-
+      
       <!-- wordbook -->
       <div class="col-lg py-4">
-
         <!-- tab btn -->
         <div class="btn-group mx-auto pb-4">
           <button id="wordbook-btn" class="btn btn-secondary">New!</button>
@@ -24,13 +23,10 @@
 
         <!-- new wordbook -->
         {% include 'includes/wordbook.html' %}
-
         <!-- follow -->
         {% include 'includes/wordbook.html' with object_list=follow page_obj=follow page='follow' id='follow' %}
-
         <!-- recommender -->
         {% include 'includes/wordbook.html' with object_list=recommender page_obj=recommender page='recommender' id='recommender' %}
-
       </div>
     </div>
   </div>
