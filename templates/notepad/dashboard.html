@@ -66,7 +66,7 @@
           {% include 'includes/wordbook.html' with object_list=liked page_obj=liked page='liked' id='liked' name='いいね' %}
         {% else %}
           <!-- ユーザー以外は公開のみ表示 -->
-          {% include 'includes/wordbook.html' with object_list=public page_obj=public page='public' id='public' %}
+          {% include 'includes/wordbook.html' with object_list=public page_obj=public page='public' %}
         {% endif %}
       </div>
     </div>

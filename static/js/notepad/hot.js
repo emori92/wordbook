@@ -2,7 +2,7 @@
 'user strict';
 
 
-// 表示のオンオフをsessionStorageで保存する
+// タブの表示をsessionStorageで保存する
 if (sessionStorage.getItem('hot') === null) {
   sessionStorage.setItem('hot', 'wordbook');
 }
@@ -17,12 +17,12 @@ const changeDisplay = (id1, id2, id3) => {
   let element1 = document.getElementById(id1);
   let element2 = document.getElementById(id2);
   let element3 = document.getElementById(id3);
-  // save session
-  sessionStorage.setItem('hot', id1);
   // change display
   element1.classList.remove('d-none');
   element2.classList.add('d-none');
   element3.classList.add('d-none');
+  // save session
+  sessionStorage.setItem('hot', id1);
 }
 
 // btn
