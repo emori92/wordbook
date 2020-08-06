@@ -13,11 +13,12 @@
       <div class="mt-4">
         <!-- {{ form.as_p }} -->
         <p>
-          {{ form.username.label }}{{ form.username }}
+          {{ form.username.label }}: 
+          {{ form.username }}
         </p>
         <p>
-          {{ form.password.label}}
-          <input type="password" name="password" maxlength="128" required="" id="id_password">
+          {{ form.password.label }}: 
+          <input type="password" name="password" maxlength="128" id="id_password">
         </p>
       </div>
       <button type="submit" class="btn btn-success w-25">Signup!</button>

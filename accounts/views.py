@@ -8,7 +8,7 @@ from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import User
-from .forms import MyUserCreationForm, SignupForm, ProfileForm
+from .forms import SignupForm, ProfileForm
 
 
 # login
@@ -33,12 +33,13 @@ class SignupView(generic.CreateView):
     def form_valid(self, form):
         # ユーザー取得
         self.object = form.save(commit=False)
-        username = form.cleaned_data.get('username')
-        # パスワードハッシュ化
-        self.object.set_password(form.cleaned_data.get('password'))
+        data = form.cleaned_data
+        username = data.get('username')
+        # パスワード登録
+        password = data.get('password')
+        self.object.set_password(password)
         self.object = form.save()
         # ログイン
-        password = form.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super().form_valid(form)
