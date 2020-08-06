@@ -48,11 +48,11 @@ LOGGING = {
         },
         
         # db
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
+        # 'django.db.backends': {
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG',
+        #     'propagate': False,
+        # },
     },
     
     # handler
@@ -68,7 +68,6 @@ LOGGING = {
     
     # formatter
     'formatters': {
-        
         # develop
         'develop': {
             'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'

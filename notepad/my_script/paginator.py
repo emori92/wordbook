@@ -2,11 +2,11 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-def set_paginator(self, queryset, query_parameter):
+def set_paginator(self, queryset, url_parameter):
     '''create paginator'''
 
     paginator = Paginator(queryset, 4)
-    page = self.request.GET.get(query_parameter)
+    page = self.request.GET.get(url_parameter)
     try:
         pagination = paginator.page(page)
     except PageNotAnInteger:

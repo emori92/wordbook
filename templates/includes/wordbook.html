@@ -23,5 +23,8 @@
   </div>
   
   <!-- pagenator -->
-  {% include 'includes/pagination.html' %}
+  {% if page_obj.has_other_pages %}
+    {% include 'includes/pagination.html' %}
+  {% endif %}
+
 </div>

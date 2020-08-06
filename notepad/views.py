@@ -7,7 +7,7 @@ from accounts.models import User
 from .models import Note, Question, Follow, Star
 from .forms import NoteForm, QuestionForm
 from SQL.notepad import hot_query  # SQL query
-from my_python.paginator import set_paginator, set_ranking_num  # paginator
+from .my_script.paginator import set_paginator, set_ranking_num  # paginator
 
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -41,7 +41,7 @@ class RankingListView(generic.ListView):
         users = User.objects.filter(followed__followed__gt=0).values('id', 'username', 'describe') \
             .annotate(user_num=Count('followed__followed')).order_by('-user_num')[:40]
         # pagination機能を付ける
-        users = set_paginator(self, queryset=users, query_parameter='user')  # paginatorを作成する関数
+        users = set_paginator(self, queryset=users, url_parameter='user')  # paginatorを作成する関数
         context['users'] = users
         # ランキングの数字を合わせてcontextに格納
         context['nums_users'] = set_ranking_num(users)
@@ -69,6 +69,7 @@ class HotListView(generic.ListView):
             # SQLディレクトリにあるクエリ文を引数にする
             note = Note.objects.raw(hot_query, [self.request.user.pk])[:40]
             context['follow'] = set_paginator(self, note, 'follow')
+            # print(f"\n\n{set_paginator(self, note, 'follow').end_index()}\n\n")
         # 推薦されたノートを取得
         demo_query = Note.objects.all()[:20]  # デモデータ
         context['recommender'] = set_paginator(self, demo_query, 'recommender')
@@ -95,15 +96,18 @@ class Dashboard(generic.ListView):
             following = User.objects.get(pk=self.request.user.pk)
             followed = User.objects.get(pk=self.kwargs['pk'])
             # ユーザーがフォローしているか真偽値を取得
+            # この真偽値で、templateの「フォロー」「フォロー解除」の表示を切り替える
             follow_state = Follow.objects.filter(following=following, followed=followed).exists()
             context['follow_state'] = follow_state
         # 公開されている単語帳のみ取得
+        # 自分以外のユーザーには公開情報を表示
         public = Note.objects.filter(user=self.kwargs['pk'], public=1).order_by('-updated_at')
         context['public'] = set_paginator(self, public, 'public')
         # いいねした単語帳を取得
         if self.request.user.pk == self.kwargs['pk']:
             liked = Note.objects.filter(star__user=self.request.user.pk)
             context['liked'] = set_paginator(self, liked, 'liked')
+        # print(f'\n\n{set_paginator(self, public, "public").end_index()}\n\n`')
         return context
 
 
