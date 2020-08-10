@@ -6,7 +6,7 @@ import logging
 from accounts.models import User
 from .models import Note, Question, Follow, Star
 from .forms import NoteForm, QuestionForm
-from SQL.notepad import hot_query  # SQL query
+from .SQL.user_follow_query import hot_query  # SQL query
 from .my_script.paginator import set_paginator, set_ranking_num  # paginator
 
 from django.views import generic
