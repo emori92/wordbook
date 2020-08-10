@@ -23,6 +23,5 @@
 
 ## パッケージ
 - django-environ: 0.4.5
-<!-- - django-guardian: 2.3.0 -->
 - django-sass: 1.0.0
 - Pillow: 7.1.2

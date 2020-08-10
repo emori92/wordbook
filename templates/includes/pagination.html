@@ -15,11 +15,11 @@
       <!-- 数値 -->
       {% for num in page_obj.paginator.page_range %}
         {% if num == page_obj.number %}
-          <li class="page-itme active">
+          <li class="page-item active">
             <span class="page-link">{{ num }}</span>
           </li>
         {% else %}
-          <li class="page-itme">
+          <li class="page-item">
             <a href="?{{ page|default:'page' }}={{ num }}" class="page-link">{{ num }}</a>
           </li>
         {% endif %}
