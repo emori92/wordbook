@@ -114,3 +114,64 @@ WHERE
 ORDER BY
     t1.created_at
 ;
+
+
+-- insert review
+BEGIN TRANSACTION;
+    INSERT INTO
+        review
+    VALUES
+        (1, 15, 1)
+    ;
+
+    SELECT * FROM review;
+ROLLBACK;
+-- COMMIT;
+SELECT * FROM review;
+
+
+-- ユーザー名、復習、問題を抽出
+SELECT
+    qr.id
+    , q.id AS question_id
+    , q.question
+    , q.hint
+    , q.answer
+    , qr.review_id
+    , qr.review
+    , qr.user_id
+FROM
+    question AS q
+-- question review
+INNER JOIN
+    (
+        SELECT
+            qr.id
+            , qr.question_id
+            , r.review_id
+            , r.review
+            , r.user_id
+        FROM
+            question_review AS qr
+        -- review user
+        INNER JOIN
+            (
+                SELECT
+                    r.id AS review_id
+                    , r.review
+                    , u.id AS user_id
+                FROM
+                    review AS r
+                INNER JOIN
+                    user AS u
+                ON
+                    r.user_id == u.id
+                -- WHERE
+                --     u.id == 16
+            ) AS r
+        ON
+            qr.review_id = r.review_id
+    ) AS qr
+ON
+    q.id == qr.question_id
+;

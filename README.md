@@ -17,11 +17,12 @@
 - 推薦機能（単語帳、ユーザーを推薦）
 
 ## 環境
-- OS: Catalina 10.15
+- OS: Catalina 10.16
 - Python: 3.8.2
 - Django: 2.2.9
 
 ## パッケージ
+- django-debug-toolbar: 2.2
 - django-environ: 0.4.5
 - django-sass: 1.0.0
 - Pillow: 7.1.2

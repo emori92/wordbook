@@ -36,10 +36,9 @@ class Note(models.Model):
 class Question(models.Model):
     '''問題、ヒント、答えのモデル'''
         
-    query = models.TextField(verbose_name='問題', max_length=128)
+    question = models.TextField(verbose_name='問題', max_length=128)
     hint = models.TextField(verbose_name='ヒント', max_length=64, null=True, blank=True)
     answer = models.TextField(verbose_name='答え', max_length=256)
-    # review = models.BooleanField(verbose_name='復習', default=0)
     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='更新日', auto_now=True)
     note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.CASCADE)
@@ -48,7 +47,20 @@ class Question(models.Model):
         db_table = 'question'
     
     def __str__(self):
-        return self.query
+        return self.question
+
+
+class Review(models.Model):
+    """問題を復習する"""
+
+    question = models.ForeignKey(Question, verbose_name='問題', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'review'
+
+    def __str__(self):
+        return f'question={self.question} user={self.user}'
 
 
 class Star(models.Model):
