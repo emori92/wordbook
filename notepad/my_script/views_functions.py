@@ -17,7 +17,7 @@ def set_paginator(self, queryset, url_parameter):
 
 
 def set_ranking_num(objects):
-    """set ranking nums"""
+    """set ranking num"""
     
     if objects.start_index == 1:
         return {str(n): value for n, value in enumerate(objects, start=1)}

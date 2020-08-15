@@ -11,4 +11,4 @@ class NoteForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['query', 'hint', 'answer']
+        fields = ['question', 'hint', 'answer']

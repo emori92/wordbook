@@ -19,7 +19,7 @@
           <!-- btn -->
           {% if user.pk == object.user.pk %}
             <div class="d-inline-flex flex-column px-4 mb-4">
-              <a href="{% url 'notepad:query_new' pk=note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
+              <a href="{% url 'notepad:question_new' pk=note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
               <a href="{% url 'notepad:note_edit' pk=note.pk %}" class="btn btn-outline-secondary btn-block">ノートを編集する</a>
               <a href="{% url 'notepad:note_delete' pk=note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
             </div>
@@ -60,26 +60,40 @@
         {% for item in queryset %}
         <div class="card border-secondary mb-5">
 
-          <!-- question -->
-          <div class="card-header border-secondary">{{ item.query }}</div>
-          
-          <!-- answer hint btn -->
-          <div class="d-flex position-relative">
-            <div class="w-75">
-              <button class="answer-btn btn btn-danger ml-3 my-3">答え</button>
-              {% if item.hint %}
-                <button  class="hint-btn btn btn-primary ml-3 my-3">ヒント</button>
-              {% endif %}
-            </div>
+          <!-- question title -->
+          <div class="card-header border-secondary">
+            {{ item.question }}
 
             <!-- edit btn -->
             {% if user.pk == object.user.pk %}
-              <div class="edit-btn dropleft mr-1 mb-2">
+              <div class="edit-btn dropleft">
                 <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="far fa-edit"></i></button>
                 <div class="dropdown-menu">
-                  <a href="{% url 'notepad:query_edit' pk=item.pk %}" class="dropdown-item">編集する</a>
-                  <a href="{% url 'notepad:query_delete' pk=item.pk %}" class="dropdown-item">削除する</a>
+                  <a href="{% url 'notepad:question_edit' item.pk %}" class="dropdown-item">編集する</a>
+                  <a href="{% url 'notepad:question_delete' item.pk %}" class="dropdown-item">削除する</a>
                 </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- answer hint btn -->
+          <div class="d-flex">
+            <div class="w-75 my-3">
+              <button class="answer-btn btn btn-danger ml-3">答え</button>
+              {% if item.hint %}
+                <button  class="hint-btn btn btn-primary ml-2">ヒント</button>
+              {% endif %}
+            </div>
+
+            <!-- review btn -->
+            {% if user.is_authenticated %}
+              <div class="review-btn my-3">
+                <!-- review_listに問題のidと同じものがあれば、復習を解除 -->
+                {% if item.id in review_list %}
+                  <a href="{% url 'notepad:question_review' note_pk=object.pk question_pk=item.pk user_pk=user.pk %}" class="btn btn-secondary">復習を解除</a>
+                {% else %}
+                  <a href="{% url 'notepad:question_review' note_pk=object.pk question_pk=item.pk user_pk=user.pk %}" class="btn btn-info">復習する</a>
+                {% endif %}
               </div>
             {% endif %}
           </div>

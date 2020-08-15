@@ -4,10 +4,12 @@ from django.db.models import Count
 import logging
 
 from accounts.models import User
-from .models import Note, Question, Follow, Star
+from .models import Note, Question, Review, Follow, Star
 from .forms import NoteForm, QuestionForm
-from .SQL.user_follow_query import hot_query  # SQL query
-from .my_script.paginator import set_paginator, set_ranking_num  # paginator
+# SQL query
+from .SQL.user_follow_query import hot_query
+# paginator
+from .my_script.views_functions import set_paginator, set_ranking_num
 
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +20,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 logger = logging.getLogger(__name__)
 
 
-# index
+# home
 class Index(generic.TemplateView):
     template_name = 'notepad/index.html'
 
@@ -134,9 +136,15 @@ class NoteDetailView(generic.DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # noteに紐づくqueryを全て取得
-        queryset = Question.objects.filter(note=self.kwargs['pk']).order_by('-updated_at')
+        # noteに紐づくquestionを全て取得
+        queryset = Question.objects.filter(note=self.kwargs['pk']) \
+            .prefetch_related('review_set').order_by('created_at')
         context['queryset'] = queryset
+        # 復習ボタンの表示切り替えを判別するリストを作成
+        review = Review.objects.select_related('question') \
+            .filter(question__note_id=self.kwargs['pk'])
+        review_list = [r.question_id for r in review]
+        context['review_list'] = review_list
         # いいねの判定
         if self.request.user.is_authenticated:
             # 単語帳とユーザーを特定
@@ -149,7 +157,8 @@ class NoteDetailView(generic.DetailView):
         star_num = Star.objects.filter(note_id=self.kwargs['pk'])
         # starテーブルにレコードの有無を確認（レコードがないとエラーになるので、定数0を格納）
         if star_num.exists():
-            context['star_num'] = star_num.values('note_id').annotate(num=Count('id')).get(note_id=self.kwargs['pk'])
+            context['star_num'] = star_num.values('note_id') \
+                .annotate(num=Count('id')).get(note_id=self.kwargs['pk'])
         else:
             context['star_num'] = {'num': 0}
         return context
@@ -160,7 +169,7 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    
+
     def get_success_url(self):
         note_pk = self.object.pk
         return reverse('notepad:note_detail', kwargs={'pk': note_pk})
@@ -179,8 +188,8 @@ class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
 class QuestionCreateView(LoginRequiredMixin, generic.CreateView):
     model = Question
     formclass = QuestionForm
-    fields = ['query', 'hint', 'answer']
-    template_name = "notepad/query_new.html"
+    fields = ['question', 'hint', 'answer']
+    template_name = "notepad/question_new.html"
 
     def get_success_url(self):
         note_pk = self.object.note_id
@@ -196,8 +205,8 @@ class QuestionCreateView(LoginRequiredMixin, generic.CreateView):
 class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Question
     formclass = QuestionForm
-    fields = ['query', 'hint', 'answer']
-    template_name = "notepad/query_new.html"
+    fields = ['question', 'hint', 'answer']
+    template_name = "notepad/question_new.html"
 
     def get_success_url(self):
         pk = self.object.note_id
@@ -206,11 +215,33 @@ class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Question
-    template_name = "notepad/query_delete.html"
+    template_name = "notepad/question_delete.html"
 
     def get_success_url(self):
         pk = self.object.note_id
         return reverse('notepad:note_detail', kwargs={'pk': pk})
+
+
+class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
+    # 問題の復習を確認する
+    def get_redirect_url(self, *args, **kwargs):
+        url = '/note/%s/' % self.kwargs['note_pk']
+        return url
+
+    def get(self, request, *args, **kwargs):
+        # pkを定義
+        q_id = self.kwargs['question_pk']
+        u_id = self.request.user.pk
+        # pkからユーザーのreviewを取得
+        queryset = Review.objects.filter(question_id=q_id, user_id=u_id)
+        # querysetが空であればレコード作成
+        if len(queryset) == 0:
+            review = Review.objects.create(question_id=q_id, user_id=u_id)
+            review.save()
+        else:
+            review = queryset.get(user_id=u_id)
+            review.delete()
+        return super().get(request, *args, **kwargs)
 
 
 # SNS

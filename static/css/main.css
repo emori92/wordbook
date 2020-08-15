@@ -32,7 +32,12 @@ button {
 .container .edit-btn {
   position: absolute;
   right: 0;
-  bottom: 0;
+  top: 4px;
+}
+
+.container .review-btn {
+  position: absolute;
+  right: 16px;
 }
 
 body header {
