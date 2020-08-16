@@ -51,68 +51,28 @@
 
           <!-- date -->
           <p class="text-secondary font-italic text-right mr-3">更新: {{ object.updated_at }}</p>
-          
+
         </div>
       </div>
 
       <!-- question list -->
       <div class="col-lg-9">
-        {% for item in queryset %}
-        <div class="card border-secondary mb-5">
+        <!-- btn -->
+        <div class="btn-group my-4">
+          <button id="question-btn" class="btn btn-secondary">All</button>
+          <button id="review-btn" class="btn btn-secondary">復習のみ</button>
+        </div>
 
-          <!-- question title -->
-          <div class="card-header border-secondary">
-            {{ item.question }}
+        <!-- question -->
+        {% include 'includes/question.html' %}
 
-            <!-- edit btn -->
-            {% if user.pk == object.user.pk %}
-              <div class="edit-btn dropleft">
-                <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="far fa-edit"></i></button>
-                <div class="dropdown-menu">
-                  <a href="{% url 'notepad:question_edit' item.pk %}" class="dropdown-item">編集する</a>
-                  <a href="{% url 'notepad:question_delete' item.pk %}" class="dropdown-item">削除する</a>
-                </div>
-              </div>
-            {% endif %}
-          </div>
-
-          <!-- answer hint btn -->
-          <div class="d-flex">
-            <div class="w-75 my-3">
-              <button class="answer-btn btn btn-danger ml-3">答え</button>
-              {% if item.hint %}
-                <button  class="hint-btn btn btn-primary ml-2">ヒント</button>
-              {% endif %}
-            </div>
-
-            <!-- review btn -->
-            {% if user.is_authenticated %}
-              <div class="review-btn my-3">
-                <!-- review_listに問題のidと同じものがあれば、復習を解除 -->
-                {% if item.id in review_list %}
-                  <a href="{% url 'notepad:question_review' note_pk=object.pk question_pk=item.pk user_pk=user.pk %}" class="btn btn-secondary">復習を解除</a>
-                {% else %}
-                  <a href="{% url 'notepad:question_review' note_pk=object.pk question_pk=item.pk user_pk=user.pk %}" class="btn btn-info">復習する</a>
-                {% endif %}
-              </div>
-            {% endif %}
-          </div>
-
-          <!-- text -->
-          <div class="hint d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint|linebreaksbr }}</div>
-          <div class="answer d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer|linebreaksbr }}</div>
-
-          </div>
-        {% empty %}
-          <div class="card border-secondary p-4">
-            <h1 class="card-body text-secondary text-center">問題がありません。</h1>
-          </div>
-        {% endfor %}
+        <!-- review -->
+        {% include 'includes/question.html' with queryset=review_list id='review' %}
       </div>
     </div>
   </div>
 {% endblock content %}
 
 {% block js %}
-  <script src="{% static 'js/notepad/note-detail.js' %}"></script>
+  <script src="{% static 'js/notepad/note-detail.js' %}" type='module'></script>
 {% endblock js %}

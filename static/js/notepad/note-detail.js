@@ -1,5 +1,20 @@
 
+import {changeTabDisplay} from '../script/functions.js';
+
 'user strict';
+
+
+// function parameter
+const noteDetailParameter = {
+  'sessionName': 'noteDetail',
+  'sessionValue': 'question',
+  'btnId1': 'question-btn',
+  'btnId2': 'review-btn',
+  'btnValue1': 'question',
+  'btnValue2': 'review'
+}
+
+changeTabDisplay(noteDetailParameter);
 
 
 // get answer and hint class
@@ -24,6 +39,7 @@ const showText = (elemList, elemClass) => {
     });
   }
 }
+
 
 showText(answers, '.answer');
 showText(hints, '.hint');
