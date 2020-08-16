@@ -6,7 +6,8 @@
 const tabSessions = {
   'ranking': 'star',
   'hot': 'wordbook',
-  'dashboard': 'wordbook'
+  'dashboard': 'wordbook',
+  'noteDetail': 'question'
 }
 
 // タブ表示のsessionを初期化

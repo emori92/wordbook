@@ -140,10 +140,14 @@ class NoteDetailView(generic.DetailView):
         queryset = Question.objects.filter(note=self.kwargs['pk']) \
             .prefetch_related('review_set').order_by('created_at')
         context['queryset'] = queryset
-        # 復習ボタンの表示切り替えを判別するリストを作成
-        review = Review.objects.select_related('question') \
+        # 復習ボタンの表示切り替えを判別するタプルを作成
+        review_query = Review.objects.select_related('question') \
             .filter(question__note_id=self.kwargs['pk'])
-        review_list = [r.question_id for r in review]
+        review_tuple = [(r.question_id, r.user_id) for r in review_query]
+        context['review_tuple'] = review_tuple
+        # ブラウザで復習一覧を表示するquerysetを作成
+        review_list = Question.objects.prefetch_related('review_set') \
+            .filter(note=self.kwargs['pk'], review__user_id=self.request.user.pk)
         context['review_list'] = review_list
         # いいねの判定
         if self.request.user.is_authenticated:
@@ -155,7 +159,7 @@ class NoteDetailView(generic.DetailView):
             context['star_state'] = star_state
         # いいね数
         star_num = Star.objects.filter(note_id=self.kwargs['pk'])
-        # starテーブルにレコードの有無を確認（レコードがないとエラーになるので、定数0を格納）
+        # starテーブルにレコードの有無を確認（レコードがないとエラーになるので定数0を格納）
         if star_num.exists():
             context['star_num'] = star_num.values('note_id') \
                 .annotate(num=Count('id')).get(note_id=self.kwargs['pk'])
@@ -236,11 +240,11 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
         queryset = Review.objects.filter(question_id=q_id, user_id=u_id)
         # querysetが空であればレコード作成
         if len(queryset) == 0:
-            review = Review.objects.create(question_id=q_id, user_id=u_id)
-            review.save()
+            review_query = Review.objects.create(question_id=q_id, user_id=u_id)
+            review_query.save()
         else:
-            review = queryset.get(user_id=u_id)
-            review.delete()
+            review_query = queryset.get(user_id=u_id)
+            review_query.delete()
         return super().get(request, *args, **kwargs)
 
 
