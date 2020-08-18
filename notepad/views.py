@@ -239,12 +239,12 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
         # pkからユーザーのreviewを取得
         queryset = Review.objects.filter(question_id=q_id, user_id=u_id)
         # querysetが空であればレコード作成
-        if len(queryset) == 0:
-            review_query = Review.objects.create(question_id=q_id, user_id=u_id)
-            review_query.save()
-        else:
+        if queryset.exists():
             review_query = queryset.get(user_id=u_id)
             review_query.delete()
+        else:
+            review_query = Review.objects.create(question_id=q_id, user_id=u_id)
+            review_query.save()
         return super().get(request, *args, **kwargs)
 
 

@@ -1,21 +1,17 @@
 
 'user strict';
 
-let print = c => console.log(c);
 
 // change display tab
 const changeTabDisplay = (params) => {
   // タブの表示をsessionStorageで保存する
   const sessionKey = params['sessionName'];
   const sessionName = sessionStorage.getItem(sessionKey);
-  print(sessionKey);
-  print(sessionName);
   if (sessionName === null) {
     sessionStorage[params['sessionName']] = params['sessionValue'];
   }
   // display wordbook
   let element = document.getElementById(sessionName);
-  print(element);
   element.classList.remove('d-none');
 
   // add or remove class
@@ -35,8 +31,10 @@ const changeTabDisplay = (params) => {
   let btn2 = document.getElementById(params['btnId2']);
 
   // push btn
-  btn1.addEventListener('click', () => { changeDisplay(params['btnValue1'], params['btnValue2']) });
-  btn2.addEventListener('click', () => { changeDisplay(params['btnValue2'], params['btnValue1']) });
+  if (btn1 && btn2) {
+    btn1.addEventListener('click', () => { changeDisplay(params['btnValue1'], params['btnValue2']) });
+    btn2.addEventListener('click', () => { changeDisplay(params['btnValue2'], params['btnValue1']) });
+  }
 }
 
 
