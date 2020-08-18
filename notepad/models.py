@@ -3,23 +3,23 @@ from django.db import models
 from accounts.models import User
 
 
-# class Tag(models.Model):
-#     '''ノートをカテゴリするタグのモデル'''
+class Tag(models.Model):
+    '''ノートをカテゴリするタグのモデル'''
 
-#     tag_name = models.CharField(verbose_name='カテゴリタグ', max_length=32, unique=True)
+    name = models.CharField(verbose_name='タグ', max_length=32, unique=True)
 
-#     class Meta:
-#         db_table = 'tag'
+    class Meta:
+        db_table = 'tag'
 
-#     def __str__(self):
-#         return self.tag_name
+    def __str__(self):
+        return self.name
 
 
 class Note(models.Model):
     '''メモ基本情報のモデル'''
 
     user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
-    # tag = models.ForeignKey(Tag, verbose_name='カテゴリ', on_delete=models.SET_NULL, null=True)
+    tag = models.ManyToManyField(Tag, verbose_name='タグ')
     title = models.CharField(verbose_name='タイトル', max_length=32)
     describe = models.TextField(verbose_name='説明', max_length=128, null=True, blank=True)
     public = models.BooleanField(verbose_name='公開範囲', default=0)
@@ -60,7 +60,7 @@ class Review(models.Model):
         db_table = 'review'
 
     def __str__(self):
-        return f'question={self.question} user={self.user}'
+        return f'"{self.question}/{self.user}"'
 
 
 class Star(models.Model):

@@ -16,8 +16,8 @@
       </div>
 
       <!-- category btn -->
-      <div class="col-lg-8 mt-5">
-        <div class="btn-group btn-group-lg">
+      <div class="btn-group-size col-lg-8 mt-lg-5">
+        <div class="btn-group">
           <button id="star-btn" class="btn btn-secondary">いいね</button>
           <button id="user-btn" class="btn btn-secondary">ユーザー</button>
           <button id="category-btn" class="btn btn-secondary">カテゴリ</button>
@@ -35,7 +35,7 @@
             {% for num, item in nums_stars.items %}
               <div class="wordbook card border-secondary m-3">
                 <div class="card-header border-secondary">
-                  <span class="h4 text-danger">{{ num }} </span>
+                  <span class="h4 text-danger">{{ num }}</span>
                   {{ item.title|truncatechars:15 }}
                   <span class="text-right text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
                 </div>

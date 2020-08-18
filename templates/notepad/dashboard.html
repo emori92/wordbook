@@ -9,7 +9,7 @@
 {% block content %}
   <div class="container">
     <div class="row my-5">
-      <div class="col-lg-3 col-md-5 my-5 pt-5 bg-light">
+      <div class="col-lg-3 col-md-5 my-5 pt-5 bg-light border rounded">
 
         <!-- profile -->
         <div class="profile">
@@ -18,7 +18,7 @@
           {% if account.image %}
             <img src="{{ account.image.url }}" alt="user-image" class="w-100 image-thumbnail rounded-circle">
           {% else %}
-            <img src="/media/user/user_default.jpg" alt="user-image" class="w-100 image-thumbnail rounded-circle">
+            <img src="{% static 'img/user_default.jpg' %}" alt="user-image" class="w-100 image-thumbnail rounded-circle">
           {% endif %}
   
           <!-- user info-->

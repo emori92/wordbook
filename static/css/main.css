@@ -48,3 +48,8 @@ body .wordbook {
   width: 240px;
   height: 200px;
 }
+
+body .user-image {
+  width: 48px;
+  height: 48px;
+}

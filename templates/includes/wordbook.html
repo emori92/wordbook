@@ -1,16 +1,24 @@
+{% load static %}
 
 <div id="{{ id|default:'wordbook' }}" class="border border-secondary rounded d-none">
   <div class="flex-wrap d-flex">
     {% for item in object_list %}
-      <div class="wordbook card my-4 ml-4 text-center border-secondary position-relative">
-        <div class="card-header border-secondary h5">{{ item.title|truncatechars:15 }}</div>
+      <div class="wordbook card my-4 ml-4 border-secondary position-relative">
+        <div class="card-header border-secondary h5 text-center">
+          <a class="text-dark" href="{% url 'notepad:note_detail' pk=item.pk %}">{{ item.title|truncatechars:15 }}</a>
+        </div>
         <div class="card-body">
-          <p class="card-text">{{ item.describe|truncatechars:40 }}</p>
-          <div class="position-absolute" style="bottom: 0">
-            <a class="btn btn-primary" href="{% url 'notepad:note_detail' pk=item.pk %}">ノートを見る</a>
-            {% if user.pk != item.user.pk %}
-              <a href="{% url 'notepad:dashboard' pk=item.user.pk %}" class="btn btn-outline-danger">{{ item.user }}</a>
-            {% endif %}
+          <p class="card-text">{{ item.describe|truncatechars:50 }}</p>
+          {% if item.user.image %}
+            <a href="{% url 'notepad:dashboard' item.user.id %}">
+              <img src="{{ item.user.image.url }}" alt="user image" class="user-image rounded-circle position-absolute fixed-bottom ml-3 mb-2">
+            </a>
+          {% else %}
+            <a href="{% url 'notepad:dashboard' item.user.id %}">
+              <img src="{% static 'img/user_default.jpg' %}" alt="user image" class="user-image rounded-circle position-absolute fixed-bottom ml-3 mb-2">
+            </a>
+          {% endif %}
+          <div class="position-absolute fixed-bottom mr-3">
             <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
           </div>
         </div>

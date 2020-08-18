@@ -2,51 +2,51 @@
 
 <div id="{{ id|default:'question' }}" class="d-none">
   {% for item in queryset %}
-  <div id="{{ forloop.counter }}"class="card border-secondary mb-5">
+    <div id="{{ forloop.counter }}"class="card border-secondary mb-5">
 
-    <!-- question title -->
-    <div class="card-header border-secondary">
-      {{ item.question }}
+      <!-- question title -->
+      <div class="card-header border-secondary">
+        {{ item.question }}
 
-      <!-- edit btn -->
-      {% if user.pk == object.user.pk %}
-        <div class="edit-btn dropleft">
-          <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="far fa-edit"></i></button>
-          <div class="dropdown-menu">
-            <a href="{% url 'notepad:question_edit' item.pk %}" class="dropdown-item">編集する</a>
-            <a href="{% url 'notepad:question_delete' item.pk %}" class="dropdown-item">削除する</a>
+        <!-- edit btn -->
+        {% if user.pk == object.user.pk %}
+          <div class="edit-btn dropleft">
+            <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="far fa-edit"></i></button>
+            <div class="dropdown-menu">
+              <a href="{% url 'notepad:question_edit' item.pk %}" class="dropdown-item">編集する</a>
+              <a href="{% url 'notepad:question_delete' item.pk %}" class="dropdown-item">削除する</a>
+            </div>
           </div>
-        </div>
-      {% endif %}
-    </div>
-
-    <!-- answer hint btn -->
-    <div class="d-flex">
-      <div class="w-75 my-3">
-        <button class="answer-btn btn btn-danger ml-3">答え</button>
-        {% if item.hint %}
-          <button  class="hint-btn btn btn-primary ml-2">ヒント</button>
         {% endif %}
       </div>
 
-      <!-- review btn -->
-      {% if user.is_authenticated %}
-        <div class="review-btn my-3">
-          <!-- urlのalias -->
-          {% url 'notepad:question_review' object.pk item.pk user.pk as review_url %}
-          <!-- custom templateを利用して、同じquestion_idとuser_idのlistがあるか判定 -->
-          {% if item.id|make_list:user.id in review_tuple %}
-            <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-secondary">復習を解除</a>
-          {% else %}
-            <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-info">復習する</a>
+      <!-- answer hint btn -->
+      <div class="d-flex">
+        <div class="w-75 my-3">
+          <button class="answer-btn btn btn-danger ml-3">答え</button>
+          {% if item.hint %}
+            <button  class="hint-btn btn btn-primary ml-2">ヒント</button>
           {% endif %}
         </div>
-      {% endif %}
-    </div>
 
-    <!-- text -->
-    <div class="hint d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint|linebreaksbr }}</div>
-    <div class="answer d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer|linebreaksbr }}</div>
+        <!-- review btn -->
+        {% if user.is_authenticated %}
+          <div class="review-btn my-3">
+            <!-- urlのalias -->
+            {% url 'notepad:question_review' object.pk item.pk user.pk as review_url %}
+            <!-- custom templateを利用して、同じquestion_idとuser_idのlistがあるか判定 -->
+            {% if item.id|make_list:user.id in review_tuple %}
+              <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-secondary">復習を解除</a>
+            {% else %}
+              <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-info">復習する</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- text -->
+      <div class="hint d-none mx-4 mb-3 alert alert-primary">ヒント:<br> {{ item.hint|linebreaksbr }}</div>
+      <div class="answer d-none mx-4 mb-3 alert alert-danger">答え:<br> {{ item.answer|linebreaksbr }}</div>
 
     </div>
   {% empty %}

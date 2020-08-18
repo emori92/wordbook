@@ -18,4 +18,7 @@ body {
   .wordbook {
     @include wordbook();
   }
+  .user-image {
+    @include user-image();
+  }
 }
