@@ -8,20 +8,29 @@
 
 {% block content %}
   <div class="container">
-    <div class="row my-5">
-      
-      <!-- wordbook -->
-      <div class="col-lg py-4">
-        <!-- tab btn -->
-        <div class="btn-group-size">
-          <div class="btn-group pb-4">
-            <button id="wordbook-btn" class="btn btn-secondary">New!</button>
-            {% if user.is_authenticated %}
-              <button id="follow-btn" class="btn btn-secondary">フォロー</button>
-            {% endif %}
-            <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
-          </div>
+
+    <!-- title -->
+    <div class="title row mt-5">
+      <div class="col-lg-4">
+        <h1 class="text-info display-2">Hot🔥</h1>
+      </div>
+
+      <!-- tab btn -->
+      <div class="btn-group-size">
+        <div class="btn-group mt-lg-5">
+          <button id="wordbook-btn" class="btn btn-secondary">New!</button>
+          {% if user.is_authenticated %}
+            <button id="follow-btn" class="btn btn-secondary">フォロー</button>
+          {% endif %}
+          <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
         </div>
+      </div>
+    </div>
+
+    <!-- wordbook -->
+    <div class="row mb-5">
+      <div class="col-lg py-4">
+        
 
         <!-- new wordbook -->
         {% include 'includes/wordbook.html' %}

@@ -1,6 +1,6 @@
 {% load static %}
 
-<div id="{{ id|default:'wordbook' }}" class="border border-secondary rounded d-none">
+<div id="{{ id|default:'wordbook' }}" class="border rounded shadow-sm d-none">
   <div class="flex-wrap d-flex">
     {% for item in object_list %}
       <div class="wordbook card my-4 ml-4 border-secondary position-relative">

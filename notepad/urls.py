@@ -23,4 +23,6 @@ urlpatterns = [
     # SNS
     path('follow/<int:following>/<int:followed>/', views.FollowView.as_view(), name='follow'),
     path('star/<int:note_pk>/<int:user_pk>/', views.StarView.as_view(), name='star'),
+    path('tag/<int:note_pk>/', views.TagCreateView.as_view(), name='tag_new'),
+    path('tag/<slug:word>/', views.TagListView.as_view(), name='tag_list'),
 ]

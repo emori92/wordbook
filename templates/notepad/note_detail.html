@@ -17,7 +17,7 @@
           {% if object.tag.all %}
             <div class="mt-3 ml-3 h5">
             {% for tag in object.tag.all %}
-              <a href="" class="badge badge-success">{{ tag.name }}</a>
+              <a href="{% url 'notepad:tag_list' tag.name %}" class="badge badge-success">{{ tag.name }}</a>
             {% endfor %}
             </div>
           {% endif %}
@@ -26,10 +26,10 @@
           <!-- btn -->
           {% if user.pk == object.user.pk %}
             <div class="d-inline-flex flex-column px-4 mb-4">
-              <a href="{% url 'notepad:question_new' pk=note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
-              <a href="" class="btn btn-info btn-block">タグを追加する</a>
-              <a href="{% url 'notepad:note_edit' pk=note.pk %}" class="btn btn-outline-secondary btn-block">ノートを編集する</a>
-              <a href="{% url 'notepad:note_delete' pk=note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
+              <a href="{% url 'notepad:question_new' note.pk %}" class="btn btn-primary btn-block">問題を追加する</a>
+              <a href="{% url 'notepad:tag_new' note_pk=note.pk %}" class="btn btn-outline-info btn-block">タグを追加する</a>
+              <a href="{% url 'notepad:note_edit' note.pk %}" class="btn btn-outline-secondary btn-block">ノートを編集する</a>
+              <a href="{% url 'notepad:note_delete' note.pk %}" class="btn btn-outline-danger btn-block">ノートを削除する</a>
             </div>
           {% endif %}
 

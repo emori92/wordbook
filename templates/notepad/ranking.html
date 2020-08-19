@@ -30,19 +30,24 @@
       <div class="col-lg my-4">
 
         <!-- star -->
-        <div id="star" class="border border-secondary rounded d-none">
+        <div id="star" class="border rounded shadow-sm d-none">
           <div class="d-flex flex-wrap">
             {% for num, item in nums_stars.items %}
               <div class="wordbook card border-secondary m-3">
+
+                <!-- title -->
                 <div class="card-header border-secondary">
-                  <span class="h4 text-danger">{{ num }}</span>
-                  {{ item.title|truncatechars:15 }}
-                  <span class="text-right text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
+                  <span class="rank-num h4 text-danger">{{ num }}</span>
+                  <a href="{% url 'notepad:note_detail' item.id %}" class="text-dark h5">
+                    {{ item.title|truncatechars:15 }}
+                  </a>
                 </div>
+
+                <!-- description -->
                 <div class="card-body">
                   <p>{{ item.describe|truncatechars:50 }}</p>
-                  <a href="{% url 'notepad:note_detail' pk=item.id %}" class="btn btn-primary">ノートを見る</a>
-                  <a href="{% url 'notepad:dashboard' pk=item.user_id %}" class="btn btn-outline-danger">{{ item.user }}</a>
+                  <a href="{% url 'notepad:dashboard' item.user_id %}" class="btn btn-outline-danger">{{ item.user }}</a>
+                  <span class="rank-num text-secondary"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
                   <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
                 </div>
               </div>
@@ -54,16 +59,20 @@
         </div>
 
         <!-- user -->
-        <div id="user" class="border border-secondary rounded d-none">
+        <div id="user" class="border rounded shadow-sm d-none">
           <div class="d-flex flex-wrap">
             <!-- 辞書で格納したnums_usersをdict.items()で展開 -->
             {% for num, item in nums_users.items %}
               <div class="wordbook card border-secondary m-3">
+
+                <!-- title -->
                 <div class="card-header border-secondary">
-                  <span class="h4 text-danger">{{ num }} </span>
+                  <span class="rank-num h4 text-danger">{{ num }} </span>
                   <a href="{% url 'notepad:dashboard' pk=item.id %}" class="text-info">{{ item.username|truncatechars:10 }}</a>
                   <i class="fas fa-user-friends"></i>: {{ item.user_num }}
                 </div>
+
+                <!-- description -->
                 <div class="card-body">
                   {% if item.describe %}
                     <p>{{ item.describe|linebreaksbr }}</p>
