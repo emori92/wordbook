@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}new tag | Wordbook{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <form method="post" class="mt-5">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-success">追加!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

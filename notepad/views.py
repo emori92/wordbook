@@ -4,8 +4,8 @@ from django.db.models import Count
 import logging
 
 from accounts.models import User
-from .models import Note, Question, Review, Follow, Star
-from .forms import NoteForm, QuestionForm
+from .models import Note, Question, Review, Follow, Star, Tag
+from .forms import NoteForm, QuestionForm, TagForm
 # SQL query
 from .SQL.user_follow_query import hot_query
 # paginator
@@ -71,7 +71,6 @@ class HotListView(generic.ListView):
             # SQLディレクトリにあるクエリ文を引数にする
             note = Note.objects.raw(hot_query, [self.request.user.pk])[:40]
             context['follow'] = set_paginator(self, note, 'follow')
-            # print(f"\n\n{set_paginator(self, note, 'follow').end_index()}\n\n")
         # 推薦されたノートを取得
         demo_query = Note.objects.all()[:20]  # デモデータ
         context['recommender'] = set_paginator(self, demo_query, 'recommender')
@@ -186,6 +185,42 @@ class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_success_url(self):
         note_pk = self.object.user_id
         return reverse('notepad:dashboard', kwargs={'pk': note_pk})
+
+
+# tag
+class TagCreateView(LoginRequiredMixin, generic.FormView):
+    template_name = 'notepad/tag_new.html'
+    form_class = TagForm
+
+    def get_success_url(self):
+        note_pk = self.kwargs['note_pk']
+        url = reverse('notepad:note_detail', kwargs={'pk': note_pk})
+        return url
+
+    def form_valid(self, form):
+        # tagの取得 or 作成
+        text = form.cleaned_data['name']
+        tag, created = Tag.objects.get_or_create(name=text)
+        # noteに紐付ける
+        note_pk = self.kwargs['note_pk']
+        note = get_object_or_404(Note, id=note_pk)
+        note.tag.add(tag)
+        return super().form_valid(form)
+
+
+class TagListView(generic.ListView):
+    model = Note
+    template_name = "notepad/tag_list.html"
+
+    def get_queryset(self):
+        keyword = self.kwargs['word']
+        queryset = Note.objects.prefetch_related('tag').filter(tag__name=keyword)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['slug'] = self.kwargs['word']
+        return context
 
 
 # question
