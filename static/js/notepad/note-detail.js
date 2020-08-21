@@ -1,30 +1,26 @@
 
-import {changeTabDisplay} from '../script/functions.js';
-
 'user strict';
+
+import { changeTabDisplay2 } from '../script/functions.js';
 
 
 // function parameter
 const noteDetailParameter = {
   'sessionName': 'noteDetail',
-  'sessionValue': 'question',
+  'sessionInit': 'question',
   'btnId1': 'question-btn',
   'btnId2': 'review-btn',
-  'btnValue1': 'question',
-  'btnValue2': 'review'
+  'tabId1': 'question',
+  'tabId2': 'review'
 }
-
-changeTabDisplay(noteDetailParameter);
-
 
 // get answer and hint class
 let answers = document.querySelectorAll('.answer-btn');
 let hints = document.querySelectorAll('.hint-btn');
 
-
 // show answer, hint
 const showText = (elemList, elemClass) => {
-
+  // for loop elementList
   for (let i = 0; i < elemList.length; i++) {
     // click event
     elemList[i].addEventListener('click', () => {
@@ -40,6 +36,7 @@ const showText = (elemList, elemClass) => {
   }
 }
 
-
+// execute functions
+changeTabDisplay2(noteDetailParameter);
 showText(answers, '.answer');
 showText(hints, '.hint');

@@ -39,19 +39,23 @@ class RankingListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # フォロー数の多い人を抽出
-        users = User.objects.filter(followed__followed__gt=0).values('id', 'username', 'describe') \
-            .annotate(user_num=Count('followed__followed')).order_by('-user_num')[:40]
-        # pagination機能を付ける
-        users = set_paginator(self, queryset=users, url_parameter='user')  # paginatorを作成する関数
-        context['users'] = users
-        # ランキングの数字を合わせてcontextに格納
-        context['nums_users'] = set_ranking_num(users)
-        # いいねの投稿も同上の処理を行う
-        stars = self.get_queryset()
+        # いいね
+        stars_query = self.get_queryset()
+        stars = set_paginator(self, stars_query, 'page')
+        context['num_stars'] = set_ranking_num(stars)
         context['stars'] = stars
-        paginator = set_paginator(self, stars, 'page')
-        context['nums_stars'] = set_ranking_num(paginator)
+        # フォロー
+        users_query = User.objects.filter(followed__followed__gt=0) \
+            .annotate(user_num=Count('followed__followed')).order_by('-user_num')
+            # .values('id', 'username', 'describe') \
+        users = set_paginator(self, queryset=users_query, url_parameter='user')
+        context['num_users'] = set_ranking_num(users)  # ランキングの数値
+        context['users'] = users
+        # タグ
+        tag_query = Tag.objects.all() \
+            .annotate(tag_num=Count('note__id')).order_by('-tag_num')
+        # debug
+        print(f'\n\n{tag_query}\n\n')
         return context
 
 
@@ -68,7 +72,7 @@ class HotListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         # フォローしているユーザーのノートを取得
         if self.request.user.is_authenticated:
-            # SQLディレクトリにあるクエリ文を引数にする
+            # "/notepad/SQL/"にあるクエリ文を実行
             note = Note.objects.raw(hot_query, [self.request.user.pk])[:40]
             context['follow'] = set_paginator(self, note, 'follow')
         # 推薦されたノートを取得
@@ -108,7 +112,6 @@ class Dashboard(generic.ListView):
         if self.request.user.pk == self.kwargs['pk']:
             liked = Note.objects.filter(star__user=self.request.user.pk)
             context['liked'] = set_paginator(self, liked, 'liked')
-        # print(f'\n\n{set_paginator(self, public, "public").end_index()}\n\n`')
         return context
 
 
@@ -212,15 +215,55 @@ class TagListView(generic.ListView):
     model = Note
     template_name = "notepad/tag_list.html"
 
+    # タグ付けされたnoteのみ取得
     def get_queryset(self):
         keyword = self.kwargs['word']
-        queryset = Note.objects.prefetch_related('tag').filter(tag__name=keyword)
+        tags = Note.objects.prefetch_related('tag') \
+            .filter(tag__name=keyword, public=1)
+        queryset = set_paginator(self, tags, 'tag')
         return queryset
 
+    # ブラウザにslugを表示する
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['slug'] = self.kwargs['word']
         return context
+
+
+class TagDeleteListView(LoginRequiredMixin, generic.ListView):
+    # model = Tag
+    template_name = "notepad/tag_delete.html"
+
+    # ノートに紐づいたタグを取得
+    def get_queryset(self):
+        queryset = Note.objects.get(id=self.kwargs['note_pk']) \
+            .tag.filter(note=self.kwargs['note_pk'])
+        return queryset
+
+    # note_pkをcontextに登録
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['note_pk'] = self.kwargs['note_pk']
+        return context
+
+
+
+class TagDeleteView(LoginRequiredMixin, generic.RedirectView):
+    # リダイレクト先のURL
+    def get_redirect_url(self, *args, **kwargs):
+        pk = self.kwargs['note_pk']
+        url = reverse('notepad:tag_delete_list', kwargs={'note_pk': pk})
+        return url
+
+    # タグの削除
+    def get(self, request, *args, **kwargs):
+        # noteの取得
+        note = Note.objects.get(id=self.kwargs['note_pk'])
+        # tagの取得
+        tag = Tag.objects.get(name=self.kwargs['tag'])
+        # tag削除
+        note.tag.remove(tag)
+        return super().get(request, *args, **kwargs)
 
 
 # question
@@ -264,7 +307,8 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
 class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
     # 問題の復習を確認する
     def get_redirect_url(self, *args, **kwargs):
-        url = '/note/%s/' % self.kwargs['note_pk']
+        pk = self.kwargs['note_pk']
+        url = reverse('notepad:note_detail', kwargs={'pk': pk})
         return url
 
     def get(self, request, *args, **kwargs):
@@ -287,7 +331,8 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
 class FollowView(LoginRequiredMixin, generic.RedirectView):
     # リダイレクト先
     def get_redirect_url(self, *args, **kwargs):
-        url = '/dashboard/%s/' % self.kwargs['followed']
+        pk = self.kwargs['followed']
+        url = reverse('notepad:dashboard', kwargs={'pk': pk})
         return url
     
     # フォロー、フォロー削除
@@ -308,7 +353,8 @@ class FollowView(LoginRequiredMixin, generic.RedirectView):
 class StarView(LoginRequiredMixin, generic.RedirectView):
     # リダイレクト先
     def get_redirect_url(self, *args, **kwargs):
-        url = '/note/%s/' % self.kwargs['note_pk']
+        pk = self.kwargs['note_pk']
+        url = reverse('notepad:note_detail', kwargs={'pk': pk})
         return url
 
     def get(self, request, *args, **kwargs):

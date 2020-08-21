@@ -24,5 +24,7 @@ urlpatterns = [
     path('follow/<int:following>/<int:followed>/', views.FollowView.as_view(), name='follow'),
     path('star/<int:note_pk>/<int:user_pk>/', views.StarView.as_view(), name='star'),
     path('tag/<int:note_pk>/', views.TagCreateView.as_view(), name='tag_new'),
-    path('tag/<slug:word>/', views.TagListView.as_view(), name='tag_list'),
+    path('tag/<int:note_pk>/delete/', views.TagDeleteListView.as_view(), name='tag_delete_list'),
+    path('tag/<int:note_pk>/<str:tag>/', views.TagDeleteView.as_view(), name='tag_delete'),
+    path('tag/<str:word>/', views.TagListView.as_view(), name='tag_list'),
 ]
