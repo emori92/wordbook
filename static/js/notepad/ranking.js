@@ -1,18 +1,19 @@
 
-import {changeTabDisplay} from '../script/functions.js';
-
 'user strict';
+
+import { changeTabDisplay3 } from '../script/functions.js';
 
 
 // function parameter
 const rankingParameter = {
   'sessionName': 'ranking',
-  'sessionValue': 'star',
+  'sessionInit': 'star',
   'btnId1': 'star-btn',
   'btnId2': 'user-btn',
-  'btnValue1': 'star',
-  'btnValue2': 'user'
+  'btnId3': 'category-btn',
+  'tabId1': 'star',
+  'tabId2': 'user',
+  'tabId3': 'category'
 }
 
-
-changeTabDisplay(rankingParameter);
+changeTabDisplay3(rankingParameter);

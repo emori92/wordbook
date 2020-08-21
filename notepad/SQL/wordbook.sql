@@ -175,3 +175,27 @@ INNER JOIN
 ON
     q.id == qr.question_id
 ;
+
+
+SELECT
+    n.title
+    , t.name
+FROM
+    note_tag AS nt
+    LEFT JOIN
+        note AS n
+    ON nt.note_id == n.id
+    LEFT JOIN
+        tag AS t
+    ON nt.tag_id == t.id
+;
+
+
+-- tagのランキング
+SELECT
+
+FROM
+    tag AS t
+    LEFT JOIN
+        note_tag AS nt
+    ON t.id == nt.tag_id

@@ -29,6 +29,13 @@ button {
   height: 120px;
 }
 
+.container #tag-edit {
+  width: 40px;
+  position: absolute;
+  right: 4px;
+  top: 72px;
+}
+
 .container .edit-btn {
   position: absolute;
   right: 0;
@@ -38,6 +45,23 @@ button {
 .container .review-btn {
   position: absolute;
   right: 16px;
+}
+
+.container #tag-alert {
+  width: 260px;
+}
+
+.container #tag-alert p {
+  margin-bottom: 0;
+}
+
+.container .tag-list {
+  width: 272px;
+}
+
+.container .tag-btn {
+  width: 200px;
+  margin: 3rem auto;
 }
 
 body header {
