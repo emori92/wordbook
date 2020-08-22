@@ -32,30 +32,33 @@ class RankingListView(generic.ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        # いいねされたノートをランキング形式で取得
+        # いいねされた数が多いノートを降順で取得
         note = Note.objects.filter(public=1, star__gt=0).select_related('user') \
             .annotate(star_num=Count('star__id')).order_by('-star_num')[:40]
         return note
 
+    # いいね、ユーザー、タグのランキング情報をcontextに代入
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # いいね、フォロワー、タグで共通の処理を関数化
+        def set_ranking(queryset, url_name, objects, ranking_objects):
+            object_list = set_paginator(self, queryset, url_name)
+            context[ranking_objects] = set_ranking_num(object_list)
+            context[objects] = object_list
+
         # いいね
         stars_query = self.get_queryset()
-        stars = set_paginator(self, stars_query, 'page')
-        context['num_stars'] = set_ranking_num(stars)
-        context['stars'] = stars
+        set_ranking(stars_query, 'page', 'stars', 'ranking_stars')
         # フォロー
         users_query = User.objects.filter(followed__followed__gt=0) \
             .annotate(user_num=Count('followed__followed')).order_by('-user_num')
-            # .values('id', 'username', 'describe') \
-        users = set_paginator(self, queryset=users_query, url_parameter='user')
-        context['num_users'] = set_ranking_num(users)  # ランキングの数値
-        context['users'] = users
+        set_ranking(users_query, 'user', 'users', 'ranking_users')
         # タグ
-        tag_query = Tag.objects.all() \
-            .annotate(tag_num=Count('note__id')).order_by('-tag_num')
-        # debug
-        print(f'\n\n{tag_query}\n\n')
+        tags_query = Tag.objects.all() \
+            .annotate(tag_num=Count('note__id')) \
+            .filter(tag_num__gt=0).order_by('-tag_num')
+        set_ranking(tags_query, 'tag', 'tags', 'ranking_tags')
         return context
 
 

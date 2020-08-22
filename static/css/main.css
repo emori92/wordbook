@@ -20,8 +20,22 @@ button {
   font-family: 'Bangers', cursive;
 }
 
-.container .rank-num {
+.container .wordbook .num-font {
   font-family: 'Bangers', cursive;
+  position: absolute;
+  left: 16px;
+}
+
+.container .wordbook .star-icon {
+  position: absolute;
+  left: 16px;
+  bottom: 8px;
+}
+
+.container .wordbook .human-icon {
+  position: absolute;
+  left: 16px;
+  bottom: 8px;
 }
 
 .container .create a {
@@ -34,6 +48,15 @@ button {
   position: absolute;
   right: 4px;
   top: 72px;
+}
+
+.container #wordbook-user-image img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  position: absolute;
+  right: 24px;
+  bottom: 40px;
 }
 
 .container .edit-btn {
@@ -73,7 +96,30 @@ body .wordbook {
   height: 200px;
 }
 
+body .wordbook:hover {
+  text-decoration: none;
+  box-shadow: 0px 2px 8px rgba(128, 128, 128, 0.5);
+}
+
+body .wordbook .fa-lock {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+}
+
+body .wordbook .update {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+}
+
 body .user-image {
   width: 48px;
   height: 48px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 16px;
+  margin-bottom: 8px;
+  z-index: 1050;
 }

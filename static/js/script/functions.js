@@ -3,7 +3,7 @@
 
 
 // add or remove class
-const changeStyle2 = (id1, id2) => {
+const changeStyle2 = (sessionKey, id1, id2) => {
   // get element
   let elem1 = document.getElementById(id1);
   let elem2 = document.getElementById(id2);
@@ -11,10 +11,10 @@ const changeStyle2 = (id1, id2) => {
   elem1.classList.remove('d-none');
   elem2.classList.add('d-none');
   // save session
-  sessionStorage.setItem(params['sessionName'], id1);
+  sessionStorage.setItem(sessionKey, id1);
 }
 
-const changeStyle3 = (id1, id2, id3) => {
+const changeStyle3 = (sessionKey, id1, id2, id3) => {
   // get element
   let elem1 = document.getElementById(id1);
   let elem2 = document.getElementById(id2);
@@ -24,7 +24,7 @@ const changeStyle3 = (id1, id2, id3) => {
   elem2.classList.add('d-none');
   elem3.classList.add('d-none');
   // save session
-  sessionStorage.setItem(params['sessionName'], id1);
+  sessionStorage.setItem(sessionKey, id1);
 }
 
 
@@ -46,8 +46,8 @@ const changeTabDisplay2 = (params) => {
   let btn2 = document.getElementById(params['btnId2']);
   // push btn
   if (btn1 && btn2) {
-    btn1.addEventListener('click', () => { changeStyle2(params['tabId1'], params['tabId2']) });
-    btn2.addEventListener('click', () => { changeStyle2(params['tabId2'], params['tabId1']) });
+    btn1.addEventListener('click', () => { changeStyle2(key, params['tabId1'], params['tabId2']) });
+    btn2.addEventListener('click', () => { changeStyle2(key, params['tabId2'], params['tabId1']) });
   }
 }
 
@@ -69,9 +69,12 @@ const changeTabDisplay3 = (params) => {
   let btn3 = document.getElementById(params['btnId3']);
   // push btn
   if (btn1 && btn2 && btn3) {
-    btn1.addEventListener('click', () => { changeStyle3(params['tabId1'], params['tabId2'], params['tabId3']) });
-    btn2.addEventListener('click', () => { changeStyle3(params['tabId2'], params['tabId1'], params['tabId3']) });
-    btn3.addEventListener('click', () => { changeStyle3(params['tabId3'], params['tabId1'], params['tabId2']) });
+    btn1.addEventListener('click', () => { changeStyle3(key, params['tabId1'], params['tabId2'], params['tabId3']) });
+    btn2.addEventListener('click', () => { changeStyle3(key, params['tabId2'], params['tabId1'], params['tabId3']) });
+    btn3.addEventListener('click', () => { changeStyle3(key, params['tabId3'], params['tabId1'], params['tabId2']) });
+  } else {
+    btn1.addEventListener('click', () => { changeStyle2(key, params['tabId1'], params['tabId3']) });
+    btn3.addEventListener('click', () => { changeStyle2(key, params['tabId3'], params['tabId1']) });
   }
 }
 

@@ -3,26 +3,23 @@
 <div id="{{ id|default:'wordbook' }}" class="border rounded shadow-sm d-none">
   <div class="flex-wrap d-flex">
     {% for item in object_list %}
-      <div class="wordbook card my-4 ml-4 border-secondary position-relative">
+      <a href="{% url 'notepad:note_detail' pk=item.pk %}" class="wordbook card text-dark my-4 ml-4 border-secondary position-relative">
+        <!-- card header -->
         <div class="card-header border-secondary h5 text-center">
-          <a class="text-dark" href="{% url 'notepad:note_detail' pk=item.pk %}">{{ item.title|truncatechars:15 }}</a>
+          {% if item.public == 0 %}
+            <i class="fas fa-lock text-secondary"></i>
+          {% endif %}
+          {{ item.title|truncatechars:15 }}
         </div>
+        <!-- card body -->
         <div class="card-body">
           <p class="card-text">{{ item.describe|truncatechars:50 }}</p>
-          {% if item.user.image %}
-            <a href="{% url 'notepad:dashboard' item.user.id %}">
-              <img src="{{ item.user.image.url }}" alt="user image" class="user-image rounded-circle position-absolute fixed-bottom ml-3 mb-2">
-            </a>
-          {% else %}
-            <a href="{% url 'notepad:dashboard' item.user.id %}">
-              <img src="{% static 'img/user_default.jpg' %}" alt="user image" class="user-image rounded-circle position-absolute fixed-bottom ml-3 mb-2">
-            </a>
-          {% endif %}
-          <div class="position-absolute fixed-bottom mr-3">
+            <img src="{% if item.user.image %}{{ item.user.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user image" class="user-image">
+          <div class="update">
             <p class="text-secondary text-right font-italic">{{ item.updated_at }}</p>
           </div>
         </div>
-      </div>
+      </a>
     {% empty %}
       <div class="m-4 p-4 w-100 h-50">
         <p class="text-center h1 font-weight-normal text-secondary">{{ name|default:'ノート' }}がありません。</p>
@@ -30,7 +27,7 @@
     {% endfor %}
   </div>
   
-  <!-- pagenator -->
+  <!-- paginator -->
   {% if page_obj.has_other_pages %}
     {% include 'includes/pagination.html' %}
   {% endif %}

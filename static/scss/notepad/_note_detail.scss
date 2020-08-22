@@ -8,12 +8,22 @@
     right: 4px;
     top: 72px;
   }
+  // user image
+  #wordbook-user-image img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    position: absolute;
+    right: 24px;
+    bottom: 40px;
+  }
   // edit btn
   .edit-btn {
     position: absolute;
     right: 0;
     top: 4px;
   }
+  // review-btn
   .review-btn {
     position: absolute;
     right: 16px;
