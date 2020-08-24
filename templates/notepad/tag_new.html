@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}new tag | Wordbook{% endblock %}
 
 {% block content %}
@@ -8,7 +10,7 @@
       <div class="col">
         <form method="post" class="mt-5">
           {% csrf_token %}
-          {{ form.as_p }}
+          {{ form|crispy }}
           <button type="submit" class="btn btn-success">追加!</button>
         </form>
       </div>

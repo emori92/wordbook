@@ -11,7 +11,7 @@
         <div id="tag-alert" class="alert alert-danger my-5 mx-auto text-center">
           <p>タグを削除します。</p>
         </div>
-        
+
         <!-- tags -->
         <div class="tag-list mx-auto rounded border border-bottom-0">
           {% for item in object_list %}
@@ -33,6 +33,7 @@
           <a href="{% url 'notepad:tag_new' note_pk %}" class="btn btn-primary mr-3">タグを追加</a>
           <a href="{% url 'notepad:note_detail' note_pk %}" class="btn btn-outline-secondary">戻る</a>
         </div>
+
       </div>
     </div>
   </div>

@@ -1,0 +1,59 @@
+
+<div id="{{ id }}" class="d-none">
+  <div class="border rounded shadow-sm mt-4">
+    <table class="table table-border table-hover">
+
+      <!-- head -->
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="text-center">No</th>
+
+          <!-- user -->
+          {% if ranking_list.1.username %}
+            <th scope="col" class="text-center">名前</th>
+            <th scope="col" class="text-center">フォロワー</th>
+
+          <!-- tag -->
+          {% else %}
+            <th scope="col" class="text-center">タグ</th>
+            <th scope="col" class="text-center">タグ付け数</th>
+          {% endif %}
+
+        </tr>
+      </thead>
+
+      <!-- body -->
+      <tbody>
+        {% for num, item in ranking_list.items %}
+          <tr>
+            <th scope="row" class="text-center">
+              <span class="num-font h4 text-danger">{{ num }}</span>
+            </th>
+
+            <!-- user -->
+            {% if item.username %}
+              <td class="text-center h5 font-weight-normal"><a href="{% url 'notepad:dashboard' item.id %}" class="d-block text-dark">{{ item.username }}</a></td>
+              <td class="text-center">
+                <i class="fas fa-user-friends mr-2"></i>
+                <span class="text-primary h5">{{ item.followed_num }}</span>
+              </td>
+
+            <!-- tag -->
+            {% else %}
+              <td class="text-center h5 font-weight-normal"><a href="{% url 'notepad:tag_list' item.name %}" class="d-block text-dark">{{ item.name }}</a></td>
+              <td class="text-center">
+                <i class="fas fa-tags mr-2"></i>
+                <span class="text-primary h5">{{ item.tag_num }}</span>
+              </td>
+            {% endif %}
+
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+
+  <!-- pagination -->
+  {% include 'includes/pagination.html' %}
+</div>

@@ -30,14 +30,16 @@
     <!-- wordbook -->
     <div class="row mb-5">
       <div class="col-lg py-4">
-        
 
         <!-- new wordbook -->
         {% include 'includes/wordbook.html' %}
+
         <!-- follow -->
         {% include 'includes/wordbook.html' with object_list=follow page_obj=follow page='follow' id='follow' %}
+
         <!-- recommender -->
         {% include 'includes/wordbook.html' with object_list=recommender page_obj=recommender page='recommender' id='recommender' %}
+
       </div>
     </div>
   </div>
