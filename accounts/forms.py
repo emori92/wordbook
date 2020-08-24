@@ -9,10 +9,12 @@ class SignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
-        # widget = {'password': forms.PasswordInput}
+        widgets = {
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'})
+        }
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'describe', 'image']
+        fields = ['describe', 'image']

@@ -4,7 +4,7 @@
 ## 仕様
 - 単語帳を作成し、問題、ヒント、回答を作成できます
 
-## 実装機能
+## 機能
 - サインアップ/ログイン/ログアウト
 - DB登録/更新/削除
 - ユーザーフォロー
@@ -25,4 +25,5 @@
 - django-debug-toolbar: 2.2
 - django-environ: 0.4.5
 - django-sass: 1.0.0
+- django-crispy-forms: 1.9.2
 - Pillow: 7.1.2

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # package
     'django_sass',
     'guardian',
+    'crispy_forms',
     # app
     'notepad.apps.NotepadConfig',
     'accounts.apps.AccountsConfig',
@@ -81,6 +82,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {}
 
+# formをBootStrap4に調整
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # User モデルの拡張
 AUTH_USER_MODEL = 'accounts.User'
@@ -91,7 +94,7 @@ LOGOUT_REDIRECT_URL = '/'
 # FLASH MESSAGEのストレージ
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-# user permisiion (django-guardian)
+# user permission (django-guardian)
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # default
     'guardian.backends.ObjectPermissionBackend',

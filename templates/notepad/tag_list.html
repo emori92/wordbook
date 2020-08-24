@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}タグ一覧: {{ slug }} | Wordbook{% endblock title %}
+{% block title %}タグ一覧: {{ view.kwargs.word }} | Wordbook{% endblock title %}
 
 {% block content %}
   <div class="container">
@@ -10,7 +10,7 @@
     <!-- title -->
     <div class="badge-title row mt-5">
       <div class="col-lg-10">
-        <p class="display-3 font-weight-bold border rounded-pill w-50 text-center bg-success text-white">{{ slug }}</p>
+        <p class="display-3 font-weight-bold border rounded-pill w-50 text-center bg-success text-white">{{ view.kwargs.word }}</p>
       </div>
     </div>
 

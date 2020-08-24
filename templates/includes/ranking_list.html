@@ -1,58 +1,30 @@
 {% load static %}
 
-<div id="{{ id }}" class="border rounded shadow-sm d-none">
-  <div class="d-flex flex-wrap">
-    {% for num, item in ranking_list.items %}
-      <a href="{% if item.title %}{% url 'notepad:note_detail' item.id %}{% elif item.username %}{% url 'notepad:dashboard' pk=item.id %}{% else %}{% url 'notepad:tag_list' item.name %}{% endif %}" class="wordbook card border-secondary text-dark m-3">
+<div id="{{ id }}" class="d-none">
+  <div class="border rounded shadow-sm py-2">
+    <div class="d-flex flex-wrap">
+      {% for num, item in ranking_list.items %}
+        <a href="{% if item.title %}{% url 'notepad:note_detail' item.id %}{% elif item.username %}{% url 'notepad:dashboard' pk=item.id %}{% else %}{% url 'notepad:tag_list' item.name %}{% endif %}" class="wordbook card border-secondary text-dark m-3">
 
-        <!-- card header -->
-        <div class="card-header border-secondary h5 text-center">
-          <span class="num-font h4 text-danger">{{ num }}</span>
-
-          <!-- star -->
-          {% if item.title %}
+          <!-- card header -->
+          <div class="card-header border-secondary h5 text-center">
+            <span class="num-font h4 text-danger">{{ num }}</span>
             {{ item.title|truncatechars:15 }}
+          </div>
 
-          <!-- user -->
-          {% elif item.username %}
-            {{ item.username|truncatechars:10 }}
-            
-            <!-- tag -->
-          {% else %}
-            {{ item.name|truncatechars:15 }}
-          {% endif %}
-        </div>
-
-        <!-- card body -->
-        <div class="card-body">
-
-          <!-- star -->
-          {% if item.title %}
+          <!-- card body -->
+          <div class="card-body">
             <p>{{ item.describe|truncatechars:50 }}</p>
             <img src="{% if item.user.image %}{{ item.user.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user image" class="user-image">
             <span class="star-icon text-secondary h5"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
+          </div>
 
-          <!-- user -->
-          {% elif item.username  %}
-            {% if item.describe %}
-              <p>{{ item.describe|linebreaksbr }}</p>
-            {% endif %}
-            <div class="human-icon">
-              <i class="fas fa-user-friends h5"></i>
-              <span class="text-primary h5">: {{ item.user_num }}</span>
-            </div>
-
-          <!-- tag -->
-          {% else %}
-            <p>{{ item.describe|truncatechars:50 }}</p>
-            <span class="star-icon text-secondary h5"><i class="fas fa-star text-warning"></i>{{ item.tag_num }}</span>
-
-          {% endif %}
-        </div>
-      </a>
-    {% endfor %}
+        </a>
+      {% endfor %}
+    </div>
   </div>
-
+  
   <!-- pagination -->
   {% include 'includes/pagination.html' %}
+
 </div>

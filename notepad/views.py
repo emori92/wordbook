@@ -52,7 +52,7 @@ class RankingListView(generic.ListView):
         set_ranking(stars_query, 'page', 'stars', 'ranking_stars')
         # フォロー
         users_query = User.objects.filter(followed__followed__gt=0) \
-            .annotate(user_num=Count('followed__followed')).order_by('-user_num')
+            .annotate(followed_num=Count('followed__followed')).order_by('-followed_num')
         set_ranking(users_query, 'user', 'users', 'ranking_users')
         # タグ
         tags_query = Tag.objects.all() \
@@ -225,12 +225,6 @@ class TagListView(generic.ListView):
             .filter(tag__name=keyword, public=1)
         queryset = set_paginator(self, tags, 'tag')
         return queryset
-
-    # ブラウザにslugを表示する
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['slug'] = self.kwargs['word']
-        return context
 
 
 class TagDeleteListView(LoginRequiredMixin, generic.ListView):

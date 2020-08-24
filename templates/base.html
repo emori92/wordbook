@@ -37,7 +37,7 @@
       {% if user.is_authenticated %}
         <div><a href="{% url 'accounts:logout' %}" class="btn btn-danger mx-4">Logout</a></div>
       {% else %}
-        <div><a href="{% url 'accounts:signup' %}" class="btn btn-success mx-4" >Signup</a></div>
+        <div><a href="{% url 'accounts:signup' %}" class="btn btn-success mx-4" >Sign up</a></div>
         <div><a href="{% url 'accounts:login' %}" class="btn btn-warning mx-4" >Login</a></div>
       {% endif %}
     </nav>

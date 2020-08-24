@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}new query{% endblock title %}
 
 {% block content %}
@@ -7,11 +9,11 @@
   <form method="POST">
     {% csrf_token %}
     <div class="mt-4">
-      {{ form.as_p }}
+      {{ form|crispy }}
     </div>
     <div class="d-flex flex-column w-25">
       <button type="submit" class="btn btn-success mb-4">作成!</button>
-      <a href="{% url 'notepad:dashboard' pk=user.pk %}" class="btn btn-outline-secondary">戻る</a>
+      <a href="{% url 'notepad:note_detail' view.kwargs.pk %}" class="btn btn-outline-secondary">戻る</a>
     </div>
   </form>
 </div>

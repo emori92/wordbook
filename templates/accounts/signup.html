@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}サインアップ{% endblock  %}
   
 
@@ -13,15 +15,13 @@
       <div class="mt-4">
         <!-- {{ form.as_p }} -->
         <p>
-          {{ form.username.label }}: 
-          {{ form.username }}
+          {{ form.username|as_crispy_field }}
         </p>
         <p>
-          {{ form.password.label }}: 
-          <input type="password" name="password" maxlength="128" id="id_password">
+          {{ form.password|as_crispy_field }}
         </p>
       </div>
-      <button type="submit" class="btn btn-success w-25">Signup!</button>
+      <button type="submit" class="btn btn-success w-25">Sign up!</button>
     </form>
   </div>
 {% endblock content %}

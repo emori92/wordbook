@@ -49,7 +49,7 @@ class SignupView(generic.CreateView):
 class ProfileUpdateView(generic.UpdateView):
     model = User
     formclass = ProfileForm
-    fields = ['username', 'describe', 'image']
+    fields = ['describe', 'image']
     template_name = "accounts/profile.html"
 
     def get_success_url(self):
