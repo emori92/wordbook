@@ -20,12 +20,11 @@ class Login(SuccessMessageMixin, LoginView):
         return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
 
 
-# signup
+# sign up
 class SignupView(generic.CreateView):
     model = User
-    formclass = SignupForm
+    form_class = SignupForm
     template_name = "accounts/signup.html"
-    fields = ['username', 'password']
     
     def get_success_url(self):
         return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})

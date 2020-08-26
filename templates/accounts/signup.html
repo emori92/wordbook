@@ -2,26 +2,35 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}サインアップ{% endblock  %}
-  
+{% block title %}サインアップ | Wordbook{% endblock  %}
 
 {% block content %}
   <div class="container">
-    
-    <!-- form -->
-    <h1 class="mt-4">サインアップ</h1>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="mt-4">
-        <!-- {{ form.as_p }} -->
-        <p>
-          {{ form.username|as_crispy_field }}
-        </p>
-        <p>
-          {{ form.password|as_crispy_field }}
-        </p>
+    <div class="row">
+      <div class="col-lg-6 col-md-10 m-auto">
+        
+        <!-- form -->
+        <div id="user-form" class="d-flex align-items-center">
+          <form method="POST" class="border rounded shadow-sm p-4">
+            <h2 class="text-center">サインアップ</h2>
+            {% csrf_token %}
+            <div>
+              <!-- fields -->
+              <p>
+                {{ form.username|as_crispy_field }}
+              </p>
+              <p>
+                {{ form.password|as_crispy_field }}
+              </p>
+              <!-- btn -->
+              <div class="text-center mt-5">
+                <button type="submit" class="btn btn-success">Sign up</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
       </div>
-      <button type="submit" class="btn btn-success w-25">Sign up!</button>
-    </form>
+    </div>
   </div>
 {% endblock content %}

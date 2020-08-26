@@ -1,4 +1,8 @@
-button {
+#user-form {
+  height: 70vh;
+}
+
+#user-form button {
   font-family: 'Skranji', cursive;
 }
 

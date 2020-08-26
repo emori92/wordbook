@@ -9,9 +9,10 @@ class SignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
-        widgets = {
-            'password': forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'})
-        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password'].widget = forms.PasswordInput()
 
 
 class ProfileForm(forms.ModelForm):

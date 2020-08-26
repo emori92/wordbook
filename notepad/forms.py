@@ -9,7 +9,7 @@ class NoteForm(forms.ModelForm):
 
 
 class TagForm(forms.Form):
-    name = forms.CharField(max_length=32)
+    name = forms.CharField(max_length=32, label='タグ')
 
 
 class QuestionForm(forms.ModelForm):

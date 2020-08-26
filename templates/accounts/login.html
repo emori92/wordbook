@@ -2,20 +2,35 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}login{% endblock title %}
+{% block title %}login | Wordbook{% endblock title %}
   
 
 {% block content %}
   <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-10 m-auto">
+        
+        <!-- form -->
+        <div id="user-form" class="d-flex align-items-center">
+          <form method="POST" class="border rounded shadow-sm p-4 vw-100">
+            <h2 class="text-center">ログイン</h2>
+            {% csrf_token %}
+            <div>
+              <!-- fields -->
+              {{ form|crispy }}
+              <!-- {% for filed in form %}
+                {{ filed|as_crispy_field }}
+              {% endfor %} -->
+                
+              <!-- btn -->
+              <div class="text-center">
+                <button type="submit" class="btn btn-warning">Login</button>
+              </div>
+            </div>
+          </form>
+        </div>
 
-    <!-- form -->
-    <h1 class="mt-4">ログイン</h1>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="mt-4">
-        {{ form|crispy }}
       </div>
-      <button type="submit" class="btn btn-warning w-25">Login!</button>
-    </form>
+    </div>
   </div>
 {% endblock content %}
