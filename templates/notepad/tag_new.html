@@ -7,12 +7,20 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col">
+      <div class="col-md-8 m-auto">
+
+        <!-- form -->
         <form method="post" class="mt-5">
           {% csrf_token %}
+          <!-- fields -->
           {{ form|crispy }}
-          <button type="submit" class="btn btn-success">追加!</button>
+          <!-- btn -->
+          <div class="d-flex flex-column col-lg-4 col-md-6 mx-auto mt-5">
+            <button type="submit" class="btn btn-success my-3">追加!</button>
+            <a href="{% url 'notepad:note_detail' view.kwargs.note_pk %}" class="btn btn-outline-secondary">戻る</a>
+          </div>
         </form>
+
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Count
 import logging
@@ -23,6 +24,14 @@ logger = logging.getLogger(__name__)
 # home
 class Index(generic.TemplateView):
     template_name = 'notepad/index.html'
+
+    # ログインしている場合マイページにリダイレクト
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            user_pk = self.request.user.pk
+            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user_pk}))
+        else:
+            return super().post(request, *args, **kwargs)
 
 
 class RankingListView(generic.ListView):
@@ -242,7 +251,6 @@ class TagDeleteListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         context['note_pk'] = self.kwargs['note_pk']
         return context
-
 
 
 class TagDeleteView(LoginRequiredMixin, generic.RedirectView):
