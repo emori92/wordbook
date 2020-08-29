@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.Index.as_view(), name='index'),
     path('ranking/', views.RankingListView.as_view(), name='ranking'),
     path('hot/', views.HotListView.as_view(), name='hot'),
+    path('search/', views.SearchView.as_view(), name='search'),
     path('dashboard/<int:pk>/', views.Dashboard.as_view(), name='dashboard'),
     # note
     path('note_new/', views.NoteCreateView.as_view(), name='note_new'),

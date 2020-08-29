@@ -8,15 +8,20 @@
 
           <!-- card header -->
           <div class="card-header border-secondary h5 text-center">
-            <span class="num-font h4 text-danger">{{ num }}</span>
-            {{ item.title|truncatechars:15 }}
+            {% if num %}
+              <span class="num-font h4 text-danger">{{ num }}</span>
+            {% endif %}
+            {{ item.title|truncatechars:10 }}
           </div>
 
           <!-- card body -->
           <div class="card-body">
             <p>{{ item.describe|truncatechars:50 }}</p>
             <img src="{% if item.user.image %}{{ item.user.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user image" class="user-image">
-            <span class="star-icon text-secondary h5"><i class="fas fa-star text-warning"></i>{{ item.star_num }}</span>
+            <span class="star-icon text-secondary h5">
+              <i class="fas fa-star text-warning"></i>
+              <span>{{ item.star_num }}</span>
+            </span>
           </div>
 
         </a>

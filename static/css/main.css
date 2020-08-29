@@ -1,22 +1,14 @@
-#user-form {
-  height: 70vh;
-}
-
-#user-form button {
-  font-family: 'Skranji', cursive;
-}
-
-.top-img {
+body main .top-img {
   background-image: url("../img/top.jpg");
   background-size: cover;
   height: 720px;
 }
 
-.top-img .message {
+body main .top-img .message {
   padding-top: 240px;
 }
 
-.top-img .message p {
+body main .top-img .message p {
   font-family: 'Skranji', cursive;
 }
 
@@ -42,16 +34,40 @@
   bottom: 8px;
 }
 
+#search-form {
+  height: 15vh;
+}
+
+#search-form #search-field {
+  width: 60vw;
+  font-family: FontAwesome;
+}
+
+#user-form {
+  height: 70vh;
+}
+
+#user-form button {
+  font-family: 'Skranji', cursive;
+}
+
+.container #user-describe {
+  width: 200px;
+  margin: 2rem auto;
+}
+
 .container .create a {
   width: 120px;
   height: 120px;
 }
 
+.container #tag-list {
+  width: 200px;
+}
+
 .container #tag-edit {
-  width: 40px;
   position: absolute;
-  right: 4px;
-  top: 72px;
+  right: 0;
 }
 
 .container #wordbook-user-image img {

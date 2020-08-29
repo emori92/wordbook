@@ -30,10 +30,20 @@
             <a class="nav-link {% block index_active %}{% endblock %}" href="{% url 'notepad:index' %}">Home</a>
           </li>
         {% endif %}
+        <li class="nav-item mr-4 h5"><a class="nav-link {% block search_active %}{% endblock %}" href="{% url 'notepad:search' %}">Search</a></li>
         <li class="nav-item mr-4 h5"><a class="nav-link {% block ranking_active %}{% endblock %}" href="{% url 'notepad:ranking' %}">Ranking</a></li>
         <li class="nav-item mr-4 h5"><a class="nav-link {% block hot_active %}{% endblock %}" href="{% url 'notepad:hot' %}">Hot🔥</a></li>
       </ul>
-      
+      <!-- search -->
+      <!-- <div class="mx-4">
+        <form action="{% url 'notepad:search' %}" method="get" class="form-inline">
+          <div class="form-group mr-4">
+            <label for="search-form" class="sr-only">検索</label>
+            <input type="search" id="search-form" name="q" placeholder="検索" class="form-control form-control-sm">
+          </div>
+        </form>
+      </div> -->
+      <!-- auth btn -->
       {% if user.is_authenticated %}
         <div><a href="{% url 'accounts:logout' %}" class="btn btn-danger mx-4">Logout</a></div>
       {% else %}

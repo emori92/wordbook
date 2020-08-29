@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}検索{% if request.get.q %}: {{ request.get.q }}{% endif %} | Wordbook{% endblock %}
+
+{% block search_active %}active{% endblock search_active %}
+  
+{% block content %}
+  <div class="container">
+
+    <!-- title -->
+    <div class="title row mt-5">
+      <div class="col-md-4">
+        <h1 class="text-info display-2">Search</h1>
+      </div>
+
+      <!-- category btn -->
+      <div class="btn-group-size col-lg-4 col-md-6 my-auto">
+        <div class="btn-group">
+          <button id="wordbook-btn" class="btn btn-secondary">いいね</button>
+          <button id="user-btn" class="btn btn-secondary">ユーザー</button>
+          <button id="category-btn" class="btn btn-secondary">タグ</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- form -->
+    <div id="search-form" class="row">
+      <div class="col-md-10 m-auto">
+        <form method="get" class="form-inline">
+          {{ form.search }}
+        </form>
+      </div>
+    </div>
+
+    <!-- ranking -->
+    <div class="row">
+      <div class="col-lg my-4">
+
+        <!-- wordbook -->
+        {% include 'includes/wordbook.html' with object_list=wordbook page_obj=wordbook %}
+
+        <!-- user -->
+        {% include 'includes/search_table.html' with id='user' search_list=users page='user' page_obj=users %}
+
+        <!-- tag -->
+        {% include 'includes/search_table.html' with id='category' search_list=tags page='tag' page_obj=tags %}
+
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/notepad/search.js' %}" type="module"></script>
+{% endblock  %}

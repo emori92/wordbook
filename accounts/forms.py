@@ -13,9 +13,14 @@ class SignupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['password'].widget = forms.PasswordInput()
+        self.fields['username'].widget.attrs = {'autofocus': 'autofocus'}
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['describe', 'image']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['describe'].widget.attrs = {'autofocus': 'autofocus'}
