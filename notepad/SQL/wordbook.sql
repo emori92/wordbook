@@ -199,3 +199,18 @@ FROM
     LEFT JOIN
         note_tag AS nt
     ON t.id == nt.tag_id
+
+
+SELECT
+    n.title
+    , COUNT(n.id) AS star_num
+FROM
+    note AS n
+    INNER JOIN
+        star AS s
+    ON n.id == s.note_id
+GROUP BY
+    n.id
+ORDER BY
+    star_num DESC
+;

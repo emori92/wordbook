@@ -20,8 +20,8 @@ def set_ranking_num(objects):
     """set ranking num"""
     
     if objects.start_index == 1:
-        return {str(n): value for n, value in enumerate(objects, start=1)}
+        return {n: value for n, value in enumerate(objects, start=1)}
     else:
         # paginationのindex番号を取得する
         num =  objects.start_index()
-        return {str(n): value for n, value in enumerate(objects, start=num)}
+        return {n: value for n, value in enumerate(objects, start=num)}

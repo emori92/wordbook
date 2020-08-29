@@ -3,9 +3,10 @@
 @import 'mixin';
 
 // components
-@import 'accounts/signup_login';
 @import 'notepad/index';
 @import 'notepad/ranking';
+@import 'notepad/search';
+@import 'accounts/signup_login';
 @import 'notepad/dashboard';
 @import 'notepad/note_detail';
 @import 'notepad/tag_delete';

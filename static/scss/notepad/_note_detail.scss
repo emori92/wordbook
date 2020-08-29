@@ -1,12 +1,14 @@
 
 // content
 .container {
+  // tag list
+  #tag-list {
+    width: 200px;
+  }
   // tag btn
   #tag-edit {
-    width: 40px;
     position: absolute;
-    right: 4px;
-    top: 72px;
+    right: 0;
   }
   // user image
   #wordbook-user-image img {

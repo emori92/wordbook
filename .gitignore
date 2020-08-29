@@ -8,4 +8,5 @@ __pycache__
 local.py
 db.sqlite3
 media
+init.sh
 .env

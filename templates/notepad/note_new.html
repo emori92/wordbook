@@ -11,7 +11,7 @@
 
         <!-- form -->
         <div height="80vh" class="d-flex align-items-center">
-          <form method="POST" class="vw-100">
+          <form method="post" class="vw-100">
             {% csrf_token %}
             <!-- fields -->
             {{ form|crispy }}
