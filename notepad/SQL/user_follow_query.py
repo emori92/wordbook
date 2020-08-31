@@ -39,10 +39,9 @@ hot_query = '''
             *
         FROM
             user AS u
-        INNER JOIN
-            follow AS f
-        ON
-            u.id == f.following_id
+            INNER JOIN
+                follow AS f
+                ON u.id == f.following_id
         WHERE
             f.following_id == %s
         ) AS u1

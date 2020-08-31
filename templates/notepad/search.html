@@ -2,10 +2,10 @@
 
 {% load static %}
 
-{% block title %}検索{% if request.get.q %}: {{ request.get.q }}{% endif %} | Wordbook{% endblock %}
+{% block title %}検索 | Wordbook{% endblock %}
 
 {% block search_active %}active{% endblock search_active %}
-  
+
 {% block content %}
   <div class="container">
 
@@ -42,10 +42,10 @@
         {% include 'includes/wordbook.html' with object_list=wordbook page_obj=wordbook %}
 
         <!-- user -->
-        {% include 'includes/search_table.html' with id='user' search_list=users page='user' page_obj=users %}
+        {% include 'includes/search_table.html' with id='user' search_list=user page='user' page_obj=user %}
 
         <!-- tag -->
-        {% include 'includes/search_table.html' with id='category' search_list=tags page='tag' page_obj=tags %}
+        {% include 'includes/search_table.html' with id='category' search_list=tag page='tag' page_obj=tag %}
 
     </div>
   </div>

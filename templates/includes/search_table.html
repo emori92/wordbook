@@ -8,7 +8,7 @@
         <tr>
 
           <!-- user -->
-          {% if search_list.username %}
+          {% if search_list.object_list.0.username %}
             <th scope="col" class="text-center">名前</th>
             <th scope="col" class="text-center">フォロワー</th>
 
@@ -31,12 +31,12 @@
               <td class="text-center h5 font-weight-normal"><a href="{% url 'notepad:dashboard' item.id %}" class="d-block text-dark">{{ item.username }}</a></td>
               <td class="text-center">
                 <i class="fas fa-user-friends mr-2"></i>
-                <span class="text-primary h5">{{ item.followed_num }}</span>
+                <span class="text-primary h5">{{ item.follow_num }}</span>
               </td>
 
             <!-- tag -->
             {% else %}
-              <td class="text-center h5 font-weight-normal"><a href="{% url 'notepad:tag_list' item.name %}" class="d-block text-dark">{{ item.name }}</a></td>
+              <td class="text-center h5 font-weight-normal"><a href="{% url 'notepad:tag_list' item.tag %}" class="d-block text-dark">{{ item.tag__name }}</a></td>
               <td class="text-center">
                 <i class="fas fa-tags mr-2"></i>
                 <span class="text-primary h5">{{ item.tag_num }}</span>

@@ -2,10 +2,10 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-def set_paginator(self, queryset, url_parameter):
+def set_paginator(self, queryset, url_parameter, page=4):
     '''create paginator'''
 
-    paginator = Paginator(queryset, 4)
+    paginator = Paginator(queryset, page)
     page = self.request.GET.get(url_parameter)
     try:
         pagination = paginator.page(page)
