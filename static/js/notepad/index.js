@@ -4,6 +4,7 @@
 
 // タブ表示の初期パラメータ
 const tabSessions = {
+  'search': 'wordbook',
   'ranking': 'star',
   'hot': 'wordbook',
   'dashboard': 'wordbook',

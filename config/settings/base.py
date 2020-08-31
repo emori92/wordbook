@@ -94,6 +94,9 @@ LOGOUT_REDIRECT_URL = '/'
 # FLASH MESSAGEのストレージ
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+# ブラウザを閉じた場合はsessionを破棄
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # user permission (django-guardian)
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # default
