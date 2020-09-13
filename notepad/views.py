@@ -107,12 +107,13 @@ class SearchView(generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 検索用語を取得
-        word = self.request.GET.get('search')
-        # 検索用語から該当する単語帳を取得
+        # 単語帳/単語帳/タグを取得
         wordbook = Note.objects.select_related('user').filter(public=1)
         user = User.objects
         tag = Tag.note_set.through.objects.values('tag', 'tag__name')
+        # 検索用語を取得
+        word = self.request.GET.get('search')
+        # 検索している場合の処理
         if word:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
                 .filter(title__icontains=word).order_by('-created_at')
@@ -120,6 +121,7 @@ class SearchView(generic.FormView):
                 .annotate(follow_num=Count('followed__id')).order_by('-follow_num')
             tag = tag.filter(tag__name__icontains=word) \
                 .annotate(tag_num=Count('id')).order_by('-tag_num')
+        # 検索してない場合の処理
         else:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
                 .order_by('-created_at')
