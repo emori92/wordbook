@@ -18,13 +18,13 @@
           <!-- tag -->
           <div class="d-flex">
             <!-- tag list -->
+            <div id="tag-list" class="mt-3 ml-3 h5">
             {% if object.tag.all %}
-              <div id="tag-list" class="mt-3 ml-3 h5">
               {% for tag in object.tag.all %}
                 <a href="{% url 'notepad:tag_list' tag.name %}" class="badge badge-pill badge-success mb-2 mr-1">{{ tag.name }}</a>
               {% endfor %}
-              </div>
-            {% endif %}
+              {% endif %}
+            </div>
 
             <!-- tag btn -->
             {% if user.pk == object.user.pk %}
@@ -101,7 +101,10 @@
         {% include 'includes/question.html' %}
 
         <!-- review -->
-        {% include 'includes/question.html' with queryset=review_list id='review' %}
+        {% if user.is_authenticated %}
+          {% include 'includes/question.html' with queryset=review_list id='review' %}
+        {% endif %}
+
       </div>
     </div>
   </div>

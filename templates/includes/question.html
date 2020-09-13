@@ -6,7 +6,7 @@
 
       <!-- question title -->
       <div class="card-header border-secondary">
-        {{ item.question }}
+        {{ item.question|linebreaksbr }}
 
         <!-- edit btn -->
         {% if user.pk == object.user.pk %}
@@ -20,8 +20,9 @@
         {% endif %}
       </div>
 
-      <!-- answer hint btn -->
+      <!-- card body -->
       <div class="d-flex">
+        <!-- answer hint btn -->
         <div class="w-75 my-3">
           <button class="answer-btn btn btn-danger ml-3">答え</button>
           {% if item.hint %}
