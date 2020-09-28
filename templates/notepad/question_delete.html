@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ object.query|truncatechars_html:6}} delete{% endblock title %}
+{% block title %}「{{ object.question|truncatechars_html:6}}」の削除{% endblock title %}
 
 {% block content %}
   <div class="container">
@@ -11,7 +11,7 @@
 
           <!-- 警告文 -->
           <div class="alert alert-danger my-5 text-center">
-            <p>「{{ object.query|truncatechars_html:10 }}」を削除します。本当によろしいですか？</p>
+            <p>「{{ object.question|truncatechars_html:10 }}」を削除します。本当によろしいですか？</p>
           </div>
 
           <!-- ボタン -->
