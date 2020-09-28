@@ -9,10 +9,9 @@
 {% block content %}
   <div class="container">
     <div class="row my-5">
-      <div class="col-lg-3 col-md-5 my-5 pt-5 bg-light border rounded">
+      <div class="col-lg-3 col-md-4 my-5 pt-5 bg-light border rounded">
 
         <!-- profile -->
-        <div class="profile">
           <!-- image -->
           <img class="col-md-12 image-thumbnail rounded-circle" src="{% if account.image %}{{ account.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user-image">
           <!-- name-->
@@ -47,15 +46,14 @@
           {% endif %}
           <!-- create date -->
           <p class="text-secondary px-3 pt-3 text-right">{{ account.created_at }}</p>
-        </div>
       </div>
 
       <!-- wordbook -->
-      <div class="col-lg-9 my-5">
+      <div class="col-lg-9 col-md-8 my-5">
         <!-- ユーザーの場合 非公開といいねした投稿を表示 -->
         {% if user.id == account.id %}
           <!-- 表示切り替え -->
-          <div class="col-lg-4 col-md-6 mx-auto mb-4">
+          <div class="col-lg-4 col-md-8 mx-auto mb-4">
             <button id="wordbook-btn" class="btn btn-dark mr-3">自分のノート</button>
             <button id="liked-btn" class="btn btn-dark">いいね</button>
           </div>

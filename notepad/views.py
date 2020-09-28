@@ -91,12 +91,13 @@ class HotListView(generic.ListView):
         # フォローしているユーザーのノートを取得
         if self.request.user.is_authenticated:
             # "/notepad/SQL/"にあるクエリ文を実行
-            note = Note.objects.prefetch_related('user').raw(hot_query, [self.request.user.pk])
+            note = Note.objects.prefetch_related('user') \
+                .raw(hot_query, [self.request.user.pk])
             context['follow'] = set_paginator(self, note, 'follow', page=100)
         # 推薦されたノートを取得
-        demo_query = Note.objects.select_related('user') \
+        recommender_query = Note.objects.select_related('user') \
             .annotate(star_num=Count('star__id'))
-        context['recommender'] = set_paginator(self, demo_query, 'recommender')
+        context['recommender'] = set_paginator(self, recommender_query, 'recommender')
         return context
 
 
