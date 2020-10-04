@@ -9,7 +9,7 @@ class SignupFormTests(TestCase):
     def test_submit_normal_user(self):
         """ユーザーが作成できるか"""
         response = self.client.post(
-            '/accounts/signup/',
+            '/signup/',
             {'username': 'test_user', 'password': 'passw0rd'}
         )
         # http 302
