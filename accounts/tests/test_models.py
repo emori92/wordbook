@@ -2,27 +2,34 @@ from django.test import TestCase
 from accounts.models import User
 
 
-# user test
-class UserModelTests(TestCase):
+class UserModelTest(TestCase):
     """Userモデルのテスト"""
     
-    def test_create_user(self):
-        """異常値: ユーザー作成"""
-        # abnormal value (username)
-        char1 = ['u' for i in range(200)]
-        char2 = ['ゆ' for i in range(200)]
-        name1 = ''.join(char1)
-        name2 = ''.join(char2)
-        # password
-        char3 = ['p' for i in range(200)]
-        password = ''.join(char3)
-        # create user
-        user1 = User.objects.create_user(name1, password=password)
-        user2 = User.objects.create_user(name2, password=password)
+    # create user
+    def setUp(self):
+        """setUp: ユーザ作成"""
+        User.objects.create_user('check_user', password='password')
+
+    # 正常値
+
+
+    # 異常値
+    def test_update_abnormal_user(self):
+        """異常値: username/password/describeの変更"""
+        # 境界値: username/password
+        char1 = 'u' * 151
+        char2 = 'ゆ' * 151
+        password = 'a' * 129
+        describe = 'd' * 81
+        # get user
+        user = User.objects.get(username='check_user')
+        # update user
+        user.username = char1
+        user.set_password(password)
+        user.describe = describe
         # user test
-        check1 = User.objects.get(username=name1)
-        check2 = User.objects.get(username=name2)
-        self.assertEqual(bool(check1), False)
-        # self.assertEqual(user2, check2)
-        # self.assertIs(user1, check1)
-        # self.assertIs(user2, check2)
+        self.assertEqual(user.username, char1)
+        user.username = char2
+        self.assertEqual(user.username, char2)
+
+        # max_lengthを超えた異常値で本来はエラーのはず
