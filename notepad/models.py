@@ -35,7 +35,7 @@ class Note(models.Model):
 
 class Question(models.Model):
     '''問題、ヒント、答えのモデル'''
-        
+
     question = models.TextField(verbose_name='問題', max_length=128)
     hint = models.TextField(verbose_name='ヒント', max_length=64, null=True, blank=True)
     answer = models.TextField(verbose_name='答え', max_length=256)
