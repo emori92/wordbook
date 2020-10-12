@@ -9,7 +9,7 @@ class SignupFormTests(TestCase):
 
     # 正常値
     def test_sign_up_normal_user(self):
-        """正常値: SignupForm"""
+        """SignupForm: 正常値"""
         # form
         params = {'username': 'u' * 150, 'password': 'p' * 128}
         form = SignupForm(params)
@@ -23,7 +23,7 @@ class SignupFormTests(TestCase):
 
     # 異常値
     def test_sign_up_abnormal_user(self):
-        """異常値: SignupForm"""
+        """SignupForm: 異常値"""
         # 異常値: username, password
         usernames = ['', 'u'*151, 'ユ'*151]
         passwords = ['', 'p'*129, 'パ'*129]
@@ -55,7 +55,7 @@ class ProfileFormTests(TestCase):
 
     # 正常値
     def test_profile_form_normal_user(self):
-        """正常値: ProfileForm"""
+        """ProfileForm: 正常値"""
         # form
         params = {'describe': 'd' * 80}
         form = ProfileForm(params)
@@ -71,7 +71,7 @@ class ProfileFormTests(TestCase):
 
     # 異常値
     def test_profile_form_abnormal_user(self):
-        """異常値: ProfileForm"""
+        """ProfileForm: 異常値"""
         # 異常値: describe
         describes = ['d'*81, '説'*81]
         # assert
