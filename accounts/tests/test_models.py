@@ -15,7 +15,7 @@ class UserModelTest(TestCase):
 
     # 異常値
     def test_update_abnormal_user(self):
-        """異常値: username/password/describeの更新"""
+        """UserModel: 異常値"""
         # 境界値: username/password
         name1 = 'u' * 151
         name2 = 'ゆ' * 151
