@@ -1,17 +1,13 @@
 
 'user strict';
 
-import { changeTabDisplay2 } from '../script/functions.js';
+import { changeTabDisplay } from '../script/functions.js';
 
 
 // function parameter
 const noteDetailParameter = {
   'sessionName': 'noteDetail',
-  'sessionInit': 'question',
-  'btnId1': 'question-btn',
-  'btnId2': 'review-btn',
-  'tabId1': 'question',
-  'tabId2': 'review'
+  'id': ['question', 'review']
 }
 
 // get answer and hint class
@@ -37,6 +33,6 @@ const showText = (elemList, elemClass) => {
 }
 
 // execute functions
-changeTabDisplay2(noteDetailParameter);
+changeTabDisplay(noteDetailParameter);
 showText(answers, '.answer');
 showText(hints, '.hint');

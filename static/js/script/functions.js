@@ -3,81 +3,54 @@
 
 
 // add or remove class
-const changeStyle2 = (sessionKey, id1, id2) => {
-  // get element
-  let elem1 = document.getElementById(id1);
-  let elem2 = document.getElementById(id2);
-  // change display
-  elem1.classList.remove('d-none');
-  elem2.classList.add('d-none');
+const addDisplayNone = (key, ...args) => {
+  // edit display class
+  for (let num in args) {
+    if (num == 0) {  // (num === 0)とするとfalseになる
+      document.getElementById(args[num]).classList.remove('d-none');
+    } else {
+      document.getElementById(args[num]).classList.add('d-none');
+    }
+  }
   // save session
-  sessionStorage.setItem(sessionKey, id1);
-}
-
-const changeStyle3 = (sessionKey, id1, id2, id3) => {
-  // get element
-  let elem1 = document.getElementById(id1);
-  let elem2 = document.getElementById(id2);
-  let elem3 = document.getElementById(id3);
-  // change display
-  elem1.classList.remove('d-none');
-  elem2.classList.add('d-none');
-  elem3.classList.add('d-none');
-  // save session
-  sessionStorage.setItem(sessionKey, id1);
+  sessionStorage.setItem(key, args[0]);
 }
 
 
-// change display tab
-const changeTabDisplay2 = (params) => {
+// change display element
+const changeTabDisplay = (params) => {
   // parameter
   const key = params['sessionName'];
-  const nowValue = sessionStorage.getItem(key);
-  const initValue = params['sessionInit'];
+  let session = sessionStorage.getItem(key);
   // 初回アクセス時はsessionを設定
-  if (nowValue === null) {
-    sessionStorage[key] = initValue;
+  if (session === null) {
+    session = params['id'][0];
   }
-  // display wordbook
-  let tab = document.getElementById(nowValue);
-  tab.classList.remove('d-none');
+  // sessionとidが同じ要素を表示する
+  const elemId = params['id'];
+  elemId.forEach((id) => {
+    if (id === session) {
+      document.getElementById(id).classList.remove('d-none');
+    }
+  });
   // btn
-  let btn1 = document.getElementById(params['btnId1']);
-  let btn2 = document.getElementById(params['btnId2']);
-  // push btn
-  if (btn1 && btn2) {
-    btn1.addEventListener('click', () => { changeStyle2(key, params['tabId1'], params['tabId2']) });
-    btn2.addEventListener('click', () => { changeStyle2(key, params['tabId2'], params['tabId1']) });
-  }
-}
-
-const changeTabDisplay3 = (params) => {
-  // parameter
-  const key = params['sessionName'];
-  const nowValue = sessionStorage.getItem(key);
-  const initValue = params['sessionInit'];
-  // 初回アクセス時はsessionを設定
-  if (nowValue === null) {
-    sessionStorage[key] = initValue;
-  }
-  // display wordbook
-  let tab = document.getElementById(nowValue);
-  tab.classList.remove('d-none');
-  // btn
-  let btn1 = document.getElementById(params['btnId1']);
-  let btn2 = document.getElementById(params['btnId2']);
-  let btn3 = document.getElementById(params['btnId3']);
-  // push btn
+  let btn1 = document.getElementById(elemId[0] + '-btn');
+  let btn2 = document.getElementById(elemId[1] + '-btn');
+  let btn3 = document.getElementById(elemId[2] + '-btn');
+  // btnを押したら表示を切り替える
   if (btn1 && btn2 && btn3) {
-    btn1.addEventListener('click', () => { changeStyle3(key, params['tabId1'], params['tabId2'], params['tabId3']) });
-    btn2.addEventListener('click', () => { changeStyle3(key, params['tabId2'], params['tabId1'], params['tabId3']) });
-    btn3.addEventListener('click', () => { changeStyle3(key, params['tabId3'], params['tabId1'], params['tabId2']) });
-  } else {
-    btn1.addEventListener('click', () => { changeStyle2(key, params['tabId1'], params['tabId3']) });
-    btn3.addEventListener('click', () => { changeStyle2(key, params['tabId3'], params['tabId1']) });
+    btn1.addEventListener('click', () => { addDisplayNone(key, elemId[0], elemId[1], elemId[2]) });
+    btn2.addEventListener('click', () => { addDisplayNone(key, elemId[1], elemId[0], elemId[2]) });
+    btn3.addEventListener('click', () => { addDisplayNone(key, elemId[2], elemId[0], elemId[1]) });
+  } else if (btn1 && btn3) {
+    btn1.addEventListener('click', () => { addDisplayNone(key, elemId[0], elemId[2]) });
+    btn3.addEventListener('click', () => { addDisplayNone(key, elemId[2], elemId[0]) });
+  } else if (btn1 && btn2) {
+    btn1.addEventListener('click', () => { addDisplayNone(key, elemId[0], elemId[1]) });
+    btn2.addEventListener('click', () => { addDisplayNone(key, elemId[1], elemId[0]) });
   }
 }
 
 
 // export
-export { changeTabDisplay2, changeTabDisplay3 };
+export { changeTabDisplay };

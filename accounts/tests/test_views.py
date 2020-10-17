@@ -1,22 +1,21 @@
 from django.test import TestCase
 from django.urls import reverse
-from ..views import LoginView, SignupView, ProfileUpdateView
 from ..models import User
 
 
-# Viewの共通部分の正常値処理
-def assert_normal_get_request(self, app_name, kwargs=None):
+# 共通のViewのテスト
+def assert_normal_get_request(self, app_name, kwargs=None, status_code=200):
     # request
-        if kwargs:
-            url = reverse(app_name, kwargs=kwargs)
-        else:
-            url = reverse(app_name)
-        response = self.client.get(url)
-        # assert http status
-        self.assertEqual(response.status_code, 200)
+    if kwargs:
+        url = reverse(app_name, kwargs=kwargs)
+    else:
+        url = reverse(app_name)
+    response = self.client.get(url)
+    # assert http status
+    self.assertEqual(response.status_code, status_code)
 
 
-# TestCase
+# Tests
 class LoginViewTests(TestCase):
     """LoginViewのテスト"""
 
@@ -30,7 +29,24 @@ class LoginViewTests(TestCase):
         # assert get method
         assert_normal_get_request(self, 'accounts:login')
 
-    # 異常値
+
+class LogoutViewTests(TestCase):
+    """LogoutViewのテスト"""
+
+    # create user
+    def setUp(self):
+        User.objects.create_user('test_user', password='password')
+
+    # 正常値
+    def test_logout_request(self):
+        """LogoutViewのテスト"""
+        # assert logout
+        assert_normal_get_request(self, 'accounts:logout', status_code=302)
+        # logoutで正しくリダイレクトされるか確認
+        self.client.login(username='test_user', password='password')
+        # assert redirect
+        response = self.client.get(reverse('accounts:logout'))
+        self.assertRedirects(response, reverse('notepad:home'))
 
 
 class SignupViewTests(TestCase):
@@ -41,8 +57,6 @@ class SignupViewTests(TestCase):
         """SignupView: 正常値"""
         # assert get method
         assert_normal_get_request(self, 'accounts:signup')
-
-    # 異常値
 
 
 class ProfileUpdateViewTests(TestCase):
@@ -59,5 +73,3 @@ class ProfileUpdateViewTests(TestCase):
         kwargs = {'pk': self.user.id}
         # assert get method
         assert_normal_get_request(self, 'accounts:profile', kwargs)
-
-    # 正常値

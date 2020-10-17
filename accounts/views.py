@@ -12,7 +12,7 @@ from .forms import SignupForm, ProfileForm
 
 
 # login
-class Login(SuccessMessageMixin, LoginView):
+class LoginView(SuccessMessageMixin, LoginView):
     template_name = 'accounts/login.html'
     success_message = 'Login success!'
     
