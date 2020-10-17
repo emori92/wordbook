@@ -6,7 +6,7 @@ app_name = 'notepad'
 
 urlpatterns = [
     # base
-    path('', views.Index.as_view(), name='index'),
+    path('', views.HomeView.as_view(), name='home'),
     path('ranking/', views.RankingListView.as_view(), name='ranking'),
     path('hot/', views.HotListView.as_view(), name='hot'),
     path('search/', views.SearchView.as_view(), name='search'),

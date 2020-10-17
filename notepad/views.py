@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 # home
-class Index(generic.TemplateView):
+class HomeView(generic.TemplateView):
     template_name = 'notepad/index.html'
 
     # ログインしている場合マイページにリダイレクト
