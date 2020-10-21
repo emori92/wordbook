@@ -1,17 +1,9 @@
 from django.test import TestCase, LiveServerTestCase
 from django.urls import reverse
-# selenium
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 # model and my module
 from accounts.models import User
-from .my_test_module import assert_normal_get_request, assert_pagination
-
-
-# test browser
-chrome = webdriver.Chrome()
+from config.my_test_module import assert_normal_get_request, assert_pagination, run_selenium_js_btn
 
 
 # tests
@@ -22,12 +14,7 @@ class HomeViewTests(TestCase):
     def test_normal_value_home_view(self):
         """HomeView: 正常値"""
         # assert get request
-        assert_normal_get_request(self, 'notepad:home')
-
-    # 異常値
-    # def test_abnormal_value_homeview(self):
-    #     """HomeView: 異常値"""
-    #     pass
+        assert_normal_get_request(self, reverse('notepad:home'))
 
 
 class RankingViewTests(LiveServerTestCase):
@@ -47,24 +34,23 @@ class RankingViewTests(LiveServerTestCase):
     # 正常値
     def test_normal_value_ranking_view(self):
         """RankingView: 正常値"""
+        url = reverse('notepad:ranking')
         # assert get request
-        assert_normal_get_request(self, 'notepad:ranking')
-        # assert JavaScript
-        home = 'localhost:8000'
-        test_url = f'{home}{reverse("notepad:ranking")}'
-        self.selenium.get(test_url)
-        # wait until rendering
-        WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.ID, 'star')))
-        # element id
-        id_list = ['star', 'user', 'category']
-        for id in id_list:
-            btn = self.selenium.find_element_by_id(f'{id}-btn')
-            btn.click()
-
-    # 異常値
-    # def test_abnormal_value_view(self):
-    #     """RankingView: 異常値"""
-    #     pass
+        assert_normal_get_request(self, url)
+        # assert: DBデータがなしのpagination
+        pagination_list =['ranking_stars', 'ranking_users', 'ranking_tags']
+        assert_pagination(self, url, pagination_list)
+        # assert JS
+        params = {
+            'self': self,
+            'url_name': url,
+            'id_list': ['star', 'user', 'category'],
+            'class_list': ['text-center', 'num-font', 'text-dark'],
+            'text_list': ['いいね', 'ユーザー', 'タグ'],
+        }
+        run_selenium_js_btn(**params)
+        # assert: DBデータがありのpagination
+        assert_pagination(self, url, pagination_list, page_num=1)
 
 
 class ViewTests(TestCase):

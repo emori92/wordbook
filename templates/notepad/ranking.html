@@ -30,13 +30,26 @@
       <div class="col-lg my-4">
 
         <!-- star -->
-        {% include 'includes/ranking_list.html' with id='star' ranking_list=ranking_stars %}
-
+        {% if ranking_stars %}
+          {% include 'includes/ranking_list.html' with id='star' ranking_list=ranking_stars %}
+        {% else %}
+          {% include 'includes/ranking_no_objects.html' with id='star' object_name='いいね' %}
+        {% endif %}
+          
         <!-- user -->
-        {% include 'includes/ranking_table.html' with id='user' ranking_list=ranking_users page='user' page_obj=users %}
+        {% if ranking_users %}
+          {% include 'includes/ranking_table.html' with id='user' ranking_list=ranking_users page='user' page_obj=users %}
+        {% else %}
+          {% include 'includes/ranking_no_objects.html' with id='user' object_name='ユーザー' display='d-none' %}
+        {% endif %}
 
         <!-- tag -->
-        {% include 'includes/ranking_table.html' with id='category' ranking_list=ranking_tags page='tag' page_obj=tags %}
+        {% if ranking_tags %}
+          {% include 'includes/ranking_table.html' with id='category' ranking_list=ranking_tags page='tag' page_obj=tags %}
+        {% else %}
+          {% include 'includes/ranking_no_objects.html' with id='category' object_name='タグ' display='d-none' %}
+        {% endif %}
+          
 
     </div>
   </div>

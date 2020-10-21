@@ -12,7 +12,7 @@ const addDisplayNone = (key, ...args) => {
       document.getElementById(args[num]).classList.add('d-none');
     }
   }
-  // save session
+  // update session
   sessionStorage.setItem(key, args[0]);
 }
 
