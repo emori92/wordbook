@@ -1,18 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from ..models import User
-
-
-# 共通のViewのテスト
-def assert_normal_get_request(self, app_name, kwargs=None, status_code=200):
-    # request
-    if kwargs:
-        url = reverse(app_name, kwargs=kwargs)
-    else:
-        url = reverse(app_name)
-    response = self.client.get(url)
-    # assert http status
-    self.assertEqual(response.status_code, status_code)
+from config.my_test_module import create_user, assert_normal_get_request
 
 
 # Tests
@@ -21,13 +10,13 @@ class LoginViewTests(TestCase):
 
     # create user
     def setUp(self):
-        User.objects.create_user('test_user', password='password')
+        create_user(self)
 
     # 正常値
     def test_normal_login_request(self):
         """LoginView: 正常値"""
         # assert get method
-        assert_normal_get_request(self, 'accounts:login')
+        assert_normal_get_request(self, reverse('accounts:login'))
 
 
 class LogoutViewTests(TestCase):
@@ -35,16 +24,16 @@ class LogoutViewTests(TestCase):
 
     # create user
     def setUp(self):
-        User.objects.create_user('test_user', password='password')
+        create_user(self)
 
     # 正常値
     def test_logout_request(self):
         """LogoutViewのテスト"""
         # assert logout
-        assert_normal_get_request(self, 'accounts:logout', status_code=302)
-        # logoutで正しくリダイレクトされるか確認
-        self.client.login(username='test_user', password='password')
+        url = reverse('accounts:logout')
+        assert_normal_get_request(self, url, status_code=302)
         # assert redirect
+        self.client.login(username='test_user', password='password')
         response = self.client.get(reverse('accounts:logout'))
         self.assertRedirects(response, reverse('notepad:home'))
 
@@ -56,7 +45,7 @@ class SignupViewTests(TestCase):
     def test_normal_siginup_request(self):
         """SignupView: 正常値"""
         # assert get method
-        assert_normal_get_request(self, 'accounts:signup')
+        assert_normal_get_request(self, reverse('accounts:signup'))
 
 
 class ProfileUpdateViewTests(TestCase):
@@ -64,12 +53,12 @@ class ProfileUpdateViewTests(TestCase):
 
     # create user
     def setUp(self):
-        self.user = User.objects.create_user('test_user', password='password')
+        create_user(self)
 
     # 正常値
     def test_normal_get_request(self):
         """ProfileUpdateView: 正常値"""
         # url variable
-        kwargs = {'pk': self.user.id}
+        url = reverse('accounts:profile', kwargs={'pk': self.user.id})
         # assert get method
-        assert_normal_get_request(self, 'accounts:profile', kwargs)
+        assert_normal_get_request(self, url)

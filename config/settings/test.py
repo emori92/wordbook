@@ -7,13 +7,65 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOST = ['*']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 # database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ATOMIC_REQUESTS': True,
-    }
+    'default': env.db()
+}
+DATABASES['default']['ATOMIC_REQUESTS'] = True
+
+
+# logging
+LOGGING = {
+
+    # 初期化
+    'version': 1,
+    'disable_existing_loggers': False,
+    
+    # logger
+    'loggers': {
+        
+        # Django
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        
+        # apps
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagete': False,
+        },
+        
+        'accounts': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagete': False,
+        },
+
+    },
+    
+    # handler
+    'handlers': {
+        
+        # condole
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'develop',
+        },
+    },
+    
+    # formatter
+    'formatters': {
+        # develop
+        'develop': {
+            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
+        },
+    },
+    
 }
