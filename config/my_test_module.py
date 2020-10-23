@@ -32,23 +32,23 @@ def assert_pagination(self, url, pagination_list, page_num=0):
     # request
     response = self.client.get(url)
     # assert pagination
-    if page_num:
-        self.assertIn('is_paginated', response.context)
-        for list_name in pagination_list:
-            num = len(response.context[list_name])
-            self.assertEqual(num, page_num)
-    else:
-        for list_name in pagination_list:
-            self.assertNotIn('is_paginated', response.context)
-            num = len(response.context[list_name])
-            self.assertNotEqual(num, page_num)
+    # if page_num:
+    self.assertIn('is_paginated', response.context)
+    for list_name in pagination_list:
+        num = len(response.context[list_name])
+        self.assertEqual(num, page_num)
+    # else:
+    #     for list_name in pagination_list:
+    #         # self.assertNotIn('is_paginated', response.context)
+    #         num = len(response.context[list_name])
+    #         # self.assertNotEqual(num, page_num)
 
 
 def run_selenium_js_btn(self, url, id_list, class_list, text_list, pagination_list=None):
     """function: ボタン押すと表示切り替わるか"""
     # get request
     home = 'localhost:8000'
-    self.selenium.get(url)
+    self.selenium.get(f'{home}{url}')
     # wait until rendering
     main_id = id_list[0]
     WebDriverWait(self.selenium, 10) \

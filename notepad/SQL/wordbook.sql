@@ -214,3 +214,24 @@ GROUP BY
 ORDER BY
     star_num DESC
 ;
+
+
+-- フォローしている人の単語帳を取得
+SELECT
+    n.user_id
+    , n.title
+FROM
+    note AS n
+    INNER JOIN
+        custom_user AS u
+    ON n.user_id == u.id
+WHERE
+    u.id IN (
+        SELECT
+            f.followed_id
+        FROM
+            follow AS f
+        WHERE
+            f.following_id == 15
+    )
+;

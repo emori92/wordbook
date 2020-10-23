@@ -26,12 +26,12 @@ class HomeView(generic.TemplateView):
     template_name = 'notepad/index.html'
 
     # ログインしている場合マイページにリダイレクト
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             user_pk = self.request.user.pk
             return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user_pk}))
         else:
-            super().post(request, *args, **kwargs)
+            return super().get(request, *args, **kwargs)
 
 
 class RankingListView(generic.ListView):
@@ -93,6 +93,7 @@ class HotListView(generic.ListView):
             # "/notepad/SQL/"にあるクエリ文を実行
             note = Note.objects.prefetch_related('user') \
                 .raw(hot_query, [self.request.user.pk])
+            # note = Note.objects.filter(id__in=[16, 17])
             context['follow'] = set_paginator(self, note, 'follow', page=100)
         # 推薦されたノートを取得
         recommender_query = Note.objects.select_related('user') \
