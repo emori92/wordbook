@@ -3,7 +3,7 @@ from django.urls import reverse
 from selenium import webdriver
 # model and my module
 from accounts.models import User
-from config.my_test_module import assert_normal_get_request, assert_pagination, run_selenium_js_btn
+from config.my_test_module import create_user, assert_normal_get_request, assert_pagination, run_selenium_js_btn
 
 
 # tests
@@ -14,7 +14,15 @@ class HomeViewTests(TestCase):
     def test_normal_value_home_view(self):
         """HomeView: 正常値"""
         # assert get request
-        assert_normal_get_request(self, reverse('notepad:home'))
+        url = reverse('notepad:home')
+        assert_normal_get_request(self, url)
+        # if login, assert redirect to dashboard
+        create_user(self)
+        self.client.login(username='test_user', password='password')
+        # redirect url
+        redirect_url = reverse('notepad:dashboard', kwargs={'pk': self.user.pk})
+        response = self.client.get(url)
+        self.assertRedirects(response, redirect_url)
 
 
 class RankingViewTests(LiveServerTestCase):
@@ -38,12 +46,12 @@ class RankingViewTests(LiveServerTestCase):
         # assert get request
         assert_normal_get_request(self, url)
         # assert: DBデータがなしのpagination
-        pagination_list =['ranking_stars', 'ranking_users', 'ranking_tags']
+        pagination_list = ['ranking_stars', 'ranking_users', 'ranking_tags']
         assert_pagination(self, url, pagination_list)
         # assert JS
         params = {
             'self': self,
-            'url_name': url,
+            'url': url,
             'id_list': ['star', 'user', 'category'],
             'class_list': ['text-center', 'num-font', 'text-dark'],
             'text_list': ['いいね', 'ユーザー', 'タグ'],

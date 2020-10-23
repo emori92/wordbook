@@ -11,7 +11,7 @@ class User(AbstractUser):
     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
 
     class Meta:
-        db_table = 'user'
+        db_table = 'custom_user'
 
     def __str__(self):
         return self.username
