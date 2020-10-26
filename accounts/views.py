@@ -1,6 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 # view
@@ -18,6 +18,14 @@ class LoginView(SuccessMessageMixin, LoginView):
     
     def get_success_url(self):
         return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
+
+    # ログインしている場合マイページにリダイレクト
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        if user.is_authenticated:
+            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user.pk}))
+        else:
+            return super().get(request, *args, **kwargs)
 
 
 # sign up
@@ -42,6 +50,14 @@ class SignupView(generic.CreateView):
         user = authenticate(username=username, password=password)
         login(self.request, user)
         return super().form_valid(form)
+
+    # ログインしている場合マイページにリダイレクト
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        if user.is_authenticated:
+            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user.pk}))
+        else:
+            return super().get(request, *args, **kwargs)
 
 
 # profile

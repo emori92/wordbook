@@ -1,3 +1,6 @@
+"""local test environment"""
+
+
 from .base import *
 import environ
 
@@ -7,8 +10,11 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = True  # Trueでないとエラー発生
+DEBUG = True  # Trueにしないと、local testはエラーになる
 ALLOWED_HOSTS = ['*']
+
+# media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # database
 DATABASES = {

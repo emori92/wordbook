@@ -8,10 +8,8 @@
 
           <!-- card header -->
           <div class="card-header border-secondary h5 text-center">
-            {% if num %}
-              <span class="num-font h4 text-danger">{{ num }}</span>
-            {% endif %}
-            {{ item.title|truncatechars:8 }}
+            <span class="num-font h4 text-danger">{{ num }}</span>
+            <span class="star-text">{{ item.title|truncatechars:8 }}</span>
           </div>
 
           <!-- card body -->
