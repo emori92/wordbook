@@ -7,10 +7,8 @@ import logging
 from accounts.models import User
 from .models import Note, Question, Review, Follow, Star, Tag
 from .forms import SearchForm, NoteForm, QuestionForm, TagForm
-# SQL query
-from .SQL.user_follow_query import hot_query
 # paginator
-from .my_script.views_functions import set_paginator, set_ranking_num
+from .my_script.views_functions import set_ranking, set_paginator, set_ranking_num
 
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -27,9 +25,9 @@ class HomeView(generic.TemplateView):
 
     # ログインしている場合マイページにリダイレクト
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            user_pk = self.request.user.pk
-            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user_pk}))
+        user = self.request.user
+        if user.is_authenticated:
+            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user.pk}))
         else:
             return super().get(request, *args, **kwargs)
 
@@ -44,33 +42,26 @@ class RankingListView(generic.ListView):
         # いいねされた数が多いノートを降順で取得
         note = Note.objects.select_related('user') \
             .filter(public=1, star__gt=0) \
-            .annotate(star_num=Count('star__id')).order_by('-star_num')
+            .annotate(star_num=Count('star__id')).order_by('-star_num', 'title')
         return note
 
     # いいね、ユーザー、タグのランキング情報をcontextに代入
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # いいね、フォロワー、タグで共通の処理を関数化
-        def set_ranking(queryset, url_name, queryset_name, ranking_objects_name):
-            object_list = set_paginator(self, queryset, url_name)
-            context[queryset_name] = object_list
-            context[ranking_objects_name] = set_ranking_num(object_list)
-
         # いいね
         stars_query = self.get_queryset()
-        set_ranking(stars_query, 'page', 'stars', 'ranking_stars')
+        set_ranking(self, context, stars_query, 'page', 'stars', 'ranking_stars')
         # フォロー
         users_query = User.objects.prefetch_related('followed') \
             .filter(followed__followed__gt=0) \
             .annotate(followed_num=Count('followed__followed')) \
             .order_by('-followed_num')
-        set_ranking(users_query, 'user', 'users', 'ranking_users')
+        set_ranking(self, context, users_query, 'user', 'users', 'ranking_users')
         # タグ
         tags_query = Tag.objects.all() \
             .annotate(tag_num=Count('note__id')) \
             .filter(tag_num__gt=0).order_by('-tag_num')
-        set_ranking(tags_query, 'tag', 'tags', 'ranking_tags')
+        set_ranking(self, context, tags_query, 'tag', 'tags', 'ranking_tags')
         return context
 
 
@@ -90,14 +81,16 @@ class HotListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         # フォローしているユーザーのノートを取得
         if self.request.user.is_authenticated:
-            # "/notepad/SQL/"にあるクエリ文を実行
-            note = Note.objects.prefetch_related('user') \
-                .raw(hot_query, [self.request.user.pk])
-            # note = Note.objects.filter(id__in=[16, 17])
+            # フォローしているuserを取得
+            pk = self.request.user.pk
+            user_id = Follow.objects.filter(following_id=pk).values('followed_id')
+            users = User.objects.filter(id__in=user_id)
+            # フォローしているuserのnoteを取得
+            note = Note.objects.filter(public=1, user__in=users).select_related('user')
             context['follow'] = set_paginator(self, note, 'follow', page=100)
         # 推薦されたノートを取得
         recommender_query = Note.objects.select_related('user') \
-            .annotate(star_num=Count('star__id'))
+            .filter(public=1).annotate(star_num=Count('star__id'))
         context['recommender'] = set_paginator(self, recommender_query, 'recommender')
         return context
 
@@ -118,18 +111,18 @@ class SearchView(generic.FormView):
         # 検索している場合の処理
         if word:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
-                .filter(title__icontains=word).order_by('-created_at')
+                .filter(title__icontains=word).order_by('-created_at', 'title')
             user = user.filter(username__icontains=word) \
-                .annotate(follow_num=Count('followed__id')).order_by('-follow_num')
+                .annotate(follow_num=Count('followed__id')).order_by('-follow_num', 'username')
             tag = tag.filter(tag__name__icontains=word) \
-                .annotate(tag_num=Count('id')).order_by('-tag_num')
+                .annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
         # 検索してない場合の処理
         else:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
-                .order_by('-created_at')
+                .order_by('-created_at', 'title')
             user = user.annotate(follow_num=Count('followed__id')) \
-                .order_by('-follow_num')
-            tag = tag.annotate(tag_num=Count('id')).order_by('-tag_num')
+                .order_by('-follow_num', 'username')
+            tag = tag.annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
         # contextに単語帳、ユーザー、タグを登録
         context['wordbook'] = set_paginator(self, wordbook, 'page')
         context['user'] = set_paginator(self, user, 'user')
@@ -233,7 +226,7 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Note
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
-    template_name = "notepad/note_new.html"
+    template_name = "notepad/note_update.html"
 
     def get_success_url(self):
         note_pk = self.object.pk

@@ -1,22 +1,21 @@
 from django.test import TestCase
 from django.urls import reverse
 from ..models import User
-from config.my_test_module import create_user, assert_normal_get_request
+from config.my_test_module import create_user, assert_normal_get_request, redirect_dashboard
 
 
 # Tests
 class LoginViewTests(TestCase):
     """LoginViewのテスト"""
 
-    # create user
-    def setUp(self):
-        create_user(self)
-
     # 正常値
     def test_normal_login_request(self):
         """LoginView: 正常値"""
+        url = reverse('accounts:login')
         # assert get method
-        assert_normal_get_request(self, reverse('accounts:login'))
+        assert_normal_get_request(self, url)
+        # redirect dashboard
+        redirect_dashboard(self, url)
 
 
 class LogoutViewTests(TestCase):
@@ -36,6 +35,7 @@ class LogoutViewTests(TestCase):
         self.client.login(username='test_user', password='password')
         response = self.client.get(reverse('accounts:logout'))
         self.assertRedirects(response, reverse('notepad:home'))
+        
 
 
 class SignupViewTests(TestCase):
@@ -44,8 +44,11 @@ class SignupViewTests(TestCase):
     # 正常値
     def test_normal_siginup_request(self):
         """SignupView: 正常値"""
+        url = reverse('accounts:signup')
         # assert get method
-        assert_normal_get_request(self, reverse('accounts:signup'))
+        assert_normal_get_request(self, url)
+        # redirect dashboard
+        redirect_dashboard(self, url)
 
 
 class ProfileUpdateViewTests(TestCase):
