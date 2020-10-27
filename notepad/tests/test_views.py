@@ -6,7 +6,7 @@ from django.urls import reverse
 from selenium import webdriver
 # model and my module
 from accounts.models import User
-from notepad.models import Note
+from notepad.models import Note, Tag, Question
 from config.my_test_module import create_user, assert_normal_get_request, assert_pagination, redirect_dashboard, login_selenium, run_selenium_js_btn
 
 
@@ -86,20 +86,25 @@ class HotViewTests(LiveServerTestCase):
         assert_pagination(self, url, pagination_list)
         # JS: dbデータなし
 
-        # JS: dbデータあり (未ログイン)
-        params = {
+        # JS: 未ログイン
+        params1 = {
             'self': self,
             'url': url,
-            # 'id_list': ['wordbook', 'follow', 'recommender'],
-            # 'class_list': ['card-header', 'user-text', 'tag-text'],
-            # 'text_list': ['Django', 'hoge', 'test'],
             'id_list': ['wordbook', 'recommender'],
             'class_list': ['card-header', 'card-header'],
             'text_list': ['スタートアップ　…', 'Django'],
         }
-        run_selenium_js_btn(**params)
-        # JS: wordbookあり (ログイン)
-
+        run_selenium_js_btn(**params1)
+        # JS: ログイン済
+        login_selenium(self)
+        params2 = {
+            'self': self,
+            'url': url,
+            'id_list': ['wordbook', 'follow', 'recommender'],
+            'class_list': ['card-header', 'card-header', 'card-header'],
+            'text_list': ['スタートアップ　…', 'test', 'Django'],
+        }
+        run_selenium_js_btn(**params2)
 
 
 class SearchViewTests(LiveServerTestCase):
@@ -155,7 +160,7 @@ class DashboardViewTests(LiveServerTestCase):
     def test_normal_value_view(self):
         """DashboardView: 正常値"""
         # ユーザ作成
-        create_user(self, True)
+        create_user(self, wordbook=True)
         # login
         login_selenium(self)
         # get request
@@ -170,7 +175,7 @@ class DashboardViewTests(LiveServerTestCase):
             'url': url,
             'id_list': ['wordbook', 'liked'],
             'class_list': ['card-header', 'card-header'],
-            'text_list': ['スタートアップ　…', 'test'],
+            'text_list': ['Django', 'test'],
         }
         run_selenium_js_btn(**params)
 
@@ -199,12 +204,11 @@ class NoteDetailViewTests(LiveServerTestCase):
         # create user and wordbook
         create_user(self, wordbook=True)
         self.client.login(username='test_user', password='password')
-        wordbook_pk = Note.objects.get(user=self.user.pk).pk
+        pk = self.wordbook.pk
         # get request
-        url = reverse('notepad:note_detail', kwargs={'pk': wordbook_pk})
+        url = reverse('notepad:note_detail', kwargs={'pk': pk})
         assert_normal_get_request(self, url)
         # JS
-
 
 
 class NoteUpdateViewTests(TestCase):
@@ -217,8 +221,8 @@ class NoteUpdateViewTests(TestCase):
         create_user(self, wordbook=True)
         self.client.login(username='test_user', password='password')
         # get request
-        wordbook_pk = Note.objects.get(user=self.user.pk).pk
-        url = reverse('notepad:note_edit', kwargs={'pk': wordbook_pk})
+        pk = self.wordbook.pk
+        url = reverse('notepad:note_edit', kwargs={'pk': pk})
         assert_normal_get_request(self, url)
         # post request (update)
 
@@ -233,8 +237,8 @@ class NoteDeleteViewTests(TestCase):
         create_user(self, wordbook=True)
         self.client.login(username='test_user', password='password')
         # get request
-        wordbook_pk = Note.objects.get(user=self.user.pk).pk
-        url = reverse('notepad:note_delete', kwargs={'pk': wordbook_pk})
+        pk = self.wordbook.pk
+        url = reverse('notepad:note_delete', kwargs={'pk': pk})
         assert_normal_get_request(self, url)
         # delete request
 
@@ -249,133 +253,188 @@ class TagCreateViewTests(TestCase):
         create_user(self, wordbook=True)
         self.client.login(username='test_user', password='password')
         # get request
-        wordbook_pk = Note.objects.get(user=self.user.pk).pk
-        url = reverse('notepad:tag_new', kwargs={'note_pk': wordbook_pk})
+        pk = self.wordbook.pk
+        url = reverse('notepad:tag_new', kwargs={'note_pk': pk})
         assert_normal_get_request(self, url)
         # post request
 
 
-class ViewTests(TestCase):
-    """Viewのテスト"""
+class TagListViewTests(TestCase):
+    """TagListViewのテスト"""
 
     # 正常値
     def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
-
-
-class ViewTests(TestCase):
-    """Viewのテスト"""
-
-    # 正常値
-    def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
+        """TagListView: 正常値"""
+        # create user and wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # get request
+        url = reverse('notepad:tag_list', kwargs={'word': 'test'})
+        assert_normal_get_request(self, url)
 
 
-class ViewTests(TestCase):
-    """Viewのテスト"""
+class TagDeleteListViewTests(TestCase):
+    """TagDeleteListViewのテスト"""
 
     # 正常値
     def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
-
-
-class ViewTests(TestCase):
-    """Viewのテスト"""
-
-    # 正常値
-    def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
+        """TagDeleteListView: 正常値"""
+        # create user and wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # get request
+        pk = self.wordbook.pk
+        url = reverse('notepad:tag_delete_list', kwargs={'note_pk': pk})
+        assert_normal_get_request(self, url)
 
 
-class ViewTests(TestCase):
-    """Viewのテスト"""
+class TagDeleteViewTests(TestCase):
+    """TagDeleteViewのテスト"""
 
     # 正常値
     def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
-
-
-class ViewTests(TestCase):
-    """Viewのテスト"""
-
-    # 正常値
-    def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
+        """TagDeleteView: 正常値"""
+        # create user and wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # add tag
+        tag, created = Tag.objects.get_or_create(name='test_tag')
+        self.wordbook.tag.add(tag)
+        # get request
+        pk = self.wordbook.pk
+        url = reverse('notepad:tag_delete', kwargs={'note_pk': pk, 'tag': tag.name})
+        assert_normal_get_request(self, url, status_code=302)
+        # check redirect
+        redirect_url = reverse('notepad:tag_delete_list', kwargs={'note_pk': pk})
+        resp = self.client.get(url)
+        self.assertRedirects(resp, redirect_url)
+        # delete request
 
 
-class ViewTests(TestCase):
-    """Viewのテスト"""
+class QuestionCreateViewTests(TestCase):
+    """QuestionCreateViewのテスト"""
 
     # 正常値
     def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
-
-
-class ViewTests(TestCase):
-    """Viewのテスト"""
-
-    # 正常値
-    def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
-
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
+        """QuestionCreateView: 正常値"""
+        # create user and wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # get request
+        pk = self.wordbook.pk
+        url = reverse('notepad:question_new', kwargs={'pk': pk})
+        assert_normal_get_request(self, url)
+        # post request
 
 
-class ViewTests(TestCase):
-    """Viewのテスト"""
+class QuestionUpdateViewTests(TestCase):
+    """QuestionUpdateViewのテスト"""
 
     # 正常値
     def test_normal_value_view(self):
-        """View: 正常値"""
-        pass
+        """QuestionUpdateView: 正常値"""
+        # create user, wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # question
+        question = Question(question='test', answer='test', note=self.wordbook)
+        question.save()
+        # get request
+        pk = self.wordbook.pk
+        url = reverse('notepad:question_edit', kwargs={'pk': pk})
+        assert_normal_get_request(self, url)
+        # post request
 
-    # 異常値
-    def test_abnormal_value_view(self):
-        """ View: 異常値"""
-        pass
+
+class QuestionDeleteViewTests(TestCase):
+    """QuestionDeleteViewのテスト"""
+
+    # 正常値
+    def test_normal_value_view(self):
+        """QuestionDeleteView: 正常値"""
+        # create user, wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # question
+        question = Question(question='test', answer='test', note=self.wordbook)
+        question.save()
+        # get request
+        pk = self.wordbook.pk
+        url = reverse('notepad:question_delete', kwargs={'pk': pk})
+        assert_normal_get_request(self, url)
+        # delete request
+
+
+class QuestionReviewViewTests(TestCase):
+    """QuestionReviewViewのテスト"""
+
+    # 正常値
+    def test_normal_value_view(self):
+        """QuestionReviewView: 正常値"""
+        # create user, wordbook
+        create_user(self, wordbook=True)
+        self.client.login(username='test_user', password='password')
+        # question
+        question = Question(question='test', answer='test', note=self.wordbook)
+        question.save()
+        # get request
+        kwargs = {
+            'note_pk': self.wordbook.pk,
+            'question_pk': question.pk,
+            'user_pk': self.user.pk,
+        }
+        url = reverse('notepad:question_review', kwargs=kwargs)
+        assert_normal_get_request(self, url, status_code=302)
+        # check redirect
+        redirect_url = reverse('notepad:note_detail', kwargs={'pk': self.wordbook.pk})
+        resp = self.client.get(url)
+        self.assertRedirects(resp, redirect_url)
+        # register review
+
+
+class FollowViewTests(TestCase):
+    """FollowViewのテスト"""
+
+    # 正常値
+    def test_normal_value_view(self):
+        """FollowView: 正常値"""
+        # create user
+        create_user(self)
+        follow_user = User.objects.create_user('follow_test', password='follow_test')
+        self.client.login(username='test_user', password='password')
+        # get request
+        kwargs = {
+            'following': self.user.pk,
+            'followed': follow_user.pk,
+        }
+        url = reverse('notepad:follow', kwargs=kwargs)
+        assert_normal_get_request(self, url, status_code=302)
+        # check redirect
+        redirect_url = reverse('notepad:dashboard', kwargs={'pk': follow_user.pk})
+        resp = self.client.get(url)
+        self.assertRedirects(resp, redirect_url)
+        # check follow
+
+
+class StarViewTests(TestCase):
+    """StarViewのテスト"""
+
+    # 正常値
+    def test_normal_value_view(self):
+        """StarView: 正常値"""
+        # create user
+        create_user(self, wordbook=True)
+        star_user = User.objects.create_user('follow_user', password='follow_user')
+        self.client.login(username='follow_user', password='follow_user')
+        # get request
+        kwargs = {
+            'note_pk': self.wordbook.pk,
+            'user_pk': star_user.pk,
+        }
+        url = reverse('notepad:star', kwargs=kwargs)
+        assert_normal_get_request(self, url, status_code=302)
+        # check redirect
+        redirect_url = reverse('notepad:note_detail', kwargs={'pk': self.wordbook.pk})
+        resp = self.client.get(url)
+        self.assertRedirects(resp, redirect_url)
+        # check star

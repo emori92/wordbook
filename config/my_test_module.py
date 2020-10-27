@@ -76,7 +76,7 @@ def run_selenium_js_btn(self, url, id_list, class_list, text_list):
     self.selenium.get(f'{home}{url}')
     # wait until rendering
     main_id = id_list[0]
-    WebDriverWait(self.selenium, 10) \
+    WebDriverWait(self.selenium, 4) \
         .until(EC.presence_of_element_located((By.ID, main_id)))
     # assert: ボタンを押して表示が変わるか（DBのデータあり）
     for id, text_class, text in zip(id_list, class_list, text_list):

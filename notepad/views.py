@@ -87,7 +87,7 @@ class HotListView(generic.ListView):
             users = User.objects.filter(id__in=user_id)
             # フォローしているuserのnoteを取得
             note = Note.objects.filter(public=1, user__in=users).select_related('user')
-            context['follow'] = set_paginator(self, note, 'follow', page=100)
+            context['follow'] = set_paginator(self, note, 'follow', page_num=100)
         # 推薦されたノートを取得
         recommender_query = Note.objects.select_related('user') \
             .filter(public=1).annotate(star_num=Count('star__id'))
@@ -173,7 +173,8 @@ class NoteCreateView(LoginRequiredMixin, generic.CreateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_new.html"
-    
+    login_url = '/login/'
+
     # form_validでユーザーを追加
     def form_valid(self, form):
         form.instance.user_id = self.request.user.id
@@ -227,6 +228,7 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
     formclass = NoteForm
     fields = ['title', 'describe', 'public']
     template_name = "notepad/note_update.html"
+    login_url = '/login/'
 
     def get_success_url(self):
         note_pk = self.object.pk
@@ -236,6 +238,7 @@ class NoteUpdateView(LoginRequiredMixin, generic.UpdateView):
 class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Note
     template_name = 'notepad/note_delete.html'
+    login_url = '/login/'
 
     def get_success_url(self):
         note_pk = self.object.user_id
@@ -246,6 +249,7 @@ class NoteDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TagCreateView(LoginRequiredMixin, generic.FormView):
     template_name = 'notepad/tag_new.html'
     form_class = TagForm
+    login_url = '/login/'
 
     def get_success_url(self):
         note_pk = self.kwargs['note_pk']
@@ -279,6 +283,7 @@ class TagListView(generic.ListView):
 
 class TagDeleteListView(LoginRequiredMixin, generic.ListView):
     template_name = "notepad/tag_delete.html"
+    login_url = '/login/'
 
     # ノートに紐づいたタグを取得
     def get_queryset(self):
@@ -288,6 +293,8 @@ class TagDeleteListView(LoginRequiredMixin, generic.ListView):
 
 
 class TagDeleteView(LoginRequiredMixin, generic.RedirectView):
+    login_url = '/login/'
+
     # リダイレクト先のURL
     def get_redirect_url(self, *args, **kwargs):
         pk = self.kwargs['note_pk']
@@ -311,6 +318,7 @@ class QuestionCreateView(LoginRequiredMixin, generic.CreateView):
     formclass = QuestionForm
     fields = ['question', 'hint', 'answer']
     template_name = "notepad/question_new.html"
+    login_url = '/login/'
 
     def get_success_url(self):
         note_pk = self.object.note_id
@@ -328,6 +336,7 @@ class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
     formclass = QuestionForm
     fields = ['question', 'hint', 'answer']
     template_name = "notepad/question_new.html"
+    login_url = '/login/'
 
     def get_success_url(self):
         pk = self.object.note_id
@@ -337,6 +346,7 @@ class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
 class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Question
     template_name = "notepad/question_delete.html"
+    login_url = '/login/'
 
     def get_success_url(self):
         pk = self.object.note_id
@@ -344,6 +354,8 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
+    login_url = '/login/'
+
     # 問題の復習を確認する
     def get_redirect_url(self, *args, **kwargs):
         pk = self.kwargs['note_pk']
@@ -368,6 +380,8 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
 
 # SNS
 class FollowView(LoginRequiredMixin, generic.RedirectView):
+    login_url = '/login/'
+
     # リダイレクト先
     def get_redirect_url(self, *args, **kwargs):
         pk = self.kwargs['followed']
@@ -390,6 +404,8 @@ class FollowView(LoginRequiredMixin, generic.RedirectView):
 
 
 class StarView(LoginRequiredMixin, generic.RedirectView):
+    login_url = '/login/'
+
     # リダイレクト先
     def get_redirect_url(self, *args, **kwargs):
         pk = self.kwargs['note_pk']
@@ -402,9 +418,9 @@ class StarView(LoginRequiredMixin, generic.RedirectView):
         note = Note.objects.get(pk=self.kwargs['note_pk'])
         # DBに登録 or 削除
         if Star.objects.filter(user=user, note=note).exists():
-            liked_note = Star.objects.get(user=user, note=note)
-            liked_note.delete()
+            star = Star.objects.get(user=user, note=note)
+            star.delete()
         else:
-            liked_note = Star.objects.create(user=user, note=note)
-            liked_note.save()
+            star = Star.objects.create(user=user, note=note)
+            star.save()
         return super().get(request, *args, **kwargs)
