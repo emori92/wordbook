@@ -16,6 +16,11 @@ urlpatterns = [
     path('note/<int:pk>/', views.NoteDetailView.as_view(), name='note_detail'),
     path('note/<int:pk>/edit/', views.NoteUpdateView.as_view(), name='note_edit'),
     path('note/<int:pk>/delete/', views.NoteDeleteView.as_view(), name='note_delete'),
+    # tag
+    path('tag/<int:note_pk>/', views.TagCreateView.as_view(), name='tag_new'),
+    path('tag/<str:word>/', views.TagListView.as_view(), name='tag_list'),
+    path('tag/<int:note_pk>/delete/', views.TagDeleteListView.as_view(), name='tag_delete_list'),
+    path('tag/<int:note_pk>/<str:tag>/', views.TagDeleteView.as_view(), name='tag_delete'),
     # question
     path('note/<int:pk>/question_new/', views.QuestionCreateView.as_view(), name='question_new'),
     path('question/<int:pk>/edit/', views.QuestionUpdateView.as_view(), name='question_edit'),
@@ -24,8 +29,4 @@ urlpatterns = [
     # SNS
     path('follow/<int:following>/<int:followed>/', views.FollowView.as_view(), name='follow'),
     path('star/<int:note_pk>/<int:user_pk>/', views.StarView.as_view(), name='star'),
-    path('tag/<int:note_pk>/', views.TagCreateView.as_view(), name='tag_new'),
-    path('tag/<int:note_pk>/delete/', views.TagDeleteListView.as_view(), name='tag_delete_list'),
-    path('tag/<int:note_pk>/<str:tag>/', views.TagDeleteView.as_view(), name='tag_delete'),
-    path('tag/<str:word>/', views.TagListView.as_view(), name='tag_list'),
 ]
