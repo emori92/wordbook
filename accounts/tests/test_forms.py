@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-from ..models import User
-from ..forms import SignupForm, ProfileForm
+from accounts.models import User
+from accounts.forms import SignupForm, ProfileForm
 
 
 class SignupFormTests(TestCase):

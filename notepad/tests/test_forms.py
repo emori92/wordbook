@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from accounts.models import User
 from notepad.models import Note
-from ..forms import SearchForm, NoteForm, TagForm, QuestionForm
+from notepad.forms import SearchForm, NoteForm, TagForm, QuestionForm
+from config.my_module.my_test_module import assert_form
 
 
 class SearchFormTests(TestCase):
@@ -221,3 +222,19 @@ class QuestionFormTests(TestCase):
         assert_form(questions=questions)
         assert_form(hints=hints)
         assert_form(answers=answers)
+        # values_list = [
+        #     ['', 'q'*129, '問'*129],
+        #     ['h'*65, 'ヒ'*65],
+        #     ['', 'a'*257, '答'*257],
+        # ]
+        # parameter = {
+        #     'self': self,
+        #     'url': reverse('notepad:note_new'),
+        #     'redirect': None,
+        #     'form_class': QuestionForm,
+        #     'keys': ['question', 'hint', 'answer'],
+        #     'values_list': values_list,
+        #     'login': True,
+        #     'normal_value': False,
+        # }
+        # assert_form(**parameter)

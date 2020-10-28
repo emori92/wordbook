@@ -77,7 +77,7 @@
           <!-- user image -->
           {% if user.pk != object.user.pk %}
             <a href="{% url 'notepad:dashboard' object.user.pk %}" id="wordbook-user-image">
-              <img src="{% if object.user.image %}{{ object.user.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user-image">
+              <img src="{% if object.user.image %}{{ object.user.image.url }}{% else %}{% static 'img/user_default.png' %}{% endif %}" alt="user-image">
             </a>
           {% endif %}
 

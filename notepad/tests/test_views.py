@@ -7,7 +7,7 @@ from selenium import webdriver
 # model and my module
 from accounts.models import User
 from notepad.models import Note, Tag, Question
-from config.my_test_module import create_user, assert_normal_get_request, assert_pagination, redirect_dashboard, login_selenium, run_selenium_js_btn
+from config.my_module.my_test_module import create_user, assert_normal_get_request, assert_pagination, redirect_dashboard, login_selenium, run_selenium_js_btn
 
 
 # tests

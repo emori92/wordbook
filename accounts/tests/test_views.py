@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from ..models import User
-from config.my_test_module import create_user, assert_normal_get_request, redirect_dashboard
+from config.my_module.my_test_module import create_user, assert_normal_get_request, redirect_dashboard
 
 
 # Tests
