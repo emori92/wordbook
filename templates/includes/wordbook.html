@@ -14,7 +14,7 @@
         <!-- card body -->
         <div class="card-body">
           <p class="card-text">{{ item.describe|truncatechars:50 }}</p>
-          <img src="{% if item.user.image %}{{ item.user.image.url }}{% else %}{% static 'img/user_default.jpg' %}{% endif %}" alt="user image" class="user-image">
+          <img src="{% if item.user.image %}{{ item.user.image.url }}{% else %}{% static 'img/user_default.png' %}{% endif %}" alt="user image" class="user-image">
           <span class="star-icon text-secondary h5">
             <i class="fas fa-star text-warning"></i>
             <span>{{ item.star_num }}</span>

@@ -8,7 +8,7 @@ from accounts.models import User
 from .models import Note, Question, Review, Follow, Star, Tag
 from .forms import SearchForm, NoteForm, QuestionForm, TagForm
 # paginator
-from .my_script.views_functions import set_ranking, set_paginator, set_ranking_num
+from config.my_module.views_functions import set_ranking, set_paginator, set_ranking_num
 
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -139,20 +139,24 @@ class Dashboard(generic.ListView):
     # ユーザーの単語帳を取得
     def get_queryset(self):
         return Note.objects.filter(user=self.kwargs['pk']) \
-            .annotate(star_num=Count('star__id')).order_by('-updated_at')
+            .annotate(star_num=Count('star__id')).order_by('-updated_at') \
+            .select_related('user')
 
     # ユーザー取得
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # dashboardに表示するUser取得
-        context['account'] = User.objects.get(pk=self.kwargs['pk'])
+        dashboard_query = User.objects.get(pk=self.kwargs['pk'])
+        context['account'] = dashboard_query
         # フォローするユーザーとされるユーザーを取得
         if self.request.user.is_authenticated:
             following = User.objects.get(pk=self.request.user.pk)
-            followed = User.objects.get(pk=self.kwargs['pk'])
+            followed = dashboard_query
             # ユーザーがフォローしているか真偽値を取得
             # この真偽値で、templateの「フォロー」「フォロー解除」の表示を切り替える
-            follow_state = Follow.objects.filter(following=following, followed=followed).exists()
+            follow_state = Follow.objects.filter(
+                following=following, followed=followed) \
+                .select_related('note__id').exists()
             context['follow_state'] = follow_state
         # 公開されている単語帳のみ取得
         # 自分以外のユーザーには公開情報を表示
@@ -162,7 +166,7 @@ class Dashboard(generic.ListView):
         # いいねした単語帳を取得
         if self.request.user.pk == self.kwargs['pk']:
             liked = Note.objects.filter(star__user=self.request.user.pk) \
-                .annotate(star_num=Count('star__id'))
+                .annotate(star_num=Count('star__id')).select_related('user')
             context['liked'] = set_paginator(self, liked, 'liked')
         return context
 
