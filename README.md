@@ -17,7 +17,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - Twitter共有
 
 ## 環境
-- OS: Catalina 10.15.6
+- OS: Catalina 10.15.7
 - Python: 3.8.2
 - Django: 2.2.16
 

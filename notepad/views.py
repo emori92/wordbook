@@ -165,7 +165,8 @@ class Dashboard(generic.ListView):
         context['public'] = set_paginator(self, public, 'public')
         # いいねした単語帳を取得
         if self.request.user.pk == self.kwargs['pk']:
-            liked = Note.objects.filter(star__user=self.request.user.pk) \
+            liked = Note.objects.filter(
+                star__user=self.request.user.pk, public=1) \
                 .annotate(star_num=Count('star__id')).select_related('user')
             context['liked'] = set_paginator(self, liked, 'liked')
         return context
@@ -205,8 +206,8 @@ class NoteDetailView(generic.DetailView):
         review_tuple = [(r.question_id, r.user_id) for r in review_query]
         context['review_tuple'] = review_tuple
         # ブラウザで復習一覧を表示するquerysetを作成
-        review_list = Question.objects.prefetch_related('review_set') \
-            .filter(note=self.kwargs['pk'], review__user_id=self.request.user.pk)
+        review_list = Question.objects.prefetch_related('review_set').filter(
+            note=self.kwargs['pk'], review__user_id=self.request.user.pk)
         context['review_list'] = review_list
         # いいねの判定
         if self.request.user.is_authenticated:
