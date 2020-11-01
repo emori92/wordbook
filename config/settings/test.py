@@ -32,32 +32,22 @@ LOGGING = {
     
     # logger
     'loggers': {
-        
         # Django
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
-        
         # apps
         '': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagete': False,
         },
-        
-        'accounts': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagete': False,
-        },
-
     },
     
     # handler
     'handlers': {
-        
         # condole
         'console': {
             'level': 'DEBUG',
@@ -68,8 +58,8 @@ LOGGING = {
     
     # formatter
     'formatters': {
-        # develop
-        'develop': {
+        # test
+        'test': {
             'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
         },
     },

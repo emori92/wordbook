@@ -19,6 +19,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 logger = logging.getLogger(__name__)
 
 
+page_num = 12
+
+
 # home
 class HomeView(generic.TemplateView):
     template_name = 'notepad/index.html'
@@ -35,7 +38,7 @@ class HomeView(generic.TemplateView):
 class RankingListView(generic.ListView):
     model = Note
     template_name = "notepad/ranking.html"
-    paginate_by = 4
+    paginate_by = page_num
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -68,7 +71,7 @@ class RankingListView(generic.ListView):
 class HotListView(generic.ListView):
     model = Note
     template_name = "notepad/hot.html"
-    paginate_by = 4
+    paginate_by = 12
 
     def get_queryset(self):
         # 新規投稿を取得
@@ -134,7 +137,7 @@ class SearchView(generic.FormView):
 class Dashboard(generic.ListView):
     model = Note
     template_name = "notepad/dashboard.html"
-    paginate_by = 4
+    paginate_by = 12
 
     # ユーザーの単語帳を取得
     def get_queryset(self):
@@ -197,32 +200,33 @@ class NoteDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # noteに紐づくquestionを全て取得
-        queryset = Question.objects.filter(note=self.kwargs['pk']) \
+        note_pk = self.kwargs['pk']
+        queryset = Question.objects.filter(note=note_pk) \
             .prefetch_related('review_set').order_by('created_at')
-        context['queryset'] = queryset
-        # 復習ボタンの表示切り替えを判別するタプルを作成
+        context['queryset'] = set_paginator(self, queryset, 'page')
+        # 復習ボタンの表示切り替えを判別するリストを作成
         review_query = Review.objects.select_related('question') \
-            .filter(question__note_id=self.kwargs['pk'])
-        review_tuple = [(r.question_id, r.user_id) for r in review_query]
-        context['review_tuple'] = review_tuple
+            .filter(question__note_id=note_pk)
+        review_judge = [(r.question_id, r.user_id) for r in review_query]
+        context['review_judge'] = review_judge
         # ブラウザで復習一覧を表示するquerysetを作成
         review_list = Question.objects.prefetch_related('review_set').filter(
-            note=self.kwargs['pk'], review__user_id=self.request.user.pk)
-        context['review_list'] = review_list
+            note=note_pk, review__user_id=self.request.user.pk)
+        context['review_list'] = set_paginator(self, review_list, 'review')
         # いいねの判定
         if self.request.user.is_authenticated:
             # 単語帳とユーザーを特定
-            note = Note.objects.get(pk=self.kwargs['pk'])
+            note = Note.objects.get(pk=note_pk)
             user = User.objects.get(pk=self.request.user.pk)
             # いいねの有無を真偽値で格納
             star_state = Star.objects.filter(note=note, user=user).exists()
             context['star_state'] = star_state
         # いいね数
-        star_num = Star.objects.filter(note_id=self.kwargs['pk'])
+        star_num = Star.objects.filter(note_id=note_pk)
         # starテーブルにレコードの有無を確認（レコードがないとエラーになるので定数0を格納）
         if star_num.exists():
             context['star_num'] = star_num.values('note_id') \
-                .annotate(num=Count('id')).get(note_id=self.kwargs['pk'])
+                .annotate(num=Count('id')).get(note_id=note_pk)
         else:
             context['star_num'] = {'num': 0}
         return context

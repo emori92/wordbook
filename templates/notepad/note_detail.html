@@ -98,11 +98,11 @@
         {% endif %}
 
         <!-- question -->
-        {% include 'includes/question.html' %}
+        {% include 'includes/question.html' with page_obj=queryset %}
 
         <!-- review -->
         {% if user.is_authenticated %}
-          {% include 'includes/question.html' with queryset=review_list id='review' %}
+          {% include 'includes/question.html' with queryset=review_list id='review' page_obj=review_list page='review' %}
         {% endif %}
 
       </div>

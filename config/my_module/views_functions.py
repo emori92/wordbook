@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # RankingView
-def set_paginator(self, queryset, url_parameter, page_num=4):
+def set_paginator(self, queryset, url_parameter, page_num=12):
     """function: paginationを作成"""
     # paginatorインスタンスを作成
     paginator = Paginator(queryset, page_num)
