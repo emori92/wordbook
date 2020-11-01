@@ -36,7 +36,7 @@
             <!-- urlのalias -->
             {% url 'notepad:question_review' object.pk item.pk user.pk as review_url %}
             <!-- custom templateを利用して、同じquestion_idとuser_idのlistがあるか判定 -->
-            {% if item.id|make_list:user.id in review_tuple %}
+            {% if item.id|make_list:user.id in review_judge %}
               <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-secondary">復習を解除</a>
             {% else %}
               <a href="{{ review_url }}#{{ forloop.counter }}" class="btn btn-info">復習する</a>
@@ -55,4 +55,9 @@
       <h1 class="card-body text-secondary text-center">問題がありません。</h1>
     </div>
   {% endfor %}
+
+  <!-- pagination -->
+  {% if page_obj.has_other_pages %}
+    {% include 'includes/pagination.html' %}
+  {% endif %}
 </div>
