@@ -1,3 +1,4 @@
+# default
 *.log
 *.pyc
 *.pot
@@ -5,9 +6,15 @@ __pycache__
 .DS_store
 /.vscode
 .vscode/*
+
+# django
+.env
+media
 local.py
 db.sqlite3
-media
-init.sh
-.env
 .ipynb_checkpoints
+accounts/fixtures/
+notepad/fixtures/
+
+# env
+init.sh

@@ -9,7 +9,7 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # security
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = ['127, 168, 0, 1', '.herokuapp.com']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # database
