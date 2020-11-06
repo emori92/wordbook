@@ -204,15 +204,6 @@ class NoteDetailView(generic.DetailView):
         queryset = Question.objects.filter(note=note_pk) \
             .prefetch_related('review_set').order_by('created_at')
         context['queryset'] = set_paginator(self, queryset, 'page')
-        # 復習ボタンの表示切り替えを判別するリストを作成
-        review_query = Review.objects.select_related('question') \
-            .filter(question__note_id=note_pk)
-        review_judge = [(r.question_id, r.user_id) for r in review_query]
-        context['review_judge'] = review_judge
-        # ブラウザで復習一覧を表示するquerysetを作成
-        review_list = Question.objects.prefetch_related('review_set').filter(
-            note=note_pk, review__user_id=self.request.user.pk)
-        context['review_list'] = set_paginator(self, review_list, 'review')
         # いいねの判定
         if self.request.user.is_authenticated:
             # 単語帳とユーザーを特定
@@ -229,6 +220,15 @@ class NoteDetailView(generic.DetailView):
                 .annotate(num=Count('id')).get(note_id=note_pk)
         else:
             context['star_num'] = {'num': 0}
+        # 復習ボタンの表示切り替えを判別するリストを作成
+        review_query = Review.objects.select_related('question') \
+            .filter(question__note_id=note_pk)
+        review_judge = [(r.question_id, r.user_id) for r in review_query]
+        context['review_judge'] = review_judge
+        # ブラウザで復習一覧を表示するquerysetを作成
+        review_list = Question.objects.prefetch_related('review_set').filter(
+            note=note_pk, review__user_id=self.request.user.pk)
+        context['review_list'] = set_paginator(self, review_list, 'review')
         return context
 
 
@@ -367,8 +367,7 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
 
     # 問題の復習を確認する
     def get_redirect_url(self, *args, **kwargs):
-        pk = self.kwargs['note_pk']
-        url = reverse('notepad:note_detail', kwargs={'pk': pk})
+        url = self.request.headers['Referer']
         return url
 
     def get(self, request, *args, **kwargs):

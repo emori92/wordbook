@@ -136,7 +136,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = f'/var/www/{PROJECT_NAME}/static'
+STATIC_ROOT = '/usr/share/nginx/html/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = f'/var/www/{PROJECT_NAME}/media'
+MEDIA_ROOT = '/usr/share/nginx/html/media'
