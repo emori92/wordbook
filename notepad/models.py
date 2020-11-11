@@ -21,7 +21,7 @@ class Note(models.Model):
     user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag, verbose_name='タグ')
     title = models.CharField(verbose_name='タイトル', max_length=32)
-    describe = models.TextField(verbose_name='説明', max_length=128, null=True, blank=True)
+    describe = models.TextField(verbose_name='説明', max_length=512, null=True, blank=True)
     public = models.BooleanField(verbose_name='公開範囲', default=0)
     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='更新日', auto_now=True)
@@ -36,9 +36,9 @@ class Note(models.Model):
 class Question(models.Model):
     '''問題、ヒント、答えのモデル'''
 
-    question = models.TextField(verbose_name='問題', max_length=128)
-    hint = models.TextField(verbose_name='ヒント', max_length=64, null=True, blank=True)
-    answer = models.TextField(verbose_name='答え', max_length=256)
+    question = models.TextField(verbose_name='問題', max_length=512)
+    hint = models.TextField(verbose_name='ヒント', max_length=512, null=True, blank=True)
+    answer = models.TextField(verbose_name='答え', max_length=512)
     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='更新日', auto_now=True)
     note = models.ForeignKey(Note, verbose_name='ノート', on_delete=models.CASCADE)
