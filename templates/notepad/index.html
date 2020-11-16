@@ -7,12 +7,74 @@
 {% block home_active %}active{% endblock %}
 
 {% block content %}
-  <div class="bg-dark text-white text-center top-img">
+  <!-- head -->
+  <div class="bg-dark text-white top-img">
     <div class="container mx-auto message">
-      <p class="display-4 text-center text-black-50">Welcome!</p>
-      <p class="h2 text-black-50">Wordbook is notepad application only you!</p>
+      <div class="row">
+        <div class="col-md-5">
+          <h2 class="text-center text-light mb-5">自分だけの単語帳を作ろう!</h2>
+          <p class="h5 font-weight-normal text-light">
+            Wordbookは単語帳アプリです。自分だけの問題と答えを自由に作成し、世界中で知識を共有しよう！
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- main content -->
+  <div class="main-content mb-5">
+    <div class="container">
+      {% include 'includes/index_main_content.html' with img_path='img/home_1.png' title="タイトルを決めよう" text="どんな単語帳にするか、タイトルを決める。" %}
+      {% include 'includes/index_main_content.html' with img_path='img/home_2.png' title="問題と答えを追加しよう" text="タイトルに合う問題を追加します。問題が難しければヒントも加えよう。" reverse=True %}
+      {% include 'includes/index_main_content.html' with img_path='img/home_3.png' title="復習したい問題をチェック" text="覚えきれない問題はチェックして後で復習しよう。" %}
+    </div>
+  </div>
+
+  <!-- sub content -->
+  <div class="sub-content bg-light pb-5">
+    <div class="container">
+      <!-- title -->
+      <div class="row pt-5 pb-3">
+        <div class="col-md-6 mx-auto">
+          <h4 class="text-center">よりアプリを使いこなす</h4>
+        </div>
+      </div>
+      <!-- items -->
+      <div class="row d-flex justify-content-around">
+        {% include 'includes/index_sub_content.html' with img_path='img/home_sub_1.png' title='タグをつけよう' text='タグ付けすることで、同じカテゴリの単語帳を探すことができます。' %}
+        {% include 'includes/index_sub_content.html' with img_path='img/home_sub_2.png' title='単語帳を公開する' text='単語帳を公開すると、世界中にシェアすることができます。' %}
+        {% include 'includes/index_sub_content.html' with img_path='img/home_sub_3.png' title='「いいね」をする' text='他ユーザーの単語帳がいいと感じたら「いいね」をしてみましょう。いいねが多いと「ランキング」や「おすすめ」に公開されます。' %}
+        {% include 'includes/index_sub_content.html' with img_path='img/home_sub_4.png' title='ユーザをフォローする' text='気になるユーザーがいたらフォローをしてみましょう。フォロワーが増えると「ランキング」に公開されます。' %}
+      </div>
+    </div>
+  </div>
+
+  <!-- register -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto my-5">
+        <h2 class="text-center my-5">さあ、はじめよう！</h2>
+        <div class="col-lg-3 col-md-4 col-6 mx-auto my-4">
+          <a href="{% url 'accounts:signup' %}" class="btn btn-success btn-lg">新規登録</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="bg-dark text-white-50 pt-4 pb-3">
+    <div class="container">
+      <!-- link -->
+      <div class="row mt-2 mb-3 d-flex justify-content-around">
+        <div class="col-md-2 col-6 text-center"><a href="{% url 'notepad:home' %}" class="text-white-50">Wordbook</a></div>
+        <div class="col-md-2 col-6 text-center"><a href="{% url 'notepad:search' %}" class="text-white-50">検索</a></div>
+        <div class="col-md-2 col-6 text-center"><a href="{% url 'notepad:ranking' %}" class="text-white-50">ランキング</a></div>
+        <div class="col-md-2 col-6 text-center"><a href="{% url 'notepad:hot' %}" class="text-white-50">おすすめ</a></div>
+      </div>
+      <!-- copy right -->
+      <div class="col-md-2 col-7 mx-auto"><a href="https://github.com/emori92/" class="text-white-50">© 2020 emori92</a></div>
+    </div>
+  </footer>
 {% endblock content %}
 
 {% block js %}

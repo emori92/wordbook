@@ -1,21 +1,25 @@
 
-<div class="my-4">
-  <nav class="col-md-4 mx-auto">
-    <ul class="pagination">
-
-      <!-- 数値 -->
-      {% for num in page_obj.paginator.page_range %}
-        {% if num == page_obj.number %}
-          <li class="page-item active">
-            <span class="page-link">{{ num }}</span>
-          </li>
-        {% else %}
-          <li class="page-item">
-            <a href="?{{ page|default:'page' }}={{ num }}" class="page-link">{{ num }}</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-
-    </ul>
-  </nav>
+<div class="container">
+  <div class="row my-4">
+    <div class="col-md-2 col-4 mx-auto">
+      <nav>
+        <ul class="pagination">
+    
+          <!-- 数値 -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a href="?{{ page|default:'page' }}={{ num }}" class="page-link">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+    
+        </ul>
+      </nav>
+    </div>
+  </div>
 </div>

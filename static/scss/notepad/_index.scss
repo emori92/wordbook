@@ -2,16 +2,23 @@
 // content
 body {
   main {
-    // background image
+    // top
     .top-img {
       background-image: url("../img/top.jpg");
       background-size: cover;
-      height: 100vh;
+      height: 80vh;
+      margin-bottom: 40px;
       .message {
-        padding-top: 240px;
+        padding-top: 200px;
         p {
-          font-family: 'Skranji', cursive;
+          line-height: 32px;
         }
+      }
+    }
+    // main content
+    .main-content {
+      p {
+        line-height: 32px;
       }
     }
   }

@@ -14,7 +14,7 @@ from .forms import SignupForm, ProfileForm
 # login
 class LoginView(SuccessMessageMixin, LoginView):
     template_name = 'accounts/login.html'
-    success_message = 'Login success!'
+    success_message = 'ログインしました！'
     
     def get_success_url(self):
         return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
