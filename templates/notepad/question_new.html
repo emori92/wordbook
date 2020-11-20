@@ -2,7 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}新しい問題 | Wordbook{% endblock title %}
+{% block title %}{% if object.note %}{{ object.question|truncatechars:20 }}{% else %}新しい問題 {% endif %}| Wordbook{% endblock title %}
 
 {% block content %}
 <div class="container">
@@ -18,7 +18,7 @@
         </div>
         <!-- btn -->
         <div class="d-flex flex-column col-lg-4 col-md-6 mx-auto">
-          <button type="submit" class="btn btn-success mb-4">作成!</button>
+          <button type="submit" class="btn btn-success mb-4">{% if object.note %}更新!{% else %}作成!{% endif %}</button>
           {% if object.note %}
             <a href="{% url 'notepad:note_detail' object.note.pk %}" class="btn btn-outline-secondary">戻る</a>
           {% else %}
