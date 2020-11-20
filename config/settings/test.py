@@ -24,44 +24,43 @@ DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 
 # logging
-LOGGING = {
+# LOGGING = {
 
-    # 初期化
-    'version': 1,
-    'disable_existing_loggers': False,
+#     # 初期化
+#     'version': 1,
+#     'disable_existing_loggers': False,
     
-    # logger
-    'loggers': {
-        # Django
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        # apps
-        '': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagete': False,
-        },
-    },
+#     # logger
+#     'loggers': {
+#         # Django
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         },
+#         # apps
+#         '': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagete': False,
+#         },
+#     },
     
-    # handler
-    'handlers': {
-        # condole
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'develop',
-        },
-    },
+#     # handler
+#     'handlers': {
+#         # condole
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'develop',
+#         },
+#     },
     
-    # formatter
-    'formatters': {
-        # test
-        'test': {
-            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
-        },
-    },
-    
-}
+#     # formatter
+#     'formatters': {
+#         # test
+#         'test': {
+#             'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
+#         },
+#     },
+# }

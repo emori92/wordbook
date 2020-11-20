@@ -22,4 +22,7 @@ class ProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['describe'].widget.attrs = {'autofocus': 'autofocus'}
+        self.fields['describe'].widget.attrs = {
+            'autofocus': 'autofocus',
+            'placeholder': '中学生です。よろしくお願いします!\n(80文字まで)',
+        }
