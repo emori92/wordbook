@@ -2,19 +2,14 @@
 *.log
 *.pyc
 *.pot
+*.swp
 __pycache__
 .DS_store
-/.vscode
-.vscode/*
 
 # django
-.env
+.env*
 media
 local.py
 db.sqlite3
 .ipynb_checkpoints
-accounts/fixtures/
-notepad/fixtures/
-
-# env
-init.sh
+*/fixtures/

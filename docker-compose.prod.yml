@@ -1,0 +1,44 @@
+# production docker-compose
+    
+
+version: '3.8'
+services:
+
+  # DB
+  db:
+    build: ./db
+    volumes:
+      - db-dv:/var/lib/postgresql/data
+    env_file:
+      - ./.env.prod.db
+
+  # app
+  app:
+    build: ./app
+    command: gunicorn --bind 0.0.0.0:8000 config.wsgi
+    environment:
+      - DJANGO_SETTINGS_MODULE
+    env_file:
+      - ./.env.prod
+    volumes:
+      - media-dv:/usr/share/nginx/html/media
+      - log-dv:/usr/src/app/logs/
+    expose:
+      - 8000
+    depends_on:
+      - db
+
+  # web
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+volumes:
+  db-dv:
+  media-dv:
+  log-dv:

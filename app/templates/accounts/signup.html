@@ -2,8 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}login | Wordbook{% endblock title %}
-  
+{% block title %}サインアップ | Wordbook{% endblock  %}
 
 {% block content %}
   <div class="container">
@@ -12,15 +11,20 @@
         
         <!-- form -->
         <div id="user-form" class="d-flex align-items-center">
-          <form method="post" class="border rounded shadow-sm p-4 vw-100">
-            <h2 class="text-center">ログイン</h2>
+          <form method="post" class="border rounded shadow-sm p-4">
+            <h2 class="text-center">新規登録</h2>
             {% csrf_token %}
             <div>
               <!-- fields -->
-              {{ form|crispy }}
+              <p>
+                {{ form.username|as_crispy_field }}
+              </p>
+              <p>
+                {{ form.password|as_crispy_field }}
+              </p>
               <!-- btn -->
               <div class="text-center">
-                <button id="login-btn" type="submit" class="btn btn-warning">ログイン</button>
+                <button type="submit" class="btn btn-success">登録</button>
               </div>
             </div>
           </form>
