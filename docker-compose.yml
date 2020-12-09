@@ -10,9 +10,9 @@ services:
         ports:
             - 5432:5432
         environment:
-            - POSTGRES_USER
-            - POSTGRES_PASSWORD
-            - POSTGRES_DB
+            - POSTGRES_USER=local_user
+            - POSTGRES_PASSWORD=db_pass
+            - POSTGRES_DB=wordbook
         volumes:
             - db-dv:/var/lib/postgresql/data
 
@@ -20,7 +20,7 @@ services:
     app:
         build: ./app
         environment:
-            - DJANGO_SETTINGS_MODULE
+            - DJANGO_SETTINGS_MODULE=config.settings.local
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
             - ./app:/usr/src/app
