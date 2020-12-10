@@ -19,6 +19,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 DATABASES = {
     'default': env.db()
 }
+
+# DB transaction
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 

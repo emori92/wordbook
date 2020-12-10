@@ -9,7 +9,7 @@ __pycache__
 # django
 .env*
 media
-local.py
+# local.py
 db.sqlite3
 .ipynb_checkpoints
 */fixtures/

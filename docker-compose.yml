@@ -10,8 +10,8 @@ services:
         ports:
             - 5432:5432
         environment:
-            - POSTGRES_USER=local_user
-            - POSTGRES_PASSWORD=db_pass
+            - POSTGRES_USER=app_owner
+            - POSTGRES_PASSWORD=dbpass
             - POSTGRES_DB=wordbook
         volumes:
             - db-dv:/var/lib/postgresql/data
@@ -27,7 +27,7 @@ services:
         ports:
             - 8000:8000
         depends_on:
-            - db 
+            - db
 
 volumes:
     db-dv:

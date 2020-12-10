@@ -18,8 +18,12 @@ Python製WebフレームワークのDjangoで作成しています。
 
 ## 環境
 - OS: Catalina 10.15.7
-- Python: 3.8.2
+- Docker: 19.03.13
+- docker-compose: 1.27.4
+- Python: 3.7.9
 - Django: 2.2.16
+- PostgreSQL: 12.5
+- Nginx: 1.19.5
 
 ## パッケージ
 - django-debug-toolbar: 2.2
@@ -27,4 +31,3 @@ Python製WebフレームワークのDjangoで作成しています。
 - django-sass: 1.0.0
 - django-crispy-forms: 1.9.2
 - Pillow: 7.1.2
-- scikit-surprise: 1.1.1
