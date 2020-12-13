@@ -2,13 +2,19 @@
 
 {% load static %}
 
-{% block title %}{% if object.public or object.user.id == user.id %}{{ object.title }}{% else %}非公開{% endif %} | Wordbook{% endblock title %}
+{% block title %}
+  {% if object.public or object.user.id == user.id %}
+    {{ object.title }} | Wordbook
+  {% else %}
+    許可されてないコンテンツ | Wordbook
+  {% endif %}
+{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row my-5">
-      <!-- 公開 -->
-      {% if object.public or object.user.id == user.id %}
+  <!-- 公開 -->
+  {% if object.public or object.user.id == user.id %}
+    <div class="container">
+      <div class="row my-5">
         <!-- wordbook abstract -->
         <div class="col-lg-3 col-md-5 mb-5">
           <div class="card border-secondary">
@@ -107,17 +113,14 @@
           {% endif %}
 
         </div>
-
-      <!-- 非公開 -->
-      {% else %}
-        <div class="col">
-          <div class="card border-secondary">
-            <h1 class="card-body text-center font-weight-normal text-secondary py-5">非公開です。</h1>
-          </div>
-        </div>
-      {% endif %}
+      </div>
     </div>
-  </div>
+
+  <!-- 非公開 -->
+  {% else %}
+    {% include 'includes/permission.html' %}
+  {% endif %}
+
 {% endblock content %}
 
 {% block js %}

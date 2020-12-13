@@ -107,7 +107,7 @@ class SearchView(generic.FormView):
         context = super().get_context_data(**kwargs)
         # 単語帳/単語帳/タグを取得
         wordbook = Note.objects.select_related('user').filter(public=1)
-        user = User.objects
+        user = User.objects.exclude(username='AnonymousUser')
         tag = Tag.note_set.through.objects.values('tag', 'tag__name')
         # 検索用語を取得
         word = self.request.GET.get('search')
@@ -344,7 +344,7 @@ class QuestionUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Question
     formclass = QuestionForm
     fields = ['question', 'hint', 'answer']
-    template_name = "notepad/question_new.html"
+    template_name = "notepad/question_update.html"
     login_url = '/login/'
 
     def get_success_url(self):

@@ -2,28 +2,42 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}{{ object.title }} 編集 | Wordbook{% endblock title %}
+{% block title %}
+  {% if object.user.id == user.id %}
+    『{{ object.title }}』の編集 | Wordbook
+  {% else %}
+    許可されてないコンテンツ | Wordbook
+  {% endif %}
+{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row my-5">
-      <div class="col-lg-10 m-auto">
+  <!-- 許可されたユーザ -->
+  {% if user.id == object.user.id %}
+    <div class="container">
+      <div class="row my-5">
+        <div class="col-lg-10 m-auto">
 
-        <!-- form -->
-        <div height="80vh" class="d-flex align-items-center">
-          <form method="post" class="vw-100">
-            {% csrf_token %}
-            <!-- fields -->
-            {{ form|crispy }}
-            <!-- btn -->
-            <div class="d-flex flex-column col-lg-4 col-md-6 mx-auto">
-              <button type="submit" class="btn btn-success my-3">更新!</button>
-              <a href="{% url 'notepad:note_detail' view.kwargs.pk %}" class="btn btn-outline-secondary">戻る</a>
-            </div>
-          </form>
+          <!-- form -->
+          <div height="80vh" class="d-flex align-items-center">
+            <form method="post" class="vw-100">
+              {% csrf_token %}
+              <!-- fields -->
+              {{ form|crispy }}
+              <!-- btn -->
+              <div class="d-flex flex-column col-lg-4 col-md-6 mx-auto">
+                <button type="submit" class="btn btn-success my-3">更新!</button>
+                <a href="{% url 'notepad:note_detail' view.kwargs.pk %}" class="btn btn-outline-secondary">戻る</a>
+              </div>
+            </form>
+          </div>
+
         </div>
-
       </div>
     </div>
-  </div>
+
+  <!-- 未許可のユーザ -->
+  {% else %}
+    {% include 'includes/permission.html' %}
+  {% endif %}
+
 {% endblock content %}

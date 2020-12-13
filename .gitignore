@@ -12,4 +12,4 @@ media
 # local.py
 db.sqlite3
 .ipynb_checkpoints
-*/fixtures/
+/fixtures/

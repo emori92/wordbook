@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # package
     'django_sass',
-    # 'guardian',
     'crispy_forms',
     # app
     'notepad.apps.NotepadConfig',
@@ -91,12 +90,6 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # ブラウザを閉じた場合はsessionを破棄
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-# user permission (django-guardian)
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend', # default
-#     'guardian.backends.ObjectPermissionBackend',
-# )
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
