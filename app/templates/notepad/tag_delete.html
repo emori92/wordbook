@@ -1,40 +1,53 @@
 {% extends 'base.html' %}
 
-{% block title %}タグの削除 | Wordbook{% endblock title %}
+{% block title %}
+  {% if user.id == object_list.first.note_set.first.user_id %}
+    タグの削除 | Wordbook
+  {% else %}
+    許可されてないコンテンツ | Wordbook
+  {% endif %}
+{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col mx-auto">
+  <!-- 許可されたユーザ -->
+  {% if user.id == object_list.first.note_set.first.user_id %}
+    <div class="container">
+      <div class="row">
+        <div class="col mx-auto">
 
-        <!-- 警告文 -->
-        <div id="tag-alert" class="alert alert-danger my-5 mx-auto text-center">
-          <p>タグを削除します。</p>
+          <!-- 警告文 -->
+          <div id="tag-alert" class="alert alert-danger my-5 mx-auto text-center">
+            <p>タグを削除します。</p>
+          </div>
+
+          <!-- tags -->
+          <div class="tag-list mx-auto rounded border border-bottom-0">
+            {% for item in object_list %}
+              <div class="d-flex justify-content-around border-bottom">
+                <h3 class="ml-2 mt-2">
+                  <span class="badge badge-success badge-pill font-weight-normal">{{ item }}</span>
+                </h3>
+                <a href="{% url 'notepad:tag_delete' view.kwargs.note_pk item %}" class="btn btn-danger my-2 mr-2">削除</a>
+              </div>
+            {% empty %}
+              <div class="border-bottom">
+                <p class="text-center h5 my-2 font-weight-normal text-secondary">タグはありません。</p>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- btn -->
+          <div class="tag-btn mx-auto">
+            <a href="{% url 'notepad:tag_new' view.kwargs.note_pk %}" class="btn btn-primary mr-3">タグを追加</a>
+            <a href="{% url 'notepad:note_detail' view.kwargs.note_pk %}" class="btn btn-outline-secondary">戻る</a>
+          </div>
+
         </div>
-
-        <!-- tags -->
-        <div class="tag-list mx-auto rounded border border-bottom-0">
-          {% for item in object_list %}
-            <div class="d-flex justify-content-around border-bottom">
-              <h3 class="ml-2 mt-2">
-                <span class="badge badge-success badge-pill font-weight-normal">{{ item }}</span>
-              </h3>
-              <a href="{% url 'notepad:tag_delete' view.kwargs.note_pk item %}" class="btn btn-danger my-2 mr-2">削除</a>
-            </div>
-          {% empty %}
-            <div class="border-bottom">
-              <p class="text-center h5 my-2 font-weight-normal text-secondary">タグはありません。</p>
-            </div>
-          {% endfor %}
-        </div>
-
-        <!-- btn -->
-        <div class="tag-btn mx-auto">
-          <a href="{% url 'notepad:tag_new' view.kwargs.note_pk %}" class="btn btn-primary mr-3">タグを追加</a>
-          <a href="{% url 'notepad:note_detail' view.kwargs.note_pk %}" class="btn btn-outline-secondary">戻る</a>
-        </div>
-
       </div>
     </div>
-  </div>
+  <!-- 未許可のユーザ -->
+  {% else %}
+    {% include 'includes/permission.html' %}
+  {% endif %}
+
 {% endblock content %}
