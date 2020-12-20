@@ -235,3 +235,22 @@ WHERE
             f.following_id == 15
     )
 ;
+
+
+-- noteのtitleとtagを結びつけて出力
+SELECT
+    n.title AS "note title"
+    , t.name AS tag
+FROM (
+    SELECT
+        *
+    FROM
+        note_tag AS nt
+        INNER JOIN
+            note AS n
+            ON nt.note_id = n.id
+) AS n
+    INNER JOIN
+        tag AS t
+        ON n.tag_id = t.id
+;

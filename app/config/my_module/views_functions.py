@@ -10,10 +10,10 @@ def set_paginator(self, queryset, url_parameter, page_num=12):
     """function: paginationを作成"""
     # paginatorインスタンスを作成
     paginator = Paginator(queryset, page_num)
-    page = self.request.GET.get(url_parameter)
+    num = self.request.GET.get(url_parameter)
     # GETリクエストからpaginationをreturn
     try:
-        pagination = paginator.page(page)
+        pagination = paginator.page(num)
     except PageNotAnInteger:
         pagination = paginator.page(1)
     except EmptyPage:

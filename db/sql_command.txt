@@ -1,0 +1,6 @@
+# export csv
+sqlite3 -header -csv db.sqlite3 "select * from custom_user;" > user.csv
+psql -d wordbook -U app_owner -c "\copy custom_user to /tmp/user.csv delimiter ',' csv header;"
+
+# import csv
+psql -d wordbook -U app_owner -c "\copy custom_user from /tmp/user.csv delimiter ',' csv header;"
