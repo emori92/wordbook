@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  {% if user.id == object_list.first.note_set.first.user_id %}
+  {% if user.id == object_user_id %}
     タグの削除 | Wordbook
   {% else %}
     許可されてないコンテンツ | Wordbook
@@ -10,7 +10,7 @@
 
 {% block content %}
   <!-- 許可されたユーザ -->
-  {% if user.id == object_list.first.note_set.first.user_id %}
+  {% if user.id == object_user_id %}
     <div class="container">
       <div class="row">
         <div class="col mx-auto">

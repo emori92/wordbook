@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  {% object.note.user.id == user.id %}
+  {% if object.note.user.id == user.id %}
     『{{ object.question|truncatechars_html:6}}』の削除
   {% else %}
     許可されてないコンテンツ | Wordbook

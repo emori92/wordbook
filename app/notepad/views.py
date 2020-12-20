@@ -8,6 +8,7 @@ from accounts.models import User
 from .models import Note, Question, Review, Follow, Star, Tag
 from .forms import SearchForm, NoteForm, QuestionForm, TagForm
 # paginator
+from django.core.paginator import Paginator
 from config.my_module.views_functions import set_ranking, set_paginator, set_ranking_num
 
 from django.views import generic
@@ -203,7 +204,7 @@ class NoteDetailView(generic.DetailView):
         note_pk = self.kwargs['pk']
         queryset = Question.objects.filter(note=note_pk) \
             .prefetch_related('review_set').order_by('created_at')
-        context['queryset'] = set_paginator(self, queryset, 'page')
+        context['queryset'] = set_paginator(self, queryset, 'page', page_num)
         # いいねの判定
         if self.request.user.is_authenticated:
             # 単語帳とユーザーを特定
@@ -299,6 +300,17 @@ class TagDeleteListView(LoginRequiredMixin, generic.ListView):
         queryset = Note.objects.get(id=self.kwargs['note_pk']) \
             .tag.filter(note=self.kwargs['note_pk'])
         return queryset
+    
+    # ユーザのみ削除ページを表示するため、noteのidを取得
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get user id
+        note_id = self.kwargs['note_pk']
+        user_id = Note.objects.get(id=note_id).user_id
+        print(f'\n\n{user_id}\n\n')
+        context['object_user_id'] = user_id
+        return context
+    
 
 
 class TagDeleteView(LoginRequiredMixin, generic.RedirectView):
@@ -330,8 +342,14 @@ class QuestionCreateView(LoginRequiredMixin, generic.CreateView):
     login_url = '/login/'
 
     def get_success_url(self):
+        # 問題を作成したページにredirectさせる
         note_pk = self.object.note_id
-        return reverse('notepad:note_detail', kwargs={'pk': note_pk})
+        # get page num
+        queryset = self.get_queryset()
+        num = Paginator(queryset, page_num).num_pages
+        # set url query parameter
+        url = reverse('notepad:note_detail', kwargs={'pk': note_pk})
+        return f'{url}?page={num}'
 
     def form_valid(self, form):
         # kwargsのpk取得

@@ -18,6 +18,7 @@ services:
     command: gunicorn --bind 0.0.0.0:8000 config.wsgi
     volumes:
       - static-dv:/usr/src/app/static/
+      - media-dv:/usr/share/nginx/html/media/
       - log-dv:/usr/src/app/logs/
     expose:
       - 8000
