@@ -1,9 +1,11 @@
 # PostgreSQL
 FROM postgres:12.5
 
-LABEL imageversion=0.1
+LABEL imageversion=0.2
 
-COPY ./csv/ /tmp/
+WORKDIR /csv/
+
+COPY ./csv .
 
 RUN localedef -i ja_JP -c -f UTF-8 -A /usr/share/locale/locale.alias ja_JP.UTF-8
 
