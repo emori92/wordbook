@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # package
     'django_sass',
     'crispy_forms',
+    'storages',
     # app
     'notepad.apps.NotepadConfig',
     'accounts.apps.AccountsConfig',
