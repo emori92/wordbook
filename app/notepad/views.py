@@ -19,7 +19,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 # logging
 logger = logging.getLogger(__name__)
 
-
+# pagination number
 page_num = 12
 
 
@@ -108,7 +108,7 @@ class SearchView(generic.FormView):
         context = super().get_context_data(**kwargs)
         # 単語帳/単語帳/タグを取得
         wordbook = Note.objects.select_related('user').filter(public=1)
-        user = User.objects.exclude(username='AnonymousUser')
+        users = User.objects.exclude(username='AnonymousUser')
         tag = Tag.note_set.through.objects.values('tag', 'tag__name')
         # 検索用語を取得
         word = self.request.GET.get('search')
@@ -116,7 +116,7 @@ class SearchView(generic.FormView):
         if word:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
                 .filter(title__icontains=word).order_by('-created_at', 'title')
-            user = user.filter(username__icontains=word) \
+            users = users.filter(username__icontains=word) \
                 .annotate(follow_num=Count('followed__id')).order_by('-follow_num', 'username')
             tag = tag.filter(tag__name__icontains=word) \
                 .annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
@@ -124,12 +124,12 @@ class SearchView(generic.FormView):
         else:
             wordbook = wordbook.annotate(star_num=Count('star__id')) \
                 .order_by('-created_at', 'title')
-            user = user.annotate(follow_num=Count('followed__id')) \
+            users = users.annotate(follow_num=Count('followed__id')) \
                 .order_by('-follow_num', 'username')
             tag = tag.annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
         # contextに単語帳、ユーザー、タグを登録
         context['wordbook'] = set_paginator(self, wordbook, 'page')
-        context['user'] = set_paginator(self, user, 'user')
+        context['users'] = set_paginator(self, users, 'users')
         context['tag'] = set_paginator(self, tag, 'tag')
         return context
 

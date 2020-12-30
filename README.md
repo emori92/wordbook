@@ -10,8 +10,9 @@ Python製WebフレームワークのDjangoで作成しています。
 - Django: 2.2.16
 - PostgreSQL: 12.5
 - Nginx: 1.19.5
-- AWS: IAM, VPC, EC2, S3
-- SSH: Let's Encrypt
+- AWS: IAM, VPC, EC2, S3, ECR
+- Domain: freenom
+- SSL: Let's Encrypt
 
 ## 機能
 - サインアップ/ログイン/ログアウト

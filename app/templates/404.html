@@ -1,13 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}ページが見つかりません | Wordbook{% endblock title %}
+{% block title %}404 ページが見つかりません | Wordbook{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        404: ページが見つかりません。
-      </div>
-    </div>
-  </div>
+  {% include 'includes/permission.html' with text='404 ページが見つかりません。' %}
 {% endblock content %}

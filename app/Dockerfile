@@ -4,7 +4,7 @@ FROM python:3.7.9-buster
 # working directory
 WORKDIR /usr/src/app
 
-# environment
+# python encode
 ENV PYTHONDONTWRITEBYTECODE 1 && \
     PYTHONUNBUFFERED 1
 
