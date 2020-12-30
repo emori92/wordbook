@@ -3,11 +3,5 @@
 {% block title %}403エラー | Wordbook{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        403: アクセスが禁止されています。
-      </div>
-    </div>
-  </div>
+  {% include 'includes/permission.html' with text='403 アクセスが禁止されています。' %}
 {% endblock content %}

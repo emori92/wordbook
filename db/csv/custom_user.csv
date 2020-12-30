@@ -1,16 +1,19 @@
 id,password,last_login,is_superuser,username,first_name,last_name,email,is_staff,is_active,date_joined,image,describe,created_at
-5,pbkdf2_sha256$150000$R35ASH6XCvZ4$ujgfhLrPYUJF5MCeA2gyhF7+7g8yRzVB6rAljA2Vwdc=,2020-12-20 14:25:03.201419+00,f,yusuke,"","","",f,t,2020-12-17 06:36:23.214188+00,user/broccoli.png,"見習いのデータサイエンティストをやっております。
+3,pbkdf2_sha256$150000$1zwmUPJTd3YX$amYnuPiPQQQCP5bENdVyq8YxZhgFk8PgVkgnBwThT00=,2020-12-29 13:24:31.907448+00,f,masa,"","","",f,t,2020-12-17 06:20:00.641227+00,user/cat.png,"バックエンドエンジニア。
+Python/Django/SQLなど",2020-12-17 06:20:00.761409+00
+5,pbkdf2_sha256$150000$R35ASH6XCvZ4$ujgfhLrPYUJF5MCeA2gyhF7+7g8yRzVB6rAljA2Vwdc=,2020-12-30 04:55:16.066868+00,f,yusuke,"","","",f,t,2020-12-17 06:36:23.214188+00,user/broccoli.png,"見習いのデータサイエンティストをやっております。
 
 機械学習などで必要な数学、DXやマーケティング用語などを備忘録としてまとめてます。",2020-12-17 06:36:23.333642+00
-6,pbkdf2_sha256$150000$BWybnC0d6svH$WnMx15Dk5LAu8u51kghnGb7NU6iBCX21kQWkyTQwKLA=,2020-12-20 14:28:18.357762+00,f,なつめ,"","","",f,t,2020-12-17 06:50:55.973014+00,user/unicorn_6Bqu7tV.png,"ピアノを弾いてます♪
+6,pbkdf2_sha256$150000$BWybnC0d6svH$WnMx15Dk5LAu8u51kghnGb7NU6iBCX21kQWkyTQwKLA=,2020-12-25 16:51:18.70634+00,f,なつめ,"","","",f,t,2020-12-17 06:50:55.973014+00,user/unicorn.png,"ピアノを弾いてます♪
 
 音楽を愛する皆さまに役立つ知識をお届けしますので、フォロー、いいねよろしくお願いします🥰✨",2020-12-17 06:50:56.093756+00
-3,pbkdf2_sha256$150000$1zwmUPJTd3YX$amYnuPiPQQQCP5bENdVyq8YxZhgFk8PgVkgnBwThT00=,2020-12-20 15:04:56.310476+00,f,masa,"","","",f,t,2020-12-17 06:20:00.641227+00,user/cat.png,"バックエンドエンジニア。
-Python/Django/SQLなど",2020-12-17 06:20:00.761409+00
-4,pbkdf2_sha256$150000$z73H8zCrvo3t$U9MtPtGlUbr5ft/4qa0ZoRLhus85W/ccWfb6ohW8JVw=,2020-12-20 14:19:23.305047+00,f,おかだ,"","","",f,t,2020-12-17 06:23:21.400285+00,user/smile.png,"インフラ屋です👨‍🔧
+2,pbkdf2_sha256$150000$TfIX13WXPtDe$qTua35MhZl7pLaSdqqRgt6lzo1GW/2aY5I+ToXdT5Ng=,2020-12-25 17:00:44.054495+00,f,アキラ,"","","",f,t,2020-12-17 06:11:34.93774+00,user/sun.png,"今年フロントエンジニアになったアキラです❗️
+
+JavaScriptやGitなど初学者向けのコンテンツを提供しますので、ぜひフォローよろしくお願いします😆",2020-12-17 06:11:35.057036+00
+4,pbkdf2_sha256$150000$z73H8zCrvo3t$U9MtPtGlUbr5ft/4qa0ZoRLhus85W/ccWfb6ohW8JVw=,2020-12-25 17:02:52.292415+00,f,おかだ,"","","",f,t,2020-12-17 06:23:21.400285+00,user/smile.png,"インフラ屋です👨‍🔧
 
 Dockerのチュートリアルや、AWS、GCPの用語などをまとめてます。
 ぜひチェックしてください〜",2020-12-17 06:23:21.519282+00
-2,pbkdf2_sha256$150000$TfIX13WXPtDe$qTua35MhZl7pLaSdqqRgt6lzo1GW/2aY5I+ToXdT5Ng=,2020-12-20 14:22:24.242465+00,f,アキラ,"","","",f,t,2020-12-17 06:11:34.93774+00,user/sun_mopd4Ol.png,"今年フロントエンジニアになったアキラです❗️
+7,pbkdf2_sha256$150000$aws3skF0E4oW$tbA25QPnZFHEOV/qCWh6aPOIDdNxteTEj6G1vsubSQE=,2020-12-30 16:41:57.29739+00,f,TutorialUser,"","","",f,t,2020-12-30 14:25:17.811301+00,"","Wordbookへようこそ！😃
 
-JavaScriptやGitなど初学者向けのコンテンツを提供しますので、ぜひフォローよろしくお願いします😆",2020-12-17 06:11:35.057036+00
+Wordbookは自由に単語帳を作成できるアプリです。ぜひ遊んでみてくださいね😉",2020-12-30 14:25:17.92607+00

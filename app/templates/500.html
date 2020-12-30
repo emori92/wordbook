@@ -1,13 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}サーバーエラー | Wordbook{% endblock title %}
+{% block title %}500 サーバーエラー | Wordbook{% endblock title %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        500: サーバーエラーが発生しています。
-      </div>
-    </div>
-  </div>
+  {% include 'includes/permission.html' with text='500 サーバーエラーが発生しています。' %}
 {% endblock content %}

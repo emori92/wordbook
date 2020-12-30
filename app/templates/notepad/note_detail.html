@@ -35,7 +35,7 @@
 
               <!-- tag btn -->
               {% if user.pk == object.user.pk %}
-                <div id="tag-edit" class="pt-2">
+                <div id="tag-edit" class="pt-2 dropleft">
                   <button class="btn text-secondary" type="button" data-toggle="dropdown"><i class="fas fa-tags"></i></button>
                   <div class="dropdown-menu">
                     <a href="{% url 'notepad:tag_new' note.pk %}" class="dropdown-item">タグを追加する</a>

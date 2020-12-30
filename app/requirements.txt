@@ -1,6 +1,6 @@
 boto3==1.16.43
 botocore==1.19.43
-Django==2.2.16
+Django==2.2.17
 django-crispy-forms==1.9.2
 django-debug-toolbar==2.2
 django-environ==0.4.5

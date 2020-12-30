@@ -4,3 +4,9 @@ psql -d wordbook -U app_owner -c "\copy custom_user to /tmp/user.csv delimiter '
 
 # import csv
 psql -d wordbook -U app_owner -c "\copy custom_user from /tmp/user.csv delimiter ',' csv header;"
+
+# SSl
+d run -p 80:80 -p 443:443 -v nginx-conf-vol:/etc/nginx/conf.d -v webroot-vol:/usr/share/nginx/html -v certbot-vol:/etc/letsencrypt -d nginx
+
+d run --rm -it --name certbot -v certbot-vol:/etc/letsencrypt -v webroot-vol:/usr/share/nginx/html certbot/certbot certonly
+
