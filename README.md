@@ -4,25 +4,27 @@ Python製WebフレームワークのDjangoで作成しています。
 
 ## 環境
 - OS: Catalina 10.15.7
-- Docker: 19.03.13
+- Docker: 20.10.0
 - docker-compose: 1.27.4
 - Python: 3.7.9
-- Django: 2.2.16
+- Django: 2.2.17
 - PostgreSQL: 12.5
 - Nginx: 1.19.5
 - AWS: IAM, VPC, EC2, S3, ECR
 - Domain: freenom
-- SSL: Let's Encrypt
+- SSL: certbot
 
 ## 機能
-- サインアップ/ログイン/ログアウト
+- 新規登録/ログイン/ログアウト
 - ユーザーフォロー
 - 単語帳/ユーザー/タグの検索
-- 単語帳のタグ機能
-- 単語帳の公開範囲
+- 単語帳のタグ付け
+- 単語帳の非公開
 - 単語帳のいいね
 - フォロー/いいねした単語帳の一覧
 - 復習したい問題の選択
+- ページネーション
+- JavaScriptによる表示切り替え
 
 ## パッケージ
 - django-debug-toolbar 2.2
@@ -30,6 +32,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - django-sass          1.0.0
 - django-crispy-forms  1.9.2
 - django-storages      1.11.1
+- boto3                1.16.43
 - psycopg2-binary      2.8.5
 - gunicorn             20.0.4
 - whitenoise           5.2.0

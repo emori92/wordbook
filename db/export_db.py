@@ -4,7 +4,7 @@ import subprocess
 
 
 # DB table list
-db_table_names = [
+tables = [
     'custom_user',
     'note',
     'question',
@@ -16,7 +16,7 @@ db_table_names = [
 ]
 
 
-# csv directory path
+# csv path of container_id
 path = '/csv/'
 
 
@@ -39,11 +39,11 @@ def export_csv(path, table_name):
 
 
 if __name__ == '__main__':
-    # judge copy
-    container = input('hostの/wordbook/db/csv/にコピーする場合は、dbのコンテナIDを入力>>>')
-    if container:
-        # import csv
-        for name in db_table_names:
-            command = export_csv(path, name)
-            subprocess.run(command)
-        subprocess.run(['docker', 'cp', f'{container}:{path}', '.'])
+    # import csv
+    for table in tables:
+        command = export_csv(path, table)
+        subprocess.run(command)
+    # get workdir
+    workdir = os.path.dirname(os.path.abspath(__file__))
+    # run copy
+    subprocess.run(['docker', 'cp', f'wordbook_db_1:{path}', workdir])

@@ -1,0 +1,12 @@
+# DB
+app/db.sqlite3
+app/config/SQL/
+
+# python
+app/config/my_module/recommender.ipynb
+**/__pycache__/
+
+# Django
+app/media
+**/admin.py
+**/fixtures/

@@ -7,7 +7,7 @@ import { changeTabDisplay } from '../script/functions.js';
 // function parameter
 const noteDetailParameter = {
   'sessionName': 'noteDetail',
-  'id': ['question', 'review']
+  'idList': ['question', 'review']
 }
 
 // get answer and hint class
