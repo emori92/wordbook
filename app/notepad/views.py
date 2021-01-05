@@ -83,18 +83,10 @@ class HotListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # フォローしているユーザーのノートを取得
-        if self.request.user.is_authenticated:
-            # フォローしているuserを取得
-            pk = self.request.user.pk
-            user_id = Follow.objects.filter(following_id=pk).values('followed_id')
-            users = User.objects.filter(id__in=user_id)
-            # フォローしているuserのnoteを取得
-            note = Note.objects.filter(public=1, user__in=users).select_related('user')
-            context['follow'] = set_paginator(self, note, 'follow', page_num=100)
         # 推薦されたノートを取得
         recommender_query = Note.objects.select_related('user') \
             .filter(public=1).annotate(star_num=Count('star__id'))
+        # context
         context['recommender'] = set_paginator(self, recommender_query, 'recommender')
         return context
 
@@ -152,27 +144,33 @@ class Dashboard(generic.ListView):
         # dashboardに表示するUser取得
         dashboard_query = User.objects.get(pk=self.kwargs['pk'])
         context['account'] = dashboard_query
-        # フォローするユーザーとされるユーザーを取得
+        # user id
+        pk = self.request.user.pk
         if self.request.user.is_authenticated:
-            following = User.objects.get(pk=self.request.user.pk)
+            # フォローするユーザーとされるユーザーを取得
+            following = User.objects.get(pk=pk)
             followed = dashboard_query
             # ユーザーがフォローしているか真偽値を取得
             # この真偽値で、templateの「フォロー」「フォロー解除」の表示を切り替える
-            follow_state = Follow.objects.filter(
-                following=following, followed=followed) \
-                .select_related('note__id').exists()
+            follow_state = Follow.objects.select_related('note__id') \
+                .filter(following=following, followed=followed).exists()
             context['follow_state'] = follow_state
-        # 公開されている単語帳のみ取得
-        # 自分以外のユーザーには公開情報を表示
+        # 公開されている単語帳のみ取得。自分以外のユーザーに表示
         public = Note.objects.filter(user=self.kwargs['pk'], public=1) \
             .annotate(star_num=Count('star__id')).order_by('-updated_at')
         context['public'] = set_paginator(self, public, 'public')
         # いいねした単語帳を取得
-        if self.request.user.pk == self.kwargs['pk']:
+        if pk == self.kwargs['pk']:
             liked = Note.objects.filter(
                 star__user=self.request.user.pk, public=1) \
                 .annotate(star_num=Count('star__id')).select_related('user')
             context['liked'] = set_paginator(self, liked, 'liked')
+            # フォローしているuserを取得
+            user_id = Follow.objects.filter(following_id=pk).values('followed_id')
+            users = User.objects.filter(id__in=user_id)
+            # フォローしているuserのnoteを取得
+            note = Note.objects.filter(public=1, user__in=users).select_related('user')
+            context['follow'] = set_paginator(self, note, 'follow', page_num=100)
         return context
 
 

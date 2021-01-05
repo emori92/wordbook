@@ -8,23 +8,23 @@
 
 {% block content %}
   <div class="container">
-
-    <!-- title -->
     <div class="title row mt-5">
-      <div class="col-lg-4">
+
+      <!-- title -->
+      <div class="col-md-4 col-sm-12">
         <h1 class="text-info display-2">Hot</h1>
       </div>
 
       <!-- tab btn -->
-      <div class="btn-group-size col-sm-10 col-md-6">
-        <div class="btn-group mt-lg-5">
-          <button id="wordbook-btn" class="btn btn-secondary">New!</button>
-          {% if user.is_authenticated %}
-            <button id="follow-btn" class="btn btn-secondary">フォロー</button>
-          {% endif %}
-          <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
+      <div class="col-md-8 col-sm-8 my-auto">
+        <div class="btn-group-size">
+          <div class="btn-group mt-lg-5">
+            <button id="wordbook-btn" class="btn btn-secondary">New!</button>
+            <button id="recommender-btn" class="btn btn-secondary">おすすめ</button>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- wordbook -->
@@ -33,9 +33,6 @@
 
         <!-- new wordbook -->
         {% include 'includes/wordbook.html' %}
-
-        <!-- follow -->
-        {% include 'includes/wordbook.html' with object_list=follow page_obj=follow page='follow' id='follow' %}
 
         <!-- recommender -->
         {% include 'includes/wordbook.html' with object_list=recommender page_obj=recommender page='recommender' id='recommender' %}

@@ -53,12 +53,15 @@
         <!-- ユーザーの場合 非公開といいねした投稿を表示 -->
         {% if user.id == account.id %}
           <!-- 表示切り替え -->
-          <div class="col-lg-4 col-md-8 mx-auto mb-4">
-            <button id="wordbook-btn" class="btn btn-dark mr-3">自分のノート</button>
+          <div class="col-lg-5 col-md-8 mx-auto mb-4">
+            <button id="wordbook-btn" class="btn btn-dark mr-1">ホーム</button>
+            <button id="follow-btn" class="btn btn-dark mr-1">フォロー</button>
             <button id="liked-btn" class="btn btn-dark">いいね</button>
           </div>
           <!-- 非公開 -->
           {% include 'includes/wordbook.html' %}
+          <!-- フォロー -->
+          {% include 'includes/wordbook.html' with object_list=follow page_obj=follow page='follow' id='follow' name='フォロー' %}
           <!-- いいね -->
           {% include 'includes/wordbook.html' with object_list=liked page_obj=liked page='liked' id='liked' name='いいね' %}
         {% else %}
@@ -71,5 +74,5 @@
 {% endblock content %}
 
 {% block js %}
-  <script src="{% static 'js/notepad/dashboard.js' %}"></script>
+  <script src="{% static 'js/notepad/dashboard.js' %}" type="module"></script>
 {% endblock js %}
