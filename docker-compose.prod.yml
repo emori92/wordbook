@@ -1,7 +1,7 @@
 # production docker-compose
     
 
-version: '3.8'
+version: '3.3'
 services:
 
   # DB
@@ -35,6 +35,8 @@ services:
     volumes:
       - static-dv:/usr/share/nginx/html/static/
       - media-dv:/usr/share/nginx/html/media/
+      - webroot-dv:/usr/share/nginx/html/
+      - certbot-dv:/etc/letsencrypt/
     depends_on:
       - app
 
@@ -43,3 +45,5 @@ volumes:
   static-dv:
   media-dv:
   log-dv:
+  webroot-dv:
+  certbot-dv:
