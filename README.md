@@ -11,6 +11,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - PostgreSQL: 12.5
 - Nginx: 1.19.5
 - AWS: IAM, VPC, EC2, S3, ECR
+- GCP: VPC, GCE
 - Domain: freenom
 - SSL: certbot
 
