@@ -1,5 +1,5 @@
-# production docker-compose
-    
+# test docker-compose 
+
 
 version: '3.3'
 services:
@@ -29,17 +29,12 @@ services:
   web:
     build:
       context: ./web
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.test
     ports:
       - 80:80
-      - 443:443
     volumes:
       - static-dv:/usr/share/nginx/html/static/
       - media-dv:/usr/share/nginx/html/media/
-      - webroot-dv:/usr/share/nginx/html/
-      - certbot-dv:/etc/letsencrypt/
-    environment:
-      - APP_DOMAIN
     depends_on:
       - app
 
@@ -48,5 +43,3 @@ volumes:
   static-dv:
   media-dv:
   log-dv:
-  webroot-dv:
-  certbot-dv:

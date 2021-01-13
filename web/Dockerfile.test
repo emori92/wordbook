@@ -1,0 +1,10 @@
+# nginx
+FROM nginx
+
+# version
+LABEL version=0.2
+
+# add default.conf
+COPY ./conf.d /etc/nginx/conf.d
+
+EXPOSE 80
