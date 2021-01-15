@@ -42,6 +42,20 @@ if env('USE_S3'):
     DEFAULT_FILE_STORAGE = 'config.custom_storage.MediaStorage'
 
 
+# GCS
+if env('USE_GCS'):
+    from google.oauth2 import service_account
+    # 認証
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        env('GS_CREDENTIALS')
+    )
+    # storage
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = env('GS_BUCKET_NAME')
+    # static
+    STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+
 # logging
 LOGGING = {
 

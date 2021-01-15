@@ -42,12 +42,8 @@ if DEBUG:
     }
 
 
-# media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # logging
 LOGGING = {
-
     # 初期化
     'version': 1,
     'disable_existing_loggers': False,
@@ -85,7 +81,6 @@ LOGGING = {
     
     # handler
     'handlers': {
-        
         # condole
         'console': {
             'level': 'DEBUG',
@@ -93,7 +88,7 @@ LOGGING = {
             'formatter': 'develop',
         },
     },
-    
+
     # formatter
     'formatters': {
         # develop
@@ -101,5 +96,4 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d %(message)s'
         },
     },
-    
 }
