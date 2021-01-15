@@ -4,30 +4,30 @@
 version: '3.3'
 services:
 
-    # DB
-    db:
-        build: ./db
-        ports:
-            - 5432:5432
-        environment:
-            - POSTGRES_USER=app_owner
-            - POSTGRES_PASSWORD=dbpass
-            - POSTGRES_DB=wordbook
-        volumes:
-            - db-dv:/var/lib/postgresql/data
+  # DB
+  db:
+    build: ./db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=app_owner
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_DB=wordbook
+    volumes:
+      - db-dv:/var/lib/postgresql/data
 
-    # app
-    app:
-        build: ./app
-        environment:
-            - DJANGO_SETTINGS_MODULE=config.settings.local
-        command: python manage.py runserver 0.0.0.0:8000
-        volumes:
-            - ./app:/usr/src/app
-        ports:
-            - 8000:8000
-        depends_on:
-            - db
+  # app
+  app:
+    build: ./app
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.local
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
 
 volumes:
     db-dv:

@@ -9,6 +9,7 @@ __pycache__
 # django
 .env*
 media
+wordbook-*.json
 # local.py
 db.sqlite3
 .ipynb_checkpoints
