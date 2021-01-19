@@ -14,13 +14,22 @@
 
 // content
 body {
+  // フォント
   header {
     font-family: 'Skranji', cursive;
   }
+  // 単語帳のwidth
   .wordbook {
     @include wordbook();
   }
+  // 単語帳の画像
   .user-image {
     @include user-image();
+  }
+  // formの*に色付け
+  .asteriskField {
+    color: red;
+    display: inline-block;
+    margin: 0 4px;
   }
 }

@@ -28,6 +28,23 @@ class LoginView(SuccessMessageMixin, LoginView):
             return super().get(request, *args, **kwargs)
 
 
+# login by tutorial user
+class TutorialLoginView(generic.RedirectView):
+    """Tutorial Userでログイン"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        # user info
+        username = 'TutorialUser'
+        password = 'HelloWordbook'
+        # login
+        tutorial_user = authenticate(username=username, password=password)
+        login(self.request, tutorial_user)
+        # redirect dashboard
+        pk = self.request.user.pk
+        url = reverse('notepad:dashboard', kwargs={'pk': pk})
+        return url
+
+
 # sign up
 class SignupView(generic.CreateView):
     model = User
