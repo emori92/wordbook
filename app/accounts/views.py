@@ -6,8 +6,9 @@ from django.contrib.auth.views import LoginView
 # view
 from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import User
+from .models import User, Follow
 from .forms import SignupForm, ProfileForm
 
 
@@ -86,3 +87,28 @@ class ProfileUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse('notepad:dashboard', kwargs={'pk': self.request.user.pk})
+
+
+# SNS
+class FollowView(LoginRequiredMixin, generic.RedirectView):
+    login_url = '/login/'
+
+    # リダイレクト先
+    def get_redirect_url(self, *args, **kwargs):
+        pk = self.kwargs['followed']
+        url = reverse('notepad:dashboard', kwargs={'pk': pk})
+        return url
+
+    # フォロー、フォロー削除
+    def get(self, request, *args, **kwargs):
+        # フォローするユーザーとされるユーザーを取得
+        following = User.objects.get(pk=self.kwargs['following'])
+        followed = User.objects.get(pk=self.kwargs['followed'])
+        # pkをDBに格納 or 削除
+        if Follow.objects.filter(following=following, followed=followed).exists():
+            follow = Follow.objects.get(following=following, followed=followed)
+            follow.delete()
+        else:
+            follow = Follow.objects.create(following=following, followed=followed)
+            follow.save()
+        return super().get(request, *args, **kwargs)

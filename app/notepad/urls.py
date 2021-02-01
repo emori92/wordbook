@@ -27,6 +27,5 @@ urlpatterns = [
     path('question/<int:pk>/delete/', views.QuestionDeleteView.as_view(), name='question_delete'),
     path('question/<int:note_pk>/<int:question_pk>/<int:user_pk>/', views.QuestionReviewView.as_view(), name='question_review'),
     # SNS
-    path('follow/<int:following>/<int:followed>/', views.FollowView.as_view(), name='follow'),
     path('star/<int:note_pk>/<int:user_pk>/', views.StarView.as_view(), name='star'),
 ]
