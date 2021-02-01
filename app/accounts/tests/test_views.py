@@ -65,3 +65,27 @@ class ProfileUpdateViewTests(TestCase):
         url = reverse('accounts:profile', kwargs={'pk': self.user.id})
         # assert get method
         assert_normal_get_request(self, url)
+
+
+class FollowViewTests(TestCase):
+    """FollowViewのテスト"""
+
+    # 正常値
+    def test_normal_value_view(self):
+        """FollowView: 正常値"""
+        # create user
+        create_user(self)
+        follow_user = User.objects.create_user('follow_test', password='follow_test')
+        self.client.login(username='test_user', password='password')
+        # get request
+        kwargs = {
+            'following': self.user.pk,
+            'followed': follow_user.pk,
+        }
+        url = reverse('accounts:follow', kwargs=kwargs)
+        assert_normal_get_request(self, url, status_code=302)
+        # check redirect
+        redirect_url = reverse('notepad:dashboard', kwargs={'pk': follow_user.pk})
+        resp = self.client.get(url)
+        self.assertRedirects(resp, redirect_url)
+        # check follow

@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.db.models import Count
 import logging
 
-from accounts.models import User
-from .models import Note, Question, Review, Follow, Star, Tag
+from accounts.models import User, Follow
+from .models import Note, Question, Review, Star, Tag
 from .forms import SearchForm, NoteForm, QuestionForm, TagForm
 # paginator
 from django.core.paginator import Paginator
@@ -106,18 +106,18 @@ class SearchView(generic.FormView):
         word = self.request.GET.get('search')
         # 検索している場合の処理
         if word:
-            wordbook = wordbook.annotate(star_num=Count('star__id')) \
-                .filter(title__icontains=word).order_by('-created_at', 'title')
-            users = users.filter(username__icontains=word) \
-                .annotate(follow_num=Count('followed__id')).order_by('-follow_num', 'username')
-            tag = tag.filter(tag__name__icontains=word) \
-                .annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
+            wordbook = wordbook.annotate(star_num=Count('star__id')).filter(
+                title__icontains=word).order_by('-created_at', 'title')
+            users = users.filter(username__icontains=word).annotate(
+                follow_num=Count('followed__id')).order_by('-follow_num', 'username')
+            tag = tag.filter(tag__name__icontains=word).annotate(
+                tag_num=Count('id')).order_by('-tag_num', 'tag')
         # 検索してない場合の処理
         else:
-            wordbook = wordbook.annotate(star_num=Count('star__id')) \
-                .order_by('-created_at', 'title')
-            users = users.annotate(follow_num=Count('followed__id')) \
-                .order_by('-follow_num', 'username')
+            wordbook = wordbook.annotate(
+                star_num=Count('star__id')).order_by('-created_at', 'title')
+            users = users.annotate(
+                follow_num=Count('followed__id')).order_by('-follow_num', 'username')
             tag = tag.annotate(tag_num=Count('id')).order_by('-tag_num', 'tag')
         # contextに単語帳、ユーザー、タグを登録
         context['wordbook'] = set_paginator(self, wordbook, 'page')
@@ -152,18 +152,17 @@ class Dashboard(generic.ListView):
             followed = dashboard_query
             # ユーザーがフォローしているか真偽値を取得
             # この真偽値で、templateの「フォロー」「フォロー解除」の表示を切り替える
-            follow_state = Follow.objects.select_related('note__id') \
-                .filter(following=following, followed=followed).exists()
+            follow_state = Follow.objects.select_related('note__id').filter(
+                following=following, followed=followed).exists()
             context['follow_state'] = follow_state
         # 公開されている単語帳のみ取得。自分以外のユーザーに表示
-        public = Note.objects.filter(user=self.kwargs['pk'], public=1) \
-            .annotate(star_num=Count('star__id')).order_by('-updated_at')
+        public = Note.objects.filter(user=self.kwargs['pk'], public=1).annotate(
+            star_num=Count('star__id')).order_by('-updated_at')
         context['public'] = set_paginator(self, public, 'public')
         # いいねした単語帳を取得
         if pk == self.kwargs['pk']:
-            liked = Note.objects.filter(
-                star__user=self.request.user.pk, public=1) \
-                .annotate(star_num=Count('star__id')).select_related('user')
+            liked = Note.objects.annotate(star_num=Count('star__id')).filter(
+                star__user=self.request.user.pk, public=1).select_related('user')
             context['liked'] = set_paginator(self, liked, 'liked')
             # フォローしているuserを取得
             user_id = Follow.objects.filter(following_id=pk).values('followed_id')
@@ -403,30 +402,6 @@ class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
 
 
 # SNS
-class FollowView(LoginRequiredMixin, generic.RedirectView):
-    login_url = '/login/'
-
-    # リダイレクト先
-    def get_redirect_url(self, *args, **kwargs):
-        pk = self.kwargs['followed']
-        url = reverse('notepad:dashboard', kwargs={'pk': pk})
-        return url
-    
-    # フォロー、フォロー削除
-    def get(self, request, *args, **kwargs):
-        # フォローするユーザーとされるユーザーを取得
-        following = User.objects.get(pk=self.kwargs['following'])
-        followed = User.objects.get(pk=self.kwargs['followed'])
-        # pkをDBに格納 or 削除
-        if Follow.objects.filter(following=following, followed=followed).exists():
-            follow = Follow.objects.get(following=following, followed=followed)
-            follow.delete()
-        else:
-            follow = Follow.objects.create(following=following, followed=followed)
-            follow.save()
-        return super().get(request, *args, **kwargs)
-
-
 class StarView(LoginRequiredMixin, generic.RedirectView):
     login_url = '/login/'
 

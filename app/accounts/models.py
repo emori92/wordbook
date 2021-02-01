@@ -15,3 +15,17 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Follow(models.Model):
+    '''フォロワーのモデル'''
+
+    following = models.ForeignKey(User, verbose_name='フォローした人', related_name='following', on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, verbose_name='フォローされた人', related_name='followed', on_delete=models.CASCADE)
+    followed_at = models.DateTimeField(verbose_name='フォローした日', auto_now_add=True)
+
+    class Meta:
+        db_table = 'follow'
+
+    def __str__(self):
+        return self.following

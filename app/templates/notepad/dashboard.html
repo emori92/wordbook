@@ -37,9 +37,9 @@
               <!-- follow btn -->
               <div class="mx-auto w-50">
                 {% if follow_state == True %}
-                  <a href="{% url 'notepad:follow' following=user.pk followed=account.pk %}" class="btn btn-outline-danger mb-3">フォロー解除</a>
+                  <a href="{% url 'accounts:follow' following=user.pk followed=account.pk %}" class="btn btn-outline-danger mb-3">フォロー解除</a>
                 {% else %}
-                  <a href="{% url 'notepad:follow' following=user.pk followed=account.pk %}" class="btn btn-primary mb-3">フォロー</a>
+                  <a href="{% url 'accounts:follow' following=user.pk followed=account.pk %}" class="btn btn-primary mb-3">フォロー</a>
                 {% endif %}
               </div>
             {% endif %}

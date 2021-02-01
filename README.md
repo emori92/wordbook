@@ -1,6 +1,7 @@
 ## Wordbook
 単語帳を作成できるWebアプリケーションです。単語帳を作成し、問題、ヒント、回答を自由に作成できます。
 Python製WebフレームワークのDjangoで作成しています。
+![play-wordbook](https://user-images.githubusercontent.com/36121673/106491297-0f866680-64fa-11eb-807b-35ff503f5673.gif)
 
 ## 機能
 - 新規登録/ログイン/ログアウト
@@ -20,6 +21,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - docker-compose: 1.27.4
 - Python: 3.7.9
 - Django: 2.2.17
+- Bootstrap: 4.5.0
 - PostgreSQL: 12.5
 - Nginx: 1.19.5
 
@@ -29,6 +31,13 @@ Python製WebフレームワークのDjangoで作成しています。
 - Domain: freenom
 - DNS: freenom
 - SSL: certbot
+
+## インフラ構成図
+#### AWS
+![aws-architecture-figure](https://user-images.githubusercontent.com/36121673/106470096-764c5580-64e3-11eb-8c5f-3d0020ccfc55.png)
+
+#### GCP
+![gcp-architecture-figure](https://user-images.githubusercontent.com/36121673/106470626-0e4a3f00-64e4-11eb-9b6c-5d9b96dce302.png)
 
 ## パッケージ
 - django-debug-toolbar  2.2
@@ -42,3 +51,6 @@ Python製WebフレームワークのDjangoで作成しています。
 - gunicorn              20.0.4
 - whitenoise            5.2.0
 - selenium              3.141.0
+
+## etc
+- Google Analytics

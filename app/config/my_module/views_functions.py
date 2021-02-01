@@ -38,5 +38,5 @@ def set_ranking(self, context, queryset, url, queryset_name, rankingset_name):
     object_list = set_paginator(self, queryset, url)
     # paginationを利用するためにquerysetも定義
     context[queryset_name] = object_list
-    # 
+    # paginationのindexを元に、rankingの数値をセット
     context[rankingset_name] = set_ranking_num(object_list)
