@@ -32,8 +32,9 @@ def import_csv(path, table_name):
         '-U',
         'app_owner',
         '-c',
+        # pkのシーケンスを最大に変更してcopy
         f"\copy {table_name} from {path}{table_name}.csv delimiter ',' csv header; \
-        select setval('{table_name}_id_seq', (select max(id) from {table_name}));",  # pkのシーケンスを最大に変更
+        select setval('{table_name}_id_seq', (select max(id) from {table_name}));",
     ]
     return command
 

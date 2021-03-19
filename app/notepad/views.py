@@ -31,7 +31,8 @@ class HomeView(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         if user.is_authenticated:
-            return HttpResponseRedirect(reverse('notepad:dashboard', kwargs={'pk': user.pk}))
+            return HttpResponseRedirect(
+                reverse('notepad:dashboard', kwargs={'pk': user.pk}))
         else:
             return super().get(request, *args, **kwargs)
 
@@ -44,9 +45,9 @@ class RankingListView(generic.ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         # いいねされた数が多いノートを降順で取得
-        note = Note.objects.select_related('user') \
-            .filter(public=1, star__gt=0) \
-            .annotate(star_num=Count('star__id')).order_by('-star_num', 'title')
+        note = Note.objects.select_related('user').filter(
+            public=1, star__gt=0).annotate(
+            star_num=Count('star__id')).order_by('-star_num', 'title')
         return note
 
     # いいね、ユーザー、タグのランキング情報をcontextに代入
@@ -56,15 +57,13 @@ class RankingListView(generic.ListView):
         stars_query = self.get_queryset()
         set_ranking(self, context, stars_query, 'page', 'stars', 'ranking_stars')
         # フォロー
-        users_query = User.objects.prefetch_related('followed') \
-            .filter(followed__followed__gt=0) \
-            .annotate(followed_num=Count('followed__followed')) \
-            .order_by('-followed_num')
+        users_query = User.objects.prefetch_related('followed').filter(
+            followed__followed__gt=0).annotate(
+            followed_num=Count('followed__followed')).order_by('-followed_num')
         set_ranking(self, context, users_query, 'user', 'users', 'ranking_users')
         # タグ
-        tags_query = Tag.objects.all() \
-            .annotate(tag_num=Count('note__id')) \
-            .filter(tag_num__gt=0).order_by('-tag_num')
+        tags_query = Tag.objects.all().annotate(
+            tag_num=Count('note__id')).filter(tag_num__gt=0).order_by('-tag_num')
         set_ranking(self, context, tags_query, 'tag', 'tags', 'ranking_tags')
         return context
 
@@ -76,16 +75,15 @@ class HotListView(generic.ListView):
 
     def get_queryset(self):
         # 新規投稿を取得
-        note = Note.objects.select_related('user') \
-            .filter(public=1) \
-            .annotate(star_num=Count('star__id')).order_by('-created_at')
+        note = Note.objects.select_related('user').filter(
+            public=1).annotate(star_num=Count('star__id')).order_by('-created_at')
         return note
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # 推薦されたノートを取得
-        recommender_query = Note.objects.select_related('user') \
-            .filter(public=1).annotate(star_num=Count('star__id'))
+        recommender_query = Note.objects.select_related(
+            'user').filter(public=1).annotate(star_num=Count('star__id'))
         # context
         context['recommender'] = set_paginator(self, recommender_query, 'recommender')
         return context
@@ -134,9 +132,10 @@ class Dashboard(generic.ListView):
 
     # ユーザーの単語帳を取得
     def get_queryset(self):
-        return Note.objects.filter(user=self.kwargs['pk']) \
-            .annotate(star_num=Count('star__id')).order_by('-updated_at') \
-            .select_related('user')
+        queryset = Note.objects.filter(
+            user=self.kwargs['pk']).annotate(
+            star_num=Count('star__id')).order_by('-updated_at').select_related('user')
+        return queryset
 
     # ユーザー取得
     def get_context_data(self, **kwargs):
@@ -199,8 +198,7 @@ class NoteDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         # noteに紐づくquestionを全て取得
         note_pk = self.kwargs['pk']
-        queryset = Question.objects.filter(note=note_pk) \
-            .prefetch_related('review_set').order_by('created_at')
+        queryset = Question.objects.filter(note=note_pk).order_by('created_at')
         context['queryset'] = set_paginator(self, queryset, 'page', page_num)
         # いいねの判定
         if self.request.user.is_authenticated:
@@ -212,20 +210,22 @@ class NoteDetailView(generic.DetailView):
             context['star_state'] = star_state
         # いいね数
         star_num = Star.objects.filter(note_id=note_pk)
-        # starテーブルにレコードの有無を確認（レコードがないとエラーになるので定数0を格納）
+        # star数をcontextへ代入
         if star_num.exists():
-            context['star_num'] = star_num.values('note_id') \
-                .annotate(num=Count('id')).get(note_id=note_pk)
+            context['star_num'] = star_num.values(
+                'note_id').annotate(num=Count('id')).get(note_id=note_pk)
+        # starが空の場合0を代入
         else:
             context['star_num'] = {'num': 0}
-        # 復習ボタンの表示切り替えを判別するリストを作成
-        review_query = Review.objects.select_related('question') \
-            .filter(question__note_id=note_pk)
+        # noteのpkに紐づいたreviewのquerysetを取得
+        review_query = Review.objects.filter(
+            question__note_id=note_pk).select_related('question')
+        # 復習ボタンの表示切り替えを判別するタプルを作成
         review_judge = [(r.question_id, r.user_id) for r in review_query]
         context['review_judge'] = review_judge
         # ブラウザで復習一覧を表示するquerysetを作成
-        review_list = Question.objects.prefetch_related('review_set').filter(
-            note=note_pk, review__user_id=self.request.user.pk)
+        review_list = Question.objects.prefetch_related(
+            'review_set').filter(note=note_pk, review__user_id=self.request.user.pk)
         context['review_list'] = set_paginator(self, review_list, 'review')
         return context
 
@@ -281,9 +281,8 @@ class TagListView(generic.ListView):
     # タグ付けされたnoteのみ取得
     def get_queryset(self):
         keyword = self.kwargs['word']
-        tags = Note.objects.select_related('user') \
-            .filter(tag__name=keyword, public=1) \
-            .annotate(star_num=Count('star__id'))
+        tags = Note.objects.select_related('user').filter(
+            tag__name=keyword, public=1).annotate(star_num=Count('star__id'))
         queryset = set_paginator(self, tags, 'tag')
         return queryset
 
@@ -294,8 +293,8 @@ class TagDeleteListView(LoginRequiredMixin, generic.ListView):
 
     # ノートに紐づいたタグを取得
     def get_queryset(self):
-        queryset = Note.objects.get(id=self.kwargs['note_pk']) \
-            .tag.filter(note=self.kwargs['note_pk'])
+        queryset = Note.objects.get(
+            id=self.kwargs['note_pk']).tag.filter(note=self.kwargs['note_pk'])
         return queryset
     
     # ユーザのみ削除ページを表示するため、noteのidを取得
@@ -380,7 +379,7 @@ class QuestionDeleteView(LoginRequiredMixin, generic.DeleteView):
 class QuestionReviewView(LoginRequiredMixin, generic.RedirectView):
     login_url = '/login/'
 
-    # 問題の復習を確認する
+    # redirect urlをページネーションに対応させる
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.headers['Referer']
         return url

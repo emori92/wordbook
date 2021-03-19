@@ -10,26 +10,23 @@ class UserModelTest(TestCase):
         """setUp: ユーザ作成"""
         User.objects.create_user('check_user', password='password')
 
-    # 正常値
-
-
     # 異常値
     def test_update_abnormal_user(self):
         """UserModel: 異常値"""
         # 境界値: username/password
-        name1 = 'u' * 151
-        name2 = 'ゆ' * 151
-        password = 'a' * 129
-        describe = 'd' * 81
+        names = ['u' * 150, 'ゆ' * 150]  # 151にするとエラー発生
+        passwords = ['p' * 129, 'パ' * 129]
+        describes = ['d' * 81, '説' * 81]  # describeは異常値でもエラー発生せず
         # get user
         user = User.objects.get(username='check_user')
-        # update user
-        user.username = name1
-        user.set_password(password)
-        user.describe = describe
-        # user test
-        self.assertEqual(user.username, name1)
-        user.username = name2
-        self.assertEqual(user.username, name2)
-
-        # max_lengthを超えた異常値で本来はエラーのはず
+        # update name, password, describe
+        for n in names:
+            for p in passwords:
+                for d in describes:
+                    user.username = n
+                    user.set_password(p)
+                    user.describe = d
+                    user.save()
+                    # test name, describe
+                    self.assertEqual(user.username, n)
+                    self.assertEqual(user.describe, d)

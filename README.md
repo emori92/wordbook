@@ -20,7 +20,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - Docker: 20.10.0
 - docker-compose: 1.27.4
 - Python: 3.7.9
-- Django: 2.2.17
+- Django: 2.2.18
 - Bootstrap: 4.5.0
 - PostgreSQL: 12.5
 - Nginx: 1.19.5
@@ -31,6 +31,7 @@ Python製WebフレームワークのDjangoで作成しています。
 - Domain: freenom
 - DNS: freenom
 - SSL: certbot
+- Analytics: Google Analytics
 
 ## インフラ構成図
 #### AWS
@@ -51,6 +52,3 @@ Python製WebフレームワークのDjangoで作成しています。
 - gunicorn              20.0.4
 - whitenoise            5.2.0
 - selenium              3.141.0
-
-## etc
-- Google Analytics
