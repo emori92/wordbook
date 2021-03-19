@@ -100,16 +100,18 @@ def assert_normal_get_request(self, url, status_code=200):
     self.assertEqual(response.status_code, status_code)
 
 
-def assert_pagination(self, url, pagination_list, page_num=0):
+def assert_pagination(self, url, pagination_list, page_num):
     """test view: paginationのテスト"""
     # request
     response = self.client.get(url)
     # pagination
-    if page_num:
-        self.assertIn('is_paginated', response.context)
-        for list_name in pagination_list:
-            num = len(response.context[list_name])
-            self.assertEqual(num, page_num)
+    # if page_num:
+    # paginationがあるかテスト
+    self.assertIn('is_paginated', response.context)
+    # 各object_listで、paginationの数値が一致しているか確認
+    for list_name in pagination_list:
+        num = len(response.context[list_name])
+        self.assertEqual(num, page_num)
     # else:
     #     for list_name in pagination_list:
     #         # self.assertNotIn('is_paginated', response.context)
@@ -131,13 +133,15 @@ def redirect_dashboard(self, url):
 def login_selenium(self):
     """test view: seleniumでログイン"""
     # access
-    domain = 'localhost:8000'
+    domain = '127.0.0.1:8000'
+    # GET request
     self.selenium.get(f'{domain}{reverse("accounts:login")}')
-    # input
+    # input form values
     login = self.selenium.find_element_by_name('username')
     login.send_keys('admin')
     password = self.selenium.find_element_by_name('password')
     password.send_keys('hogemori')
+    # login
     btn = self.selenium.find_element_by_id('login-btn')
     btn.click()
 
@@ -149,13 +153,13 @@ def run_selenium_js_btn(self, url, id_list, class_list, text_list):
     self.selenium.get(f'{home}{url}')
     # wait until rendering
     main_id = id_list[0]
-    WebDriverWait(self.selenium, 4) \
-        .until(EC.presence_of_element_located((By.ID, main_id)))
+    WebDriverWait(self.selenium, 4).until(
+        EC.presence_of_element_located((By.ID, main_id)))
     # assert: ボタンを押して表示が変わるか（DBのデータあり）
     for id, text_class, text in zip(id_list, class_list, text_list):
         btn = self.selenium.find_element_by_id(f'{id}-btn')
         btn.click()
         # 対象の要素を取得し、想定される出力と同じか確認
-        elem = self.selenium.find_element_by_id(id) \
-            .find_element_by_class_name(text_class)
+        elem = self.selenium.find_element_by_id(
+            id).find_element_by_class_name(text_class)
         self.assertEqual(elem.text, text)

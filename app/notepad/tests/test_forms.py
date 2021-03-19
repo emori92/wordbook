@@ -43,7 +43,7 @@ class SearchFormTests(TestCase):
             path = reverse('notepad:search')
             response = self.client.get(path, params)
             # assert http status
-            self.assertEqual(response.status_code, 200)  # redirect to SignUp form
+            self.assertEqual(response.status_code, 200)
 
 
 class NoteFormTests(TestCase):
