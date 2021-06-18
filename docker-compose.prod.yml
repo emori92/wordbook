@@ -37,7 +37,7 @@ services:
       - static-dv:/usr/share/nginx/html/static/
       - media-dv:/usr/share/nginx/html/media/
       - webroot-dv:/usr/share/nginx/html/
-      - certbot-dv:/etc/letsencrypt/
+      - /etc/letsencrypt:/etc/letsencrypt/
     environment:
       - APP_DOMAIN
     depends_on:
